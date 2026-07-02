@@ -98,6 +98,8 @@ export { ConfirmDialog } from "./components/overlay/ConfirmDialog";
 export type { ConfirmDialogProps } from "./components/overlay/ConfirmDialog";
 export { Drawer } from "./components/overlay/Drawer";
 export type { DrawerProps } from "./components/overlay/Drawer";
+export { CommandMenu } from "./components/overlay/CommandMenu";
+export type { CommandMenuProps, Command } from "./components/overlay/CommandMenu";
 
 // data (partial)
 export { Table } from "./components/data/Table";

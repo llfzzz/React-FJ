@@ -4,16 +4,19 @@ import { PanelLeft, X } from 'lucide-react';
 import { TopBar } from '../chrome/TopBar';
 import { Footer } from '../chrome/Footer';
 import { DocsSidebar, SidebarNav } from '../chrome/DocsSidebar';
+import { CommandK, useCommandK } from '../chrome/CommandK';
 
 /** Top bar + footer around every page. */
 export function SiteLayout() {
+  const { open, openMenu, closeMenu } = useCommandK();
   return (
     <>
-      <TopBar />
+      <TopBar onSearch={openMenu} />
       <main className="site-main">
         <Outlet />
       </main>
       <Footer />
+      <CommandK open={open} onClose={closeMenu} />
     </>
   );
 }

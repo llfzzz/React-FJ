@@ -19,7 +19,17 @@ const GET_STARTED: NavGroup = {
   ],
 };
 
-/** Sidebar structure: get-started chapters, then one group per category. */
+const TOKENS: NavGroup = {
+  label: 'Design tokens',
+  items: [
+    { label: 'Colors', to: '/docs/tokens/colors' },
+    { label: 'Typography', to: '/docs/tokens/typography' },
+    { label: 'Spacing & elevation', to: '/docs/tokens/spacing' },
+    { label: 'Motion', to: '/docs/tokens/motion' },
+  ],
+};
+
+/** Sidebar structure: get-started chapters, tokens, then one group per category. */
 export function buildNavGroups(): NavGroup[] {
   const componentGroups: NavGroup[] = presentCategories().map((category) => ({
     label: CATEGORY_LABELS[category],
@@ -28,5 +38,5 @@ export function buildNavGroups(): NavGroup[] {
       to: `/components/${doc.id}`,
     })),
   }));
-  return [GET_STARTED, ...componentGroups];
+  return [GET_STARTED, TOKENS, ...componentGroups];
 }

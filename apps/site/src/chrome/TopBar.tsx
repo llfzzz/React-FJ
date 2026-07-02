@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Monitor, Moon, Sun } from 'lucide-react';
+import { Monitor, Moon, Search, Sun } from 'lucide-react';
+import { Kbd } from '@fj';
 import { useTheme, type ThemeMode } from '../lib/theme';
 import logoMark from '@fj/assets/logo-mark.svg';
 
@@ -34,7 +35,7 @@ export function ThemeToggle() {
   );
 }
 
-export function TopBar() {
+export function TopBar({ onSearch }: { onSearch?: () => void }) {
   const { pathname } = useLocation();
   return (
     <header className="topbar fj-glass-strong">
@@ -56,6 +57,13 @@ export function TopBar() {
           ))}
         </nav>
         <div className="topbar-spacer" />
+        {onSearch && (
+          <button type="button" className="search-btn" onClick={onSearch}>
+            <Search size={15} aria-hidden />
+            <span className="search-btn-label">Search</span>
+            <Kbd keys={['⌘', 'K']} size="sm" />
+          </button>
+        )}
         <ThemeToggle />
       </div>
     </header>

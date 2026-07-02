@@ -82,7 +82,7 @@ pnpm workspace
 - [x] Phase 2 — core/layout/effects sync + landing page
 - [x] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
 - [x] Phase 4 — core set + effects documented (32 registry entries)
-- [ ] Phase 5 — ⌘K search, token docs pages, theme playground
+- [x] Phase 5 — ⌘K search (FJ CommandMenu), token docs pages, theme playground
 - [ ] Phase 6 — a11y + responsive + states polish
 - [ ] Phase 7 — Vitest + Playwright + full verification
 - [ ] Phase 8 — docs finalization
@@ -99,7 +99,7 @@ Synced components (29):
 - navigation (2 of 6): Tabs, SegmentedControl
 - feedback (8 of 9): Spinner, Alert, Tooltip, Progress, Skeleton, Toast(+Provider/useToast),
   EmptyState (missing: Result, LoadingOverlay)
-- overlay (3 of 10): Modal, ConfirmDialog, Drawer
+- overlay (4 of 10): Modal, ConfirmDialog, Drawer, CommandMenu
 - data (1 of 13): Table
 - effects (7): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
 Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
@@ -139,6 +139,14 @@ CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection,
   closes). Landing stats now derive from the registry. Stateful demos (Checkbox/Radio/Switch/
   Slider/Modal/Drawer/Toast) use local demo components with custom `code()` templates; effects
   demos remount on knob change (key=JSON.stringify(values)) so entrances replay.
+- Phase 5 (2026-07-03): typecheck + build green. ⌘K verified end-to-end (open → filter "slider"
+  → Enter navigates and closes); token pages render live computed values; playground retheme
+  verified (sun accent + dark stage). Two design bugs found and fixed: (1) FJ semantic aliases
+  (--bg/--text/--border…) compute at :root, so a NESTED data-theme="dark" scope must re-declare
+  the aliases locally to re-resolve them (done on .playground-stage); (2) sun accent must pin
+  --text-on-accent to literal ink #1C1C1A — var(--ink) flips near-white in dark mode and fails
+  contrast on the yellow fill. Upstream FJ Button accent="sun" has the same dark-mode issue —
+  worth an upstream fix.
 
 ## Known limitations / intentional debt
 

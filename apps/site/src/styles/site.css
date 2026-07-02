@@ -960,6 +960,308 @@ html {
   margin-left: auto;
 }
 
+/* ---------- Search button ---------- */
+
+.search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 38px;
+  padding: 0 8px 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-subtle);
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.search-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+@media (max-width: 719px) {
+  .search-btn {
+    padding: 0;
+    width: 38px;
+    justify-content: center;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .search-btn-label,
+  .search-btn kbd,
+  .search-btn > span:last-child {
+    display: none;
+  }
+}
+
+/* ---------- Token pages ---------- */
+
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.color-token {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.color-token-swatch {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.color-token-meta {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.token-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.token-note {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+.token-value {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-subtle);
+  flex: none;
+}
+
+.type-specimens {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.type-specimen {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.type-specimen-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.type-scale {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.type-scale-row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.type-scale-row:last-child {
+  border-bottom: none;
+}
+
+.type-scale-meta {
+  display: grid;
+  gap: 2px;
+}
+
+@media (max-width: 719px) {
+  .type-scale-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}
+
+.space-rows,
+.motion-rows {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.space-row,
+.motion-row {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
+  padding: 8px 0;
+}
+
+.space-bar {
+  display: block;
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  max-width: 100%;
+}
+
+.radius-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--space-3);
+}
+
+.radius-cell {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-align: center;
+}
+
+.radius-box {
+  width: 64px;
+  height: 64px;
+  background: var(--accent-soft);
+  border: 1.5px solid var(--accent);
+}
+
+.shadow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4);
+}
+
+.shadow-cell {
+  display: grid;
+  place-items: center;
+  height: 90px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.motion-track {
+  position: relative;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.motion-ball {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.motion-stagger {
+  display: flex;
+  gap: 12px;
+}
+
+.motion-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+@keyframes fj-demo-slide {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(min(220px, calc(100vw - 280px)));
+  }
+}
+
+@keyframes fj-demo-pop {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---------- Theme playground ---------- */
+
+.playground {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+  margin-bottom: var(--space-7);
+}
+
+.playground-stage-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.playground-stage {
+  background: var(--bg);
+  color: var(--text);
+  padding: clamp(var(--space-4), 3vw, var(--space-6));
+
+  /* Semantic aliases compute at :root, so a nested data-theme scope inherits
+     the page's values. Re-declare them here so they re-resolve against the
+     stage's own (possibly dark) primitives. */
+  --bg: var(--paper);
+  --bg-sunken: var(--paper-2);
+  --text: var(--ink);
+  --text-muted: var(--ink-2);
+  --text-subtle: var(--ink-3);
+  --text-disabled: var(--ink-4);
+  --border: var(--line);
+  --border-strong: var(--line-strong);
+}
+
+@media (max-width: 899px) {
+  .playground {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Simple pages (stubs, 404) ---------- */
 
 .placeholder-page {
