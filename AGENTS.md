@@ -1,6 +1,6 @@
 # FJ — Free Joy design system website
 
-Last updated: 2026-07-02
+Last updated: 2026-07-03 (all 9 phases complete, all suites green)
 Workspace: `/Users/llfzzz/Desktop/FJ`
 
 This repository is the **official private website, documentation site, playground, and showcase**
@@ -85,8 +85,8 @@ pnpm workspace
 - [x] Phase 5 — ⌘K search (FJ CommandMenu), token docs pages, theme playground
 - [x] Phase 6 — a11y + responsive + states polish (skip link, ErrorBoundary, FJ Drawer for
   mobile nav, 375px overflow audit)
-- [ ] Phase 7 — Vitest + Playwright + full verification
-- [ ] Phase 8 — docs finalization
+- [x] Phase 7 — Vitest (17 tests) + Playwright (8 e2e) + full verification
+- [x] Phase 8 — docs finalization (this file)
 
 ## Component inventory
 
@@ -153,10 +153,56 @@ CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection,
   trap + Escape + focus restore for free); 375px audit — no page-level horizontal overflow
   (code blocks and props tables scroll inside their own wrappers); drawer verified full-height
   with focus inside and 39 nav links.
+- Phase 7 (2026-07-03): `pnpm typecheck` green · `pnpm build` green · `pnpm test` 17/17
+  (4× stable after fixing a shiki-tokenization race in one assertion) · `pnpm e2e` 8/8
+  against the production build.
+
+## React Bits influence (patterns, never pixels)
+
+React Bits informed the product experience only — nothing was copied:
+- Information architecture: category sidebar + per-component pages with prev/next.
+- Preview/Code tabs with a live "Customize" control panel whose knobs rewrite the snippet.
+- Copy-code actions everywhere; ⌘K palette over the whole catalog.
+- A motion-effects family showcased with replayable, knob-driven demos.
+- Restrained landing composition: animated hero, principle cards, live component peek, one
+  flagship CTA treatment.
+All visuals, tokens, voice, and component APIs are Free Joy's own.
+
+## Site pages
+
+Landing `/` · Get started `/docs/{introduction,installation,usage}` · Tokens
+`/docs/tokens/{colors,typography,spacing,motion}` · Catalog `/components` (+ 32 component
+pages) · `/playground` · styled 404 · app-level ErrorBoundary · skip link · light/dark/system
+theme with no-flash boot script.
+
+## Test topology
+
+- Vitest (jsdom): `src/registry/snippet.test.ts` (serializer), `src/registry/registry.test.ts`
+  (catalog integrity), `src/lib/theme.test.tsx` (persistence + root attribute),
+  `src/docs/Showcase.test.tsx` (knobs → preview/code, reset). Setup installs an in-memory
+  localStorage (Node ≥22 stub shadows jsdom's) and mocks matchMedia/IntersectionObserver.
+- Playwright (chromium, against `vite preview` of the production build): landing → docs nav,
+  playground → code tab, clipboard copy, catalog filter, theme persistence across reload,
+  ⌘K search → navigate, 404, 375px drawer navigation.
 
 ## Known limitations / intentional debt
 
-- FJ `Icon` component renders Lucide from CDN (upstream decision); site chrome avoids it via
-  `lucide-react`. Self-hosting the FJ Icon glyphs is a future upstream change.
-- Long-tail components (pickers, DataGrid family, RichTextEditor…) are pulled but not deeply
-  documented until post-core phases.
+- FJ `Icon`, `CommandMenu`, `Toast`, `EmptyState`, `SegmentedControl` render Lucide glyphs from
+  the unpkg CDN (upstream convention) — offline dev shows missing glyphs there; site chrome uses
+  bundled `lucide-react`. Self-hosting the FJ glyph pipeline is a future upstream change.
+- 44 of 89 upstream components are synced; the long tail (pickers, DataGrid family,
+  RichTextEditor, Tree/Transfer, Lightbox/Tour…) syncs on demand via the same DesignSync flow.
+- The playground has no density knob on purpose: FJ component paddings are design decisions,
+  not tokens.
+- Upstream `Button accent="sun"` uses `var(--ink)` for text-on-accent, which flips near-white in
+  dark mode (contrast fail on yellow); the playground pins literal ink. Worth an upstream fix.
+- No deployment target configured (private site); `pnpm build` emits a static `dist/`.
+
+## Next steps
+
+1. Sync + document the remaining navigation family (Accordion, Breadcrumb, Pagination, Stepper).
+2. Pull `Result`/`LoadingOverlay` to complete feedback; add them to the catalog.
+3. Consider pushing local findings upstream via /design-sync (sun-accent contrast, alias
+   re-declaration note for nested theme scopes).
+4. Data family expansion (List/Stat/KeyValue/Timeline are small; DataGrid is the big one).
+5. Optional: per-page code splitting if the main bundle (≈370 kB) starts to matter.
