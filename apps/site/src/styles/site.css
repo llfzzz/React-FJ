@@ -456,6 +456,127 @@ html {
   font-size: var(--text-sm);
 }
 
+/* ---------- Landing ---------- */
+
+.hero {
+  padding-block: clamp(var(--space-8), 12vh, var(--space-10));
+  display: grid;
+  gap: var(--space-5);
+  justify-items: center;
+  text-align: center;
+}
+
+.hero-title {
+  max-width: 16ch;
+  font-size: clamp(2.75rem, 7vw, var(--text-4xl));
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.hero-lead {
+  max-width: 52ch;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-stats {
+  display: flex;
+  gap: clamp(var(--space-5), 6vw, var(--space-8));
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: var(--space-4) 0 0;
+}
+
+.hero-stats > div {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+}
+
+.hero-stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--text);
+}
+
+.hero-stat-label {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-subtle);
+}
+
+.landing-section {
+  padding-block: clamp(var(--space-7), 8vh, var(--space-9)) 0;
+}
+
+.landing-section:last-of-type {
+  padding-bottom: clamp(var(--space-7), 8vh, var(--space-9));
+}
+
+.section-head {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 640px;
+  margin-bottom: var(--space-6);
+}
+
+.section-title {
+  font-size: clamp(var(--text-xl), 4.5vw, var(--text-3xl));
+  font-weight: var(--weight-semibold);
+  line-height: 1.12;
+  letter-spacing: var(--tracking-snug);
+}
+
+.principle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+[data-theme='dark'] .principle-icon {
+  color: var(--joy-300);
+}
+
+.peek-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  border-radius: var(--radius-lg);
+}
+
+.peek-link:hover {
+  text-decoration: none;
+}
+
+.peek-body {
+  display: grid;
+  align-items: center;
+  min-height: 64px;
+}
+
+.cta-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
 /* ---------- Simple pages (stubs, 404) ---------- */
 
 .placeholder-page {

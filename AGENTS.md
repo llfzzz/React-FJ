@@ -79,7 +79,7 @@ pnpm workspace
 
 - [x] Phase 0 — scaffold: git, pnpm workspace, Vite React-TS strict app, this file
 - [x] Phase 1 — FJ foundations sync (tokens/styles/assets) + theme store + app shell
-- [ ] Phase 2 — core/layout/effects sync + landing page
+- [x] Phase 2 — core/layout/effects sync + landing page
 - [ ] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
 - [ ] Phase 4 — core ~18 components documented + effects showcase
 - [ ] Phase 5 — ⌘K search, token docs pages, theme playground
@@ -91,8 +91,14 @@ pnpm workspace
 
 Synced foundations: `styles.css`, `tokens/{colors,typography,spacing,motion,fonts,base}.css`,
 `assets/{logo-mark,logo-wordmark}.svg`, `readme.md`.
-Synced components: (Phase 2+ pulls component families)
-Documented on site: (none yet)
+Synced components (29):
+- core (14): Button, IconButton, Card, Icon, Badge, Tag, Avatar, Divider, Kbd, StatusDot,
+  CopyButton, SplitButton, Fab, BackToTop
+- layout (7): Stack, Container, Grid, Text, AppShell, PageHeader, Toolbar
+- feedback (1 of 9): Spinner (Button dependency; rest arrive in Phase 4)
+- effects (7): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
+Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
+Documented on site: (Phase 3–4)
 
 ## Local patches
 
@@ -106,6 +112,12 @@ Documented on site: (none yet)
 - Phase 1 (2026-07-02): `pnpm typecheck` + `pnpm build` green. Manual preview: shell renders in
   light + dark (`fj-theme` persisted; system fallback via inline script), glass top bar, mobile
   docs bar + drawer at <900px, 404 route.
+- Phase 2 (2026-07-02): typecheck + build green. Landing verified in light + dark at ~610px:
+  hero (TextReveal + AmbientBackground), SpotlightCard principles, live component peek grid,
+  AnimatedBorder CTA, footer. Gotchas recorded: fj-ui needs `include` + react-type `paths` in
+  tsconfig.app.json (files live outside the app); stale `tsc -b` tsbuildinfo can report ghost
+  errors — clear `node_modules/.tmp` when in doubt; FJ `Text` uses fixed token sizes, so
+  responsive display headings on the site use site CSS clamps (`.section-title`, `.hero-title`).
 
 ## Known limitations / intentional debt
 

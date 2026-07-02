@@ -20,8 +20,11 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "paths": {
       "@fj": ["../../packages/fj-ui/index.ts"],
-      "@fj/*": ["../../packages/fj-ui/*"]
+      "@fj/*": ["../../packages/fj-ui/*"],
+      "react": ["./node_modules/@types/react/index.d.ts"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime.d.ts"],
+      "react-dom": ["./node_modules/@types/react-dom/index.d.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../../packages/fj-ui"]
 }
