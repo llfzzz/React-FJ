@@ -1,0 +1,60 @@
+import React from "react";
+
+/**
+ * Free Joy — Radio / RadioGroup
+ * Single-choice control. Use RadioGroup for a set; Radio for one option.
+ */
+export function Radio({ checked = false, onChange, disabled = false, label, name, value, id, style, ...rest }) {
+  const fid = id || React.useId();
+  return (
+    <label
+      htmlFor={fid}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 10,
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.5 : 1, ...style,
+      }}
+    >
+      <span
+        style={{
+          display: "inline-flex", alignItems: "center", justifyContent: "center",
+          width: 20, height: 20, flex: "none", borderRadius: "50%",
+          border: `1.5px solid ${checked ? "var(--accent)" : "var(--border-strong)"}`,
+          background: "var(--surface)",
+          transition: "border-color var(--dur-fast) var(--ease-out)",
+        }}
+      >
+        <span style={{
+          width: 10, height: 10, borderRadius: "50%",
+          background: "var(--accent)",
+          transform: checked ? "scale(1)" : "scale(0)",
+          transition: "transform var(--dur-fast) var(--ease-out)",
+        }} />
+      </span>
+      <input
+        id={fid} type="radio" name={name} value={value} checked={checked} disabled={disabled}
+        onChange={(e) => onChange && onChange(value, e)}
+        style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
+        {...rest}
+      />
+      {label && <span style={{ fontSize: "var(--text-base)", color: "var(--text)" }}>{label}</span>}
+    </label>
+  );
+}
+
+export function RadioGroup({ value, onChange, options = [], name, style, ...rest }) {
+  const gname = name || React.useId();
+  return (
+    <div role="radiogroup" style={{ display: "flex", flexDirection: "column", gap: 12, ...style }} {...rest}>
+      {options.map((o) => {
+        const opt = typeof o === "string" ? { label: o, value: o } : o;
+        return (
+          <Radio
+            key={opt.value} name={gname} value={opt.value} label={opt.label}
+            checked={value === opt.value} onChange={onChange}
+          />
+        );
+      })}
+    </div>
+  );
+}

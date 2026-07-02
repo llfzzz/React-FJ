@@ -21,10 +21,11 @@ import {
   TextReveal,
 } from '@fj';
 import { usePageTitle } from '../../lib/usePageTitle';
+import { presentCategories, REGISTRY } from '../../registry';
 
 const STATS = [
-  { value: 29, label: 'components synced' },
-  { value: 8, label: 'component families' },
+  { value: REGISTRY.length, label: 'documented components' },
+  { value: presentCategories().length, label: 'component families' },
   { value: 2, label: 'themes, one voice' },
 ];
 

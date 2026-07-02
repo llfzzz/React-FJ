@@ -1,0 +1,70 @@
+import React from "react";
+
+const ACC = { coral: "var(--joy-500)", sun: "var(--sun-500)", bloom: "var(--bloom-500)" };
+
+/**
+ * Free Joy — Slider (range)
+ * Controlled single-thumb range with a filled track and optional value bubble.
+ * `accent` recolors the fill + thumb per-instance.
+ */
+export function Slider({
+  value,
+  defaultValue = 50,
+  min = 0,
+  max = 100,
+  step = 1,
+  onChange,
+  accent = "coral",
+  showValue = false,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const [internal, setInternal] = React.useState(defaultValue);
+  const val = value ?? internal;
+  const color = ACC[accent] || accent;
+  const pct = ((val - min) / (max - min)) * 100;
+
+  const handle = (e) => {
+    const v = Number(e.target.value);
+    if (value === undefined) setInternal(v);
+    onChange && onChange(v);
+  };
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 14, width: "100%", opacity: disabled ? 0.5 : 1, ...style }}>
+      <div style={{ position: "relative", flex: 1, height: 22, display: "flex", alignItems: "center" }}>
+        <div style={{ position: "absolute", inset: "auto 0", height: 6, borderRadius: 999, background: "var(--paper-3)" }} />
+        <div style={{ position: "absolute", left: 0, height: 6, width: `${pct}%`, borderRadius: 999, background: color }} />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={val}
+          disabled={disabled}
+          onChange={handle}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            margin: 0,
+            appearance: "none",
+            WebkitAppearance: "none",
+            background: "transparent",
+            cursor: disabled ? "not-allowed" : "pointer",
+            "--fj-thumb": color,
+          }}
+          {...rest}
+        />
+      </div>
+      {showValue && (
+        <span style={{ minWidth: 36, textAlign: "right", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{val}</span>
+      )}
+      <style dangerouslySetInnerHTML={{ __html: `
+        input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:var(--fj-thumb,var(--joy-500)); border:3px solid var(--surface); box-shadow:var(--shadow-sm); cursor:pointer; }
+        input[type=range]::-moz-range-thumb{ width:20px; height:20px; border:3px solid var(--surface); border-radius:50%; background:var(--fj-thumb,var(--joy-500)); box-shadow:var(--shadow-sm); cursor:pointer; }
+      ` }} />
+    </div>
+  );
+}

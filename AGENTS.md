@@ -81,7 +81,7 @@ pnpm workspace
 - [x] Phase 1 — FJ foundations sync (tokens/styles/assets) + theme store + app shell
 - [x] Phase 2 — core/layout/effects sync + landing page
 - [x] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
-- [ ] Phase 4 — core ~18 components documented + effects showcase
+- [x] Phase 4 — core set + effects documented (32 registry entries)
 - [ ] Phase 5 — ⌘K search, token docs pages, theme playground
 - [ ] Phase 6 — a11y + responsive + states polish
 - [ ] Phase 7 — Vitest + Playwright + full verification
@@ -95,15 +95,19 @@ Synced components (29):
 - core (14): Button, IconButton, Card, Icon, Badge, Tag, Avatar, Divider, Kbd, StatusDot,
   CopyButton, SplitButton, Fab, BackToTop
 - layout (7): Stack, Container, Grid, Text, AppShell, PageHeader, Toolbar
-- forms (2 of 21): Input, Switch (docs-engine dependencies)
-- navigation (2 of 6): Tabs, SegmentedControl (docs-engine dependencies)
-- feedback (1 of 9): Spinner (Button dependency; rest arrive in Phase 4)
+- forms (7 of 21): Input, Textarea, Select, Checkbox, Radio(+Group), Switch, Slider
+- navigation (2 of 6): Tabs, SegmentedControl
+- feedback (8 of 9): Spinner, Alert, Tooltip, Progress, Skeleton, Toast(+Provider/useToast),
+  EmptyState (missing: Result, LoadingOverlay)
+- overlay (3 of 10): Modal, ConfirmDialog, Drawer
+- data (1 of 13): Table
 - effects (7): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
 Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
-Documented on site (3): Button, Card, Badge — registry entries with playground controls,
-generated snippets, examples, props, a11y notes. Engine: `src/registry/*` (types, snippet
-serializer, entries), `src/docs/*` (Showcase, ControlPanel, CodeBlock via fine-grained lazy
-shiki + JS regex engine, PropsTable, DocSection, CopyIconButton).
+Documented on site (32): all synced interactive components — registry entries with playground
+controls, generated or custom snippets, examples, props, a11y notes, grouped in
+`src/registry/entries/{button,card,badge,core-more,forms,navigation,feedback,overlay,data,effects}`.
+Engine: `src/registry/*` (types, snippet serializer), `src/docs/*` (Showcase, ControlPanel,
+CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection, CopyIconButton).
 
 ## Local patches
 
@@ -130,6 +134,11 @@ shiki + JS regex engine, PropsTable, DocSection, CopyIconButton).
   needs ≤3 options in the 240px panel (4+ render as chips); use fine-grained shiki
   (`shiki/core` + `@shikijs/langs`/`themes` + JS regex engine) — `shiki/bundle/web` ships a
   600K wasm chunk and ~40 language chunks.
+- Phase 4 (2026-07-03): typecheck + build green. Catalog lists 32 components across 7 families;
+  Modal verified in preview (opens from playground, focus lands inside, aria-label set, Escape
+  closes). Landing stats now derive from the registry. Stateful demos (Checkbox/Radio/Switch/
+  Slider/Modal/Drawer/Toast) use local demo components with custom `code()` templates; effects
+  demos remount on knob change (key=JSON.stringify(values)) so entrances replay.
 
 ## Known limitations / intentional debt
 

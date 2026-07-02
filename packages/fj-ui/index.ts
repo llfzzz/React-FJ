@@ -53,11 +53,21 @@ export type { PageHeaderProps } from "./components/layout/PageHeader";
 export { Toolbar } from "./components/layout/Toolbar";
 export type { ToolbarProps } from "./components/layout/Toolbar";
 
-// forms (partial — full family arrives with the docs phases)
+// forms
 export { Input } from "./components/forms/Input";
 export type { InputProps } from "./components/forms/Input";
+export { Textarea } from "./components/forms/Textarea";
+export type { TextareaProps } from "./components/forms/Textarea";
+export { Select } from "./components/forms/Select";
+export type { SelectProps, SelectOption } from "./components/forms/Select";
+export { Checkbox } from "./components/forms/Checkbox";
+export type { CheckboxProps } from "./components/forms/Checkbox";
+export { Radio, RadioGroup } from "./components/forms/Radio";
+export type { RadioProps, RadioGroupProps, RadioOption } from "./components/forms/Radio";
 export { Switch } from "./components/forms/Switch";
 export type { SwitchProps } from "./components/forms/Switch";
+export { Slider } from "./components/forms/Slider";
+export type { SliderProps } from "./components/forms/Slider";
 
 // navigation (partial)
 export { Tabs } from "./components/navigation/Tabs";
@@ -65,9 +75,33 @@ export type { TabsProps, TabItem } from "./components/navigation/Tabs";
 export { SegmentedControl } from "./components/navigation/SegmentedControl";
 export type { SegmentedControlProps, SegmentOption } from "./components/navigation/SegmentedControl";
 
-// feedback (partial — full family arrives with the docs phases)
+// feedback
 export { Spinner } from "./components/feedback/Spinner";
 export type { SpinnerProps } from "./components/feedback/Spinner";
+export { Alert } from "./components/feedback/Alert";
+export type { AlertProps } from "./components/feedback/Alert";
+export { Tooltip } from "./components/feedback/Tooltip";
+export type { TooltipProps } from "./components/feedback/Tooltip";
+export { Progress } from "./components/feedback/Progress";
+export type { ProgressProps } from "./components/feedback/Progress";
+export { Skeleton } from "./components/feedback/Skeleton";
+export type { SkeletonProps } from "./components/feedback/Skeleton";
+export { Toast, ToastProvider, useToast } from "./components/feedback/Toast";
+export type { ToastProps, ToastOptions, ToastProviderProps } from "./components/feedback/Toast";
+export { EmptyState } from "./components/feedback/EmptyState";
+export type { EmptyStateProps } from "./components/feedback/EmptyState";
+
+// overlay (partial)
+export { Modal } from "./components/overlay/Modal";
+export type { ModalProps } from "./components/overlay/Modal";
+export { ConfirmDialog } from "./components/overlay/ConfirmDialog";
+export type { ConfirmDialogProps } from "./components/overlay/ConfirmDialog";
+export { Drawer } from "./components/overlay/Drawer";
+export type { DrawerProps } from "./components/overlay/Drawer";
+
+// data (partial)
+export { Table } from "./components/data/Table";
+export type { TableProps, TableColumn } from "./components/data/Table";
 
 // effects
 export { TextReveal } from "./components/effects/TextReveal";

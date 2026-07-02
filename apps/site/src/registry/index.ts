@@ -3,9 +3,73 @@ import { CATEGORY_LABELS, CATEGORY_ORDER } from './types';
 import { buttonDoc } from './entries/button';
 import { cardDoc } from './entries/card';
 import { badgeDoc } from './entries/badge';
+import { avatarDoc, iconButtonDoc, tagDoc } from './entries/core-more';
+import {
+  checkboxDoc,
+  inputDoc,
+  radioDoc,
+  selectDoc,
+  sliderDoc,
+  switchDoc,
+  textareaDoc,
+} from './entries/forms';
+import { segmentedControlDoc, tabsDoc } from './entries/navigation';
+import {
+  alertDoc,
+  emptyStateDoc,
+  progressDoc,
+  skeletonDoc,
+  spinnerDoc,
+  toastDoc,
+  tooltipDoc,
+} from './entries/feedback';
+import { drawerDoc, modalDoc } from './entries/overlay';
+import { tableDoc } from './entries/data';
+import {
+  ambientBackgroundDoc,
+  animatedBorderDoc,
+  countUpDoc,
+  glowDoc,
+  revealDoc,
+  spotlightCardDoc,
+  textRevealDoc,
+} from './entries/effects';
 
 /** Every documented component, in sidebar order. */
-export const REGISTRY: ComponentDoc[] = sortByCategory([buttonDoc, cardDoc, badgeDoc]);
+export const REGISTRY: ComponentDoc[] = sortByCategory([
+  buttonDoc,
+  iconButtonDoc,
+  cardDoc,
+  badgeDoc,
+  tagDoc,
+  avatarDoc,
+  inputDoc,
+  textareaDoc,
+  selectDoc,
+  checkboxDoc,
+  radioDoc,
+  switchDoc,
+  sliderDoc,
+  tabsDoc,
+  segmentedControlDoc,
+  alertDoc,
+  tooltipDoc,
+  toastDoc,
+  progressDoc,
+  spinnerDoc,
+  skeletonDoc,
+  emptyStateDoc,
+  modalDoc,
+  drawerDoc,
+  tableDoc,
+  textRevealDoc,
+  revealDoc,
+  countUpDoc,
+  spotlightCardDoc,
+  animatedBorderDoc,
+  glowDoc,
+  ambientBackgroundDoc,
+]);
 
 function sortByCategory(docs: ComponentDoc[]): ComponentDoc[] {
   return [...docs].sort((a, b) => {
