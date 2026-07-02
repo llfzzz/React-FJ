@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Showcase } from './Showcase';
 import { buttonDoc } from '../registry/entries/button';
@@ -13,14 +13,17 @@ describe('Showcase', () => {
 
   it('updates the generated code when a knob changes, and resets', async () => {
     const user = userEvent.setup();
-    render(<Showcase doc={buttonDoc} />);
+    const { container } = render(<Showcase doc={buttonDoc} />);
 
     // variant has 4 options → chip group
     await user.click(screen.getByRole('button', { name: 'secondary' }));
     await user.click(screen.getByRole('tab', { name: 'Code' }));
 
-    const code = await screen.findByText(/variant="secondary"/);
-    expect(code).toBeInTheDocument();
+    // Once shiki lands, the snippet is split across token spans — assert on
+    // the block's combined text instead of a single text node.
+    await waitFor(() => {
+      expect(container.querySelector('.codeblock')?.textContent).toContain('variant="secondary"');
+    });
 
     await user.click(screen.getByText('Reset'));
     await user.click(screen.getByRole('tab', { name: 'Preview' }));
