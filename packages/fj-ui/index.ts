@@ -53,6 +53,18 @@ export type { PageHeaderProps } from "./components/layout/PageHeader";
 export { Toolbar } from "./components/layout/Toolbar";
 export type { ToolbarProps } from "./components/layout/Toolbar";
 
+// forms (partial — full family arrives with the docs phases)
+export { Input } from "./components/forms/Input";
+export type { InputProps } from "./components/forms/Input";
+export { Switch } from "./components/forms/Switch";
+export type { SwitchProps } from "./components/forms/Switch";
+
+// navigation (partial)
+export { Tabs } from "./components/navigation/Tabs";
+export type { TabsProps, TabItem } from "./components/navigation/Tabs";
+export { SegmentedControl } from "./components/navigation/SegmentedControl";
+export type { SegmentedControlProps, SegmentOption } from "./components/navigation/SegmentedControl";
+
 // feedback (partial — full family arrives with the docs phases)
 export { Spinner } from "./components/feedback/Spinner";
 export type { SpinnerProps } from "./components/feedback/Spinner";

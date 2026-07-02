@@ -80,7 +80,7 @@ pnpm workspace
 - [x] Phase 0 — scaffold: git, pnpm workspace, Vite React-TS strict app, this file
 - [x] Phase 1 — FJ foundations sync (tokens/styles/assets) + theme store + app shell
 - [x] Phase 2 — core/layout/effects sync + landing page
-- [ ] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
+- [x] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
 - [ ] Phase 4 — core ~18 components documented + effects showcase
 - [ ] Phase 5 — ⌘K search, token docs pages, theme playground
 - [ ] Phase 6 — a11y + responsive + states polish
@@ -95,10 +95,15 @@ Synced components (29):
 - core (14): Button, IconButton, Card, Icon, Badge, Tag, Avatar, Divider, Kbd, StatusDot,
   CopyButton, SplitButton, Fab, BackToTop
 - layout (7): Stack, Container, Grid, Text, AppShell, PageHeader, Toolbar
+- forms (2 of 21): Input, Switch (docs-engine dependencies)
+- navigation (2 of 6): Tabs, SegmentedControl (docs-engine dependencies)
 - feedback (1 of 9): Spinner (Button dependency; rest arrive in Phase 4)
 - effects (7): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
 Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
-Documented on site: (Phase 3–4)
+Documented on site (3): Button, Card, Badge — registry entries with playground controls,
+generated snippets, examples, props, a11y notes. Engine: `src/registry/*` (types, snippet
+serializer, entries), `src/docs/*` (Showcase, ControlPanel, CodeBlock via fine-grained lazy
+shiki + JS regex engine, PropsTable, DocSection, CopyIconButton).
 
 ## Local patches
 
@@ -118,6 +123,13 @@ Documented on site: (Phase 3–4)
   tsconfig.app.json (files live outside the app); stale `tsc -b` tsbuildinfo can report ghost
   errors — clear `node_modules/.tmp` when in doubt; FJ `Text` uses fixed token sizes, so
   responsive display headings on the site use site CSS clamps (`.section-title`, `.hero-title`).
+- Phase 3 (2026-07-02): typecheck + build green. /components/button verified in preview: live
+  playground (chips/segmented/switch/input controls), Code tab with shiki snippet that mirrors
+  non-default control values, copy button, reset, sidebar auto-built from the registry, catalog
+  page with category filter, Introduction/Installation/Usage written. Notes: SegmentedControl
+  needs ≤3 options in the 240px panel (4+ render as chips); use fine-grained shiki
+  (`shiki/core` + `@shikijs/langs`/`themes` + JS regex engine) — `shiki/bundle/web` ships a
+  600K wasm chunk and ~40 language chunks.
 
 ## Known limitations / intentional debt
 

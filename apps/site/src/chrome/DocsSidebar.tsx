@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { NAV_GROUPS } from '../registry/nav';
+import { buildNavGroups } from '../registry/nav';
+
+const NAV_GROUPS = buildNavGroups();
 
 export function SidebarNav() {
   return (
