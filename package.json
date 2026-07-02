@@ -1,0 +1,14 @@
+{
+  "name": "fj-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "dev": "pnpm --filter fj-site dev",
+    "build": "pnpm --filter fj-site build",
+    "preview": "pnpm --filter fj-site preview",
+    "typecheck": "pnpm --filter fj-site typecheck",
+    "test": "pnpm --filter fj-site test",
+    "e2e": "pnpm --filter fj-site e2e"
+  }
+}
