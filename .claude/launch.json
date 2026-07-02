@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fj-site",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "fj-site", "dev"],
+      "port": 5173
+    }
+  ]
+}

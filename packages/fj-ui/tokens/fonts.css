@@ -1,0 +1,7 @@
+/* Free Joy — Webfonts.
+   FJ-LOCAL-PATCH: upstream loads these families from the Google Fonts CDN via
+   @import. This site self-hosts the same families (Bricolage Grotesque,
+   Hanken Grotesk, JetBrains Mono) through @fontsource-variable packages
+   imported in apps/site/src/main.tsx; the variable family names are mapped
+   onto the --font-* tokens in apps/site/src/styles/site.css. Kept empty so
+   styles.css stays linkable without a CDN dependency. */

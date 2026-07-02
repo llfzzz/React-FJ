@@ -78,7 +78,7 @@ pnpm workspace
 ## Implementation phases / status
 
 - [x] Phase 0 — scaffold: git, pnpm workspace, Vite React-TS strict app, this file
-- [ ] Phase 1 — FJ foundations sync (tokens/styles/assets) + theme store + app shell
+- [x] Phase 1 — FJ foundations sync (tokens/styles/assets) + theme store + app shell
 - [ ] Phase 2 — core/layout/effects sync + landing page
 - [ ] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
 - [ ] Phase 4 — core ~18 components documented + effects showcase
@@ -89,16 +89,23 @@ pnpm workspace
 
 ## Component inventory
 
-Synced: (none yet — Phase 1 pulls foundations, Phase 2+ pulls component families)
+Synced foundations: `styles.css`, `tokens/{colors,typography,spacing,motion,fonts,base}.css`,
+`assets/{logo-mark,logo-wordmark}.svg`, `readme.md`.
+Synced components: (Phase 2+ pulls component families)
 Documented on site: (none yet)
 
 ## Local patches
 
-(none)
+- `packages/fj-ui/tokens/fonts.css` — upstream `@import`s Google Fonts CDN; replaced with a
+  comment (fonts self-hosted via `@fontsource-variable/*` in `apps/site/src/main.tsx`, family
+  names mapped to `--font-*` tokens in `apps/site/src/styles/site.css`). Same approach the
+  upstream consumers use; marked `FJ-LOCAL-PATCH` in the file.
 
 ## Verification results
 
-(pending — recorded per phase)
+- Phase 1 (2026-07-02): `pnpm typecheck` + `pnpm build` green. Manual preview: shell renders in
+  light + dark (`fj-theme` persisted; system fallback via inline script), glass top bar, mobile
+  docs bar + drawer at <900px, 404 route.
 
 ## Known limitations / intentional debt
 
