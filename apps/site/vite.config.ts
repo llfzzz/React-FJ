@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
@@ -14,5 +15,11 @@ export default defineConfig({
       { find: /^@fj\//, replacement: fjRoot + '/' },
     ],
     dedupe: ['react', 'react-dom'],
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
+    globals: false,
   },
 });
