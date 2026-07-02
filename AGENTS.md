@@ -83,7 +83,8 @@ pnpm workspace
 - [x] Phase 3 — docs engine (registry, Showcase, CodeBlock, PropsTable, ControlPanel)
 - [x] Phase 4 — core set + effects documented (32 registry entries)
 - [x] Phase 5 — ⌘K search (FJ CommandMenu), token docs pages, theme playground
-- [ ] Phase 6 — a11y + responsive + states polish
+- [x] Phase 6 — a11y + responsive + states polish (skip link, ErrorBoundary, FJ Drawer for
+  mobile nav, 375px overflow audit)
 - [ ] Phase 7 — Vitest + Playwright + full verification
 - [ ] Phase 8 — docs finalization
 
@@ -147,6 +148,11 @@ CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection,
   --text-on-accent to literal ink #1C1C1A — var(--ink) flips near-white in dark mode and fails
   contrast on the yellow fill. Upstream FJ Button accent="sun" has the same dark-mode issue —
   worth an upstream fix.
+- Phase 6 (2026-07-03): typecheck + build green. Skip-to-content link (visible on focus);
+  app-level ErrorBoundary in FJ voice; mobile docs nav swapped to the synced FJ Drawer (focus
+  trap + Escape + focus restore for free); 375px audit — no page-level horizontal overflow
+  (code blocks and props tables scroll inside their own wrappers); drawer verified full-height
+  with focus inside and 39 nav links.
 
 ## Known limitations / intentional debt
 
