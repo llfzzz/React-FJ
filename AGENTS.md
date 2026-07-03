@@ -72,6 +72,14 @@ pnpm workspace
   `.docs`/`.playground` sidebar column and the `.showcase` side panel from one place. `.container`
   and `.docs` are `width: 100%` with that as a `max-width`, so the wider cap is fluid below it and
   only caps stretch on very wide displays — no page-by-page overrides needed.
+- Widening the container exposed a second problem on plain prose pages (Introduction, token
+  pages): `.doc-prose`'s 68ch cap is correct for readability, but left a large dead zone to the
+  right of it once the content column got wider. Fixed with `src/docs/OnThisPage.tsx`, a shared
+  "on this page" rail wired once into `DocsLayout` (not per-page): it reads the current route's
+  own `.doc-h2` headings from a ref after render, so any page gets a scroll-spied anchor nav for
+  free. Renders `null` below 2 headings, so the catalog (no `DocSection`s) stays single-column;
+  `.docs-content:has(.on-this-page)` only reserves the 220px track when the rail actually renders,
+  and it's hidden below 1300px viewport width to avoid crowding the sidebar + content column.
 
 ## Commands
 
@@ -94,7 +102,8 @@ pnpm workspace
 - [x] Phase 7 — Vitest (17 tests) + Playwright (8 e2e) + full verification
 - [x] Phase 8 — docs finalization (this file)
 - [x] Phase 9 — wide layout pass: `--container`/`--container-sm`/`--rail-width` site tokens
-  widened; sidebar/showcase/playground rails consolidated onto `--rail-width`
+  widened; sidebar/showcase/playground rails consolidated onto `--rail-width`; added the
+  `OnThisPage` scroll-spied rail so widened prose pages don't leave a dead zone next to the text
 
 ## Component inventory
 
@@ -168,7 +177,14 @@ CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection,
   verified at 375/768/1920px: landing, catalog, a component detail page, and the playground all
   fill the wider 1600px container with no horizontal overflow; docs sidebar collapses to the
   mobile drawer below 899px as before; prose columns keep their `ch`-based caps so paragraph text
-  doesn't stretch on ultra-wide viewports.
+  doesn't stretch on ultra-wide viewports. Follow-up in the same phase: added the `OnThisPage`
+  rail (see Architecture) and re-verified at 1100/1920px — catalog stays single-column with no
+  reserved TOC space, a component page's Showcase keeps a healthy 668px stage next to the 264px
+  customize panel and the 220px TOC, and the rail hides below 1300px with no leftover empty
+  column. `pnpm e2e` 8/8 — caught and fixed a pre-existing regression from the earlier
+  three-state→two-state theme toggle change: the "toggle persists across reloads" test still
+  clicked twice expecting a system→light→dark cycle; updated to one click (light→dark) matching
+  the new toggle.
 
 ## React Bits influence (patterns, never pixels)
 

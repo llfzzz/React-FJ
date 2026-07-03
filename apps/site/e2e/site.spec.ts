@@ -48,8 +48,7 @@ test.describe('theme', () => {
   test('toggle persists across reloads', async ({ page }) => {
     await page.goto('/');
     const toggle = page.getByRole('button', { name: /^Theme:/ });
-    // system → light → dark
-    await toggle.click();
+    // light → dark (two-state toggle; system preference resolves to light here)
     await toggle.click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await page.reload();

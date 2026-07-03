@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PanelLeft } from 'lucide-react';
 import { Drawer } from '@fj';
@@ -6,6 +6,7 @@ import { TopBar } from '../chrome/TopBar';
 import { Footer } from '../chrome/Footer';
 import { DocsSidebar, SidebarNav } from '../chrome/DocsSidebar';
 import { CommandK, useCommandK } from '../chrome/CommandK';
+import { OnThisPage } from '../docs/OnThisPage';
 
 /** Top bar + footer around every page. */
 export function SiteLayout() {
@@ -29,6 +30,7 @@ export function SiteLayout() {
 export function DocsLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { pathname } = useLocation();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Close the drawer when navigation happens inside it.
   useEffect(() => {
@@ -54,7 +56,10 @@ export function DocsLayout() {
         <SidebarNav />
       </Drawer>
       <div className="docs-content">
-        <Outlet />
+        <div className="docs-content-main" ref={contentRef}>
+          <Outlet />
+        </div>
+        <OnThisPage containerRef={contentRef} />
       </div>
     </div>
   );
