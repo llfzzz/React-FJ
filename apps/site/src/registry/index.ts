@@ -1,5 +1,5 @@
 import type { ComponentDoc, Category } from './types';
-import { CATEGORY_LABELS, CATEGORY_ORDER } from './types';
+import { CATEGORY_LABELS, CATEGORY_ORDER, isEffectCategory } from './types';
 import { buttonDoc } from './entries/button';
 import { cardDoc } from './entries/card';
 import { badgeDoc } from './entries/badge';
@@ -145,6 +145,11 @@ export function adjacentDocs(id: string): { prev?: ComponentDoc; next?: Componen
 export function presentCategories(): Category[] {
   const present = new Set(REGISTRY.map((doc) => doc.category));
   return CATEGORY_ORDER.filter((category) => present.has(category));
+}
+
+/** Every documented effect, in sidebar order — powers the /effects gallery. */
+export function effectDocs(): ComponentDoc[] {
+  return REGISTRY.filter((doc) => isEffectCategory(doc.category));
 }
 
 export { CATEGORY_LABELS };

@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Search, Sun } from 'lucide-react';
 import { Kbd } from '@fj';
+import { runThemeTransition } from '@fj-effects';
 import { useTheme } from '../lib/theme';
 import logoMark from '@fj/assets/logo-mark.svg';
 
@@ -21,7 +22,14 @@ export function ThemeToggle() {
       className="icon-btn"
       aria-label={label}
       title={label}
-      onClick={() => setMode(next)}
+      onClick={() =>
+        runThemeTransition(() => {
+          // Apply synchronously so the View-Transition snapshot captures the
+          // new theme; setMode keeps React state (and persistence) in sync.
+          document.documentElement.dataset.theme = next;
+          setMode(next);
+        })
+      }
     >
       <Icon size={18} aria-hidden />
     </button>

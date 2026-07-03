@@ -20,6 +20,7 @@ import {
   Text,
   TextReveal,
 } from '@fj';
+import { GradientText, GridPattern, Magnetic } from '@fj-effects';
 import { usePageTitle } from '../../lib/usePageTitle';
 import { presentCategories, REGISTRY } from '../../registry';
 
@@ -70,13 +71,15 @@ export function LandingPage() {
   return (
     <>
       <AmbientBackground variant="warm" style={{ marginTop: -64, paddingTop: 64 }}>
-        <section className="hero container">
-          <Reveal>
-            <Text variant="eyebrow">Free Joy design system</Text>
-          </Reveal>
-          <h1 className="hero-title">
-            <TextReveal text="A calm home for your interface." />
-          </h1>
+        <GridPattern type="dot" size={26} opacity={0.35}>
+          <section className="hero container">
+            <Reveal>
+              <Text variant="eyebrow">Free Joy design system</Text>
+            </Reveal>
+            <h1 className="hero-title">
+              <TextReveal text="A calm home for your" />{' '}
+              <GradientText>interface</GradientText>.
+            </h1>
           <Reveal delay={240}>
             <p className="hero-lead">
               Free Joy is a minimalist component library with quiet confidence — clean layouts,
@@ -85,9 +88,11 @@ export function LandingPage() {
           </Reveal>
           <Reveal delay={360}>
             <div className="hero-actions">
-              <Link to="/docs/introduction" className="btn btn-primary btn-lg">
-                Get started
-              </Link>
+              <Magnetic>
+                <Link to="/docs/introduction" className="btn btn-primary btn-lg">
+                  Get started
+                </Link>
+              </Magnetic>
               <Link to="/components" className="btn btn-secondary btn-lg">
                 Browse components
               </Link>
@@ -105,7 +110,8 @@ export function LandingPage() {
               ))}
             </dl>
           </Reveal>
-        </section>
+          </section>
+        </GridPattern>
       </AmbientBackground>
 
       <section className="landing-section container">

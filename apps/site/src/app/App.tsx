@@ -15,6 +15,8 @@ import { TypographyPage } from '../pages/tokens/TypographyPage';
 import { SpacingPage } from '../pages/tokens/SpacingPage';
 import { MotionPage } from '../pages/tokens/MotionPage';
 import { PlaygroundPage } from '../pages/playground/PlaygroundPage';
+import { EffectsGalleryPage } from '../pages/effects/EffectsGalleryPage';
+import { EffectsGuidePage } from '../pages/docs/EffectsGuidePage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,8 +44,10 @@ export function App() {
               <Route path="docs/tokens/typography" element={<TypographyPage />} />
               <Route path="docs/tokens/spacing" element={<SpacingPage />} />
               <Route path="docs/tokens/motion" element={<MotionPage />} />
+              <Route path="docs/effects-guide" element={<EffectsGuidePage />} />
               <Route path="components" element={<ComponentsIndexPage />} />
               <Route path="components/:id" element={<ComponentPage />} />
+              <Route path="effects" element={<EffectsGalleryPage />} />
               <Route path="playground" element={<PlaygroundPage />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />

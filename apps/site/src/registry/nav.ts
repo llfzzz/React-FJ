@@ -29,7 +29,15 @@ const TOKENS: NavGroup = {
   ],
 };
 
-/** Sidebar structure: get-started chapters, tokens, then one group per category. */
+const EFFECTS: NavGroup = {
+  label: 'Effects & Motion',
+  items: [
+    { label: 'Gallery', to: '/effects' },
+    { label: 'Motion & effects guide', to: '/docs/effects-guide' },
+  ],
+};
+
+/** Sidebar structure: get-started chapters, tokens, effects, then one group per category. */
 export function buildNavGroups(): NavGroup[] {
   const componentGroups: NavGroup[] = presentCategories().map((category) => ({
     label: CATEGORY_LABELS[category],
@@ -38,5 +46,5 @@ export function buildNavGroups(): NavGroup[] {
       to: `/components/${doc.id}`,
     })),
   }));
-  return [GET_STARTED, TOKENS, ...componentGroups];
+  return [GET_STARTED, TOKENS, EFFECTS, ...componentGroups];
 }
