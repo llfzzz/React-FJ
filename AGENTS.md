@@ -106,6 +106,13 @@ pnpm workspace
 - [x] Phase 9 — wide layout pass: `--container`/`--container-sm`/`--rail-width` site tokens
   widened; sidebar/showcase/playground rails consolidated onto `--rail-width`; added the
   `OnThisPage` scroll-spied rail so widened prose pages don't leave a dead zone next to the text
+- [x] Phase A (A0–A1) — 4-format implementation switcher (JS/TS/CSS/Tailwind) on all 32 synced
+  components: raw-source engine (`registry/impl/`), `ImplementationBlock`, global code-style store,
+  Showcase Replay button, authored TS/CSS/Tailwind ports, shared FJ Tailwind `@theme` on Installation
+- [x] Phase B (B1–B4) — fj-effects package + motion primitives; effects IA split into six families;
+  23 new effects with playground + 4-format code; JS-variant generator (`pnpm gen:impl`, esbuild);
+  `/effects` gallery + `/docs/effects-guide`; restrained landing motion; theme-toggle crossfade;
+  expanded unit + e2e suites; this file
 
 ## Component inventory
 
@@ -121,13 +128,26 @@ Synced components (29):
   EmptyState (missing: Result, LoadingOverlay)
 - overlay (4 of 10): Modal, ConfirmDialog, Drawer, CommandMenu
 - data (1 of 13): Table
-- effects (7): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
+- effects (7, synced fj-ui): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
 Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
-Documented on site (32): all synced interactive components — registry entries with playground
-controls, generated or custom snippets, examples, props, a11y notes, grouped in
-`src/registry/entries/{button,card,badge,core-more,forms,navigation,feedback,overlay,data,effects}`.
-Engine: `src/registry/*` (types, snippet serializer), `src/docs/*` (Showcase, ControlPanel,
-CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection, CopyIconButton).
+
+fj-effects (23, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`):
+- effects-text (4): GradientText, RotatingText, AnimatedUnderline, Highlighter
+- effects-interaction (4): Magnetic, TiltCard, Tactile, CursorSpotlight
+- effects-surfaces (2): Shimmer, Float
+- effects-backgrounds (5): Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst
+- effects-status (3): SuccessCheck, ErrorShake, LoaderDots
+- effects-motion (5): StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition (+ runThemeTransition)
+Motion primitives: `packages/fj-effects/motion/{useReducedMotion,useInView,useTrigger,keyframes,types}.ts`.
+
+Documented on site (55): all 32 synced interactive components + 23 fj-effects — registry entries with
+playground controls, generated/custom snippets, examples, props, a11y notes, and a 4-format
+implementation switcher (JS/TS/CSS/Tailwind), grouped in `src/registry/entries/{button,card,badge,
+core-more,forms,navigation,feedback,overlay,data,effects,effects-text,effects-interaction,
+effects-surfaces,effects-backgrounds,effects-status,effects-motion}`.
+Engine: `src/registry/*` (types, snippet serializer, `impl/` 4-format raw-source loader),
+`src/docs/*` (Showcase w/ Replay, ImplementationBlock, ControlPanel, CodeBlock via fine-grained lazy
+shiki + JS regex engine, PropsTable, DocSection, CopyIconButton). Code-style store: `src/lib/codeStyle.tsx`.
 
 ## Local patches
 
@@ -187,6 +207,16 @@ CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection,
   three-state→two-state theme toggle change: the "toggle persists across reloads" test still
   clicked twice expecting a system→light→dark cycle; updated to one click (light→dark) matching
   the new toggle.
+- Phase A/B (2026-07-04): `pnpm typecheck` green · `pnpm build` green · `pnpm test` 42/42 ·
+  `pnpm e2e` 16/16 against the production build. Verified in preview: the 4-format switcher on
+  Button (JS = the actual synced .jsx, TS/CSS/Tailwind ports), CountUp's CSS/Tailwind n/a panel,
+  the six effect categories in the sidebar + catalog chips, the `/effects` gallery (live previews,
+  family filter, links), Collapse expand/collapse, the ErrorShake trigger demo, and the landing
+  hero (GradientText word + GridPattern texture + Magnetic CTA). Findings: the `esbuild` JS-variant
+  generator is committed output — `pnpm gen:impl` must be re-run (and the staleness canary passes)
+  after adding an effect; Playwright reduced-motion must use `page.emulateMedia` (context `test.use`
+  didn't reach `matchMedia`); the Collapse unit test caught a real bug (content unmounted when
+  closed with unmountOnExit off) which was fixed. Nothing under `packages/fj-ui/` was edited.
 
 ## React Bits influence (patterns, never pixels)
 
@@ -285,19 +315,29 @@ no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
 ## Site pages
 
 Landing `/` · Get started `/docs/{introduction,installation,usage}` · Tokens
-`/docs/tokens/{colors,typography,spacing,motion}` · Catalog `/components` (+ 32 component
-pages) · `/playground` · styled 404 · app-level ErrorBoundary · skip link · light/dark/system
-theme with no-flash boot script.
+`/docs/tokens/{colors,typography,spacing,motion}` · Effects gallery `/effects` · Motion & effects
+guide `/docs/effects-guide` · Catalog `/components` (+ 55 component pages) · `/playground` · styled
+404 · app-level ErrorBoundary · skip link · light/dark/system theme with no-flash boot script
+(the toggle crossfades via `runThemeTransition` / View Transitions).
 
 ## Test topology
 
 - Vitest (jsdom): `src/registry/snippet.test.ts` (serializer), `src/registry/registry.test.ts`
-  (catalog integrity), `src/lib/theme.test.tsx` (persistence + root attribute),
-  `src/docs/Showcase.test.tsx` (knobs → preview/code, reset). Setup installs an in-memory
-  localStorage (Node ≥22 stub shadows jsdom's) and mocks matchMedia/IntersectionObserver.
-- Playwright (chromium, against `vite preview` of the production build): landing → docs nav,
-  playground → code tab, clipboard copy, catalog filter, theme persistence across reload,
-  ⌘K search → navigate, 404, 375px drawer navigation.
+  (catalog integrity + 4-format completeness), `src/registry/impl/impl.test.ts` (Button source
+  markers + drift canary; fj-effects generated-JS staleness canary + TS source names), `src/lib/
+  theme.test.tsx`, `src/lib/codeStyle.test.tsx` (default/persist/restore), `src/docs/Showcase.test.tsx`,
+  `src/test/effects/primitives.test.tsx` (useReducedMotion / useTrigger / ensureKeyframes / easeVar),
+  `src/test/effects/behaviors.test.tsx` (Collapse open/close, FadeSwitch swap, SuccessCheck +
+  Sparkles reduced-motion fallbacks, particle cap). Setup installs in-memory localStorage and mocks
+  matchMedia (per-test override for reduced motion) + IntersectionObserver. **42 tests.**
+- Playwright (chromium, against `vite preview` of the production build): `site.spec.ts` (landing nav,
+  playground → code tab, clipboard copy, catalog filter by "Text effects", theme persistence, ⌘K,
+  404, 375px drawer), `implementation.spec.ts` (default TS, format switch, copy + cross-page
+  persistence, n/a panel), `effects.spec.ts` (gallery render/filter/link, Replay remount),
+  `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` — TextReveal plain text,
+  Sparkles zero particles, gallery still renders). **16 tests.**
+  Note: `page.emulateMedia({ reducedMotion })` (in a beforeEach) drives the JS `matchMedia` hook;
+  the context-level `test.use({ reducedMotion })` did NOT reach `matchMedia` in this setup.
 
 ## Known limitations / intentional debt
 

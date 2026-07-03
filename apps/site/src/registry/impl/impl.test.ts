@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { buttonDoc } from '../entries/button';
+import { REGISTRY } from '../index';
+import { isEffectCategory } from '../types';
+
+/** Docs backed by the fj-effects package (importLine points at @fj-effects). */
+const effectPackageDocs = REGISTRY.filter(
+  (doc) => isEffectCategory(doc.category) && doc.importLine.includes("@fj-effects"),
+);
 
 /**
  * Content-sanity checks for the 4-format implementation sources. Button is the
@@ -41,6 +48,29 @@ describe('implementation sources (Button)', () => {
     const ts = (await buttonDoc.implementation?.sources.ts?.()) ?? '';
     for (const prop of buttonDoc.props) {
       expect(ts, `prop "${prop.name}" missing from button.ts.txt`).toContain(prop.name);
+    }
+  });
+});
+
+describe('fj-effects implementation sources', () => {
+  it('generated JS variant resolves and names the component (staleness canary)', async () => {
+    for (const doc of effectPackageDocs) {
+      const js = await doc.implementation?.sources.js?.();
+      expect(js, `${doc.id}: generated JS missing — run \`pnpm gen:impl\``).toBeTruthy();
+      // esbuild keeps the exported function name; if the port is stale this fails.
+      expect(js, `${doc.id}: component ${doc.name} not in generated JS`).toContain(
+        `function ${doc.name}`,
+      );
+    }
+  });
+
+  it('TypeScript variant is the real .tsx source and names the component', async () => {
+    for (const doc of effectPackageDocs) {
+      const ts = await doc.implementation?.sources.ts?.();
+      expect(ts, `${doc.id}: TS source missing`).toBeTruthy();
+      expect(ts, `${doc.id}: component ${doc.name} not in TS source`).toContain(
+        `function ${doc.name}`,
+      );
     }
   });
 });

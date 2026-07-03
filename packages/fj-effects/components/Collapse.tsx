@@ -25,7 +25,8 @@ export function Collapse({ children, open, duration = 280, easing = "out", unmou
   const reduced = useReducedMotion();
   const innerRef = React.useRef<HTMLDivElement>(null);
   const [height, setHeight] = React.useState<number | undefined>(open ? undefined : 0);
-  const [render, setRender] = React.useState(open);
+  // When unmountOnExit is off, children always stay mounted (just clipped).
+  const [render, setRender] = React.useState(open || !unmountOnExit);
 
   React.useEffect(() => {
     if (open) setRender(true);

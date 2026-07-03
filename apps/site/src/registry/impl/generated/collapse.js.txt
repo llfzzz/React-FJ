@@ -8,7 +8,7 @@ export function Collapse({ children, open, duration = 280, easing = "out", unmou
   const reduced = useReducedMotion();
   const innerRef = React.useRef(null);
   const [height, setHeight] = React.useState(open ? void 0 : 0);
-  const [render, setRender] = React.useState(open);
+  const [render, setRender] = React.useState(open || !unmountOnExit);
   React.useEffect(() => {
     if (open) setRender(true);
   }, [open]);
