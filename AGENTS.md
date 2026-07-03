@@ -1,6 +1,6 @@
 # FJ — Free Joy design system website
 
-Last updated: 2026-07-03 (all 9 phases complete, all suites green)
+Last updated: 2026-07-03 (all 9 phases complete + wide layout pass, all suites green)
 Workspace: `/Users/llfzzz/Desktop/FJ`
 
 This repository is the **official private website, documentation site, playground, and showcase**
@@ -66,6 +66,12 @@ pnpm workspace
 - Fonts self-hosted via @fontsource (variable); family names mapped to FJ tokens in site CSS.
 - Site chrome icons: `lucide-react` (bundled). Synced FJ `Icon` uses lucide-static CDN (upstream
   convention, documented as-is).
+- Layout scale is a site-level `:root` override in `apps/site/src/styles/site.css` (loads after
+  `@fj/styles.css`, same pattern as the font-token mapping): `--container` 1180px→1600px,
+  `--container-sm` 720px→880px, plus a new shared `--rail-width` (264px) token driving the
+  `.docs`/`.playground` sidebar column and the `.showcase` side panel from one place. `.container`
+  and `.docs` are `width: 100%` with that as a `max-width`, so the wider cap is fluid below it and
+  only caps stretch on very wide displays — no page-by-page overrides needed.
 
 ## Commands
 
@@ -87,6 +93,8 @@ pnpm workspace
   mobile nav, 375px overflow audit)
 - [x] Phase 7 — Vitest (17 tests) + Playwright (8 e2e) + full verification
 - [x] Phase 8 — docs finalization (this file)
+- [x] Phase 9 — wide layout pass: `--container`/`--container-sm`/`--rail-width` site tokens
+  widened; sidebar/showcase/playground rails consolidated onto `--rail-width`
 
 ## Component inventory
 
@@ -156,6 +164,11 @@ CodeBlock via fine-grained lazy shiki + JS regex engine, PropsTable, DocSection,
 - Phase 7 (2026-07-03): `pnpm typecheck` green · `pnpm build` green · `pnpm test` 17/17
   (4× stable after fixing a shiki-tokenization race in one assertion) · `pnpm e2e` 8/8
   against the production build.
+- Phase 9 (2026-07-03): `pnpm typecheck` + `pnpm build` + `pnpm test` (17/17) green. Manually
+  verified at 375/768/1920px: landing, catalog, a component detail page, and the playground all
+  fill the wider 1600px container with no horizontal overflow; docs sidebar collapses to the
+  mobile drawer below 899px as before; prose columns keep their `ch`-based caps so paragraph text
+  doesn't stretch on ultra-wide viewports.
 
 ## React Bits influence (patterns, never pixels)
 

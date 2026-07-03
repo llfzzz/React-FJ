@@ -113,7 +113,8 @@ export function SpacingPage() {
       <DocSection id="misc" title="Layout constants">
         <ul className="doc-list">
           <li>
-            <code>--container</code> 1180px · <code>--container-sm</code> 720px — page columns.
+            <code>--container</code> 1600px · <code>--container-sm</code> 880px — page columns
+            (site override; fj-ui defaults are 1180px/720px).
           </li>
           <li>
             <code>--tap-target</code> 44px — minimum touch hit area.
