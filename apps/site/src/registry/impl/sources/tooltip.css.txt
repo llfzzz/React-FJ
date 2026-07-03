@@ -1,0 +1,58 @@
+<!-- Free Joy — Tooltip, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Pure CSS: the bubble reveals on hover/focus-within of the wrapper.
+     Placement modifiers: default top | --bottom | --left | --right. -->
+
+<span class="fj-tip" tabindex="0">
+  <button class="fj-tip-trigger">Hover me</button>
+  <span class="fj-tip-bubble" role="tooltip">Publishes to your followers</span>
+</span>
+
+<style>
+.fj-tip {
+  position: relative;
+  display: inline-flex;
+}
+
+.fj-tip-bubble {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  white-space: nowrap;
+  padding: 6px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: var(--z-tooltip);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.fj-tip:hover .fj-tip-bubble,
+.fj-tip:focus-within .fj-tip-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Placements */
+.fj-tip--bottom .fj-tip-bubble { bottom: auto; top: calc(100% + 8px); }
+.fj-tip--left .fj-tip-bubble  { bottom: auto; left: auto; right: calc(100% + 8px); top: 50%; transform: translateY(calc(-50% + 2px)); }
+.fj-tip--right .fj-tip-bubble { bottom: auto; left: calc(100% + 8px); top: 50%; transform: translateY(calc(-50% + 2px)); }
+.fj-tip--left:hover .fj-tip-bubble,
+.fj-tip--left:focus-within .fj-tip-bubble,
+.fj-tip--right:hover .fj-tip-bubble,
+.fj-tip--right:focus-within .fj-tip-bubble { transform: translateY(-50%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-tip-bubble { transition-duration: 0.01ms; }
+}
+</style>

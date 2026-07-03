@@ -12,6 +12,7 @@ import {
   type SelectProps,
 } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
+import { impl } from '../impl';
 
 export const inputDoc: ComponentDoc = {
   id: 'input',
@@ -20,6 +21,7 @@ export const inputDoc: ComponentDoc = {
   blurb: 'A labeled text field with hint and error states — calm until it needs your attention.',
   keywords: ['text', 'field', 'form'],
   importLine: "import { Input } from '@fj';",
+  implementation: impl('input'),
   controls: [
     { type: 'text', prop: 'label', defaultValue: 'Studio name' },
     { type: 'text', prop: 'placeholder', defaultValue: 'e.g. Morning pages' },
@@ -78,6 +80,7 @@ export const textareaDoc: ComponentDoc = {
   blurb: 'The multi-line sibling of Input — same calm labels, hints, and error states.',
   keywords: ['multiline', 'text', 'form'],
   importLine: "import { Textarea } from '@fj';",
+  implementation: impl('textarea'),
   controls: [
     { type: 'text', prop: 'label', defaultValue: 'A note about the light' },
     { type: 'number', prop: 'rows', defaultValue: 4, min: 2, max: 10, step: 1 },
@@ -111,6 +114,7 @@ export const selectDoc: ComponentDoc = {
   blurb: 'A native select in Free Joy clothing — dependable keyboard behavior, quiet chevron.',
   keywords: ['dropdown', 'options', 'form'],
   importLine: "import { Select } from '@fj';",
+  implementation: impl('select'),
   controls: [
     { type: 'text', prop: 'label', defaultValue: 'Share with' },
     { type: 'select', prop: 'size', options: ['sm', 'md', 'lg'], defaultValue: 'md' },
@@ -163,6 +167,7 @@ export const checkboxDoc: ComponentDoc = {
   blurb: 'A crisp check for independent yes/no choices.',
   keywords: ['check', 'toggle', 'form'],
   importLine: "import { Checkbox } from '@fj';",
+  implementation: impl('checkbox'),
   controls: [
     { type: 'text', prop: 'label', defaultValue: 'Include work-in-progress' },
     { type: 'boolean', prop: 'disabled', defaultValue: false },
@@ -207,6 +212,7 @@ export const radioDoc: ComponentDoc = {
   blurb: 'One choice from a short list — RadioGroup keeps the set tidy.',
   keywords: ['choice', 'group', 'form'],
   importLine: "import { Radio, RadioGroup } from '@fj';",
+  implementation: impl('radio'),
   controls: [{ type: 'boolean', prop: 'disabled', label: 'dim (demo)', defaultValue: false }],
   render: (values) => <RadioDemo values={values} />,
   code: () => `const [value, setValue] = useState('My circle');
@@ -247,6 +253,7 @@ export const switchDoc: ComponentDoc = {
   blurb: 'An instant on/off toggle — for settings that apply the moment you flip them.',
   keywords: ['toggle', 'setting', 'on', 'off'],
   importLine: "import { Switch } from '@fj';",
+  implementation: impl('switch'),
   controls: [
     { type: 'text', prop: 'label', defaultValue: 'Quiet mode' },
     { type: 'boolean', prop: 'disabled', defaultValue: false },
@@ -290,6 +297,7 @@ export const sliderDoc: ComponentDoc = {
   blurb: 'A single-thumb range with a filled track — for values you feel more than type.',
   keywords: ['range', 'value', 'form'],
   importLine: "import { Slider } from '@fj';",
+  implementation: impl('slider'),
   controls: [
     { type: 'select', prop: 'accent', options: ['coral', 'sun', 'bloom'], defaultValue: 'coral' },
     { type: 'boolean', prop: 'showValue', defaultValue: false },

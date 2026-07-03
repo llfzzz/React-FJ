@@ -1,0 +1,82 @@
+<!-- Free Joy — Checkbox, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The native checkbox is visually hidden; the sibling box is the styled
+     surface, and :checked drives its fill + tick (no JS needed). -->
+
+<label class="fj-check">
+  <input class="fj-check-input" type="checkbox" checked />
+  <span class="fj-check-box" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </span>
+  <span class="fj-check-label">Email me set reminders</span>
+</label>
+
+<label class="fj-check">
+  <input class="fj-check-input" type="checkbox" />
+  <span class="fj-check-box" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </span>
+  <span class="fj-check-label">Follow new artists automatically</span>
+</label>
+
+<style>
+.fj-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* Visually hidden but focusable native control. */
+.fj-check-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fj-check-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--radius-xs);
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--white);
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+/* The tick is hidden until checked. */
+.fj-check-box svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.fj-check-input:checked + .fj-check-box {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.fj-check-input:checked + .fj-check-box svg { opacity: 1; }
+
+.fj-check-input:focus-visible + .fj-check-box {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.fj-check-input:disabled ~ * { opacity: 0.5; }
+.fj-check:has(.fj-check-input:disabled) { cursor: not-allowed; }
+
+.fj-check-label {
+  font-size: var(--text-base);
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-check-box, .fj-check-box svg { transition-duration: 0.01ms; }
+}
+</style>

@@ -1,0 +1,100 @@
+<!-- Free Joy — Toast, no-framework version.
+     Requires the FJ tokens (tokens/*.css), including the glass tokens.
+     This is the standalone toast card + its fixed stacking region. Queueing
+     and auto-dismiss are app logic — add/remove .fj-toast nodes in the region. -->
+
+<div class="fj-toast-region fj-toast-region--bottom-right">
+  <div class="fj-toast" role="status">
+    <span class="fj-toast-icon fj-toast-icon--success" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </span>
+    <div class="fj-toast-body">
+      <div class="fj-toast-title">Mix published</div>
+      <div class="fj-toast-text">Your set is live and shareable.</div>
+    </div>
+    <button class="fj-toast-close" aria-label="Dismiss">×</button>
+  </div>
+</div>
+
+<style>
+.fj-toast-region {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+.fj-toast-region--bottom-right { bottom: 24px; right: 24px; align-items: flex-end; }
+.fj-toast-region--bottom-left  { bottom: 24px; left: 24px;  align-items: flex-start; }
+.fj-toast-region--top-right    { top: 24px;    right: 24px; align-items: flex-end; }
+.fj-toast-region--top-left     { top: 24px;    left: 24px;  align-items: flex-start; }
+
+.fj-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 340px;
+  max-width: calc(100vw - 48px);
+  padding: 14px 16px;
+  pointer-events: auto;
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: fj-toast-in var(--dur-base) var(--ease-out);
+}
+/* Top-anchored regions animate down from above. */
+.fj-toast-region--top-right .fj-toast,
+.fj-toast-region--top-left .fj-toast { --fj-from: -12px; }
+
+.fj-toast-icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 1px;
+  color: var(--ink);
+}
+.fj-toast-icon--success { color: var(--success-500); }
+.fj-toast-icon--warn    { color: var(--warn-500); }
+.fj-toast-icon--danger  { color: var(--danger-500); }
+.fj-toast-icon--info    { color: var(--info-500); }
+
+.fj-toast-body { flex: 1; min-width: 0; }
+
+.fj-toast-title {
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text);
+}
+.fj-toast-text {
+  margin-top: 2px;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.fj-toast-close {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-subtle);
+  font-size: 16px;
+  cursor: pointer;
+}
+.fj-toast-close:hover { color: var(--text); }
+
+@keyframes fj-toast-in {
+  from { opacity: 0; transform: translateY(var(--fj-from, 12px)) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-toast { animation-duration: 0.01ms; }
+}
+</style>

@@ -1,0 +1,89 @@
+<!-- Free Joy — Select, no-framework version.
+     Requires the FJ tokens (tokens/*.css), including --ring.
+     Native select, custom chevron, matches the Input field styling. -->
+
+<div class="fj-field">
+  <label class="fj-field-label" for="mood">Mood</label>
+  <div class="fj-select-wrap">
+    <select class="fj-select fj-select--md" id="mood">
+      <option>Sunny</option>
+      <option>Mellow</option>
+      <option>Blue hour</option>
+    </select>
+    <span class="fj-select-chevron" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
+  </div>
+  <span class="fj-field-note">Sets the default palette.</span>
+</div>
+
+<style>
+.fj-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fj-field-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+}
+
+.fj-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fj-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 0 38px 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.fj-select:focus {
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+
+.fj-select--sm { height: 36px; }
+.fj-select--md { height: 44px; }
+.fj-select--lg { height: 52px; }
+
+.fj-select-chevron {
+  position: absolute;
+  right: 13px;
+  pointer-events: none;
+  display: inline-flex;
+  color: var(--text-subtle);
+}
+
+.fj-field-note {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+/* Error state */
+.fj-field--error .fj-select,
+.fj-field--error .fj-select:focus {
+  border-color: var(--danger-500);
+}
+.fj-field--error .fj-field-note { color: var(--danger-700); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-select { transition-duration: 0.01ms; }
+}
+</style>

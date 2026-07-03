@@ -1,0 +1,66 @@
+<!-- Free Joy — Textarea, no-framework version.
+     Requires the FJ tokens (tokens/*.css), including --ring.
+     Matches the Input field styling; error state via .fj-field--error. -->
+
+<div class="fj-field">
+  <label class="fj-field-label" for="notes">Liner notes</label>
+  <textarea class="fj-textarea" id="notes" rows="4" placeholder="A word about this mix…"></textarea>
+  <span class="fj-field-note">Markdown is fine.</span>
+</div>
+
+<div class="fj-field fj-field--error">
+  <label class="fj-field-label" for="bio">Bio</label>
+  <textarea class="fj-textarea" id="bio" rows="3">…</textarea>
+  <span class="fj-field-note">Bio must be under 240 characters.</span>
+</div>
+
+<style>
+.fj-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fj-field-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+}
+
+.fj-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.fj-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+
+.fj-field-note {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+.fj-field--error .fj-textarea,
+.fj-field--error .fj-textarea:focus {
+  border-color: var(--danger-500);
+}
+.fj-field--error .fj-field-note { color: var(--danger-700); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-textarea { transition-duration: 0.01ms; }
+}
+</style>

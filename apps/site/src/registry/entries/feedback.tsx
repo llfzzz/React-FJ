@@ -17,6 +17,7 @@ import {
   type TooltipProps,
 } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
+import { impl } from '../impl';
 
 export const alertDoc: ComponentDoc = {
   id: 'alert',
@@ -25,6 +26,7 @@ export const alertDoc: ComponentDoc = {
   blurb: 'An inline banner that states what happened and stays out of the way.',
   keywords: ['banner', 'message', 'status'],
   importLine: "import { Alert } from '@fj';",
+  implementation: impl('alert'),
   controls: [
     { type: 'select', prop: 'tone', options: ['info', 'success', 'warn', 'danger', 'neutral'], defaultValue: 'info' },
     { type: 'text', prop: 'title', defaultValue: 'Sketch saved' },
@@ -66,6 +68,7 @@ export const tooltipDoc: ComponentDoc = {
   blurb: 'A small dark bubble that answers “what is this?” on hover or focus.',
   keywords: ['hint', 'hover', 'label'],
   importLine: "import { Tooltip } from '@fj';",
+  implementation: impl('tooltip'),
   controls: [
     { type: 'text', prop: 'label', defaultValue: 'Share with your circle' },
     { type: 'select', prop: 'placement', options: ['top', 'bottom', 'left', 'right'], defaultValue: 'top' },
@@ -115,6 +118,7 @@ export const toastDoc: ComponentDoc = {
   blurb: 'A frosted notification that arrives, says its piece, and leaves on its own.',
   keywords: ['notification', 'snackbar', 'message'],
   importLine: "import { ToastProvider, useToast } from '@fj';",
+  implementation: impl('toast'),
   controls: [
     { type: 'text', prop: 'title', defaultValue: 'Sketch published' },
     { type: 'select', prop: 'tone', options: ['neutral', 'success', 'warn', 'danger', 'info'], defaultValue: 'neutral' },
@@ -149,6 +153,7 @@ export const progressDoc: ComponentDoc = {
   blurb: 'A slim bar for work you can measure — or an easy drift when you cannot.',
   keywords: ['loading', 'bar', 'percent'],
   importLine: "import { Progress } from '@fj';",
+  implementation: impl('progress'),
   controls: [
     { type: 'number', prop: 'value', defaultValue: 64, min: 0, max: 100, step: 1 },
     { type: 'select', prop: 'size', options: ['sm', 'md', 'lg'], defaultValue: 'md' },
@@ -188,6 +193,7 @@ export const spinnerDoc: ComponentDoc = {
   blurb: 'The smallest honest loading signal — a ring, optionally with a word.',
   keywords: ['loading', 'busy', 'wait'],
   importLine: "import { Spinner } from '@fj';",
+  implementation: impl('spinner'),
   controls: [
     { type: 'number', prop: 'size', defaultValue: 22, min: 14, max: 48, step: 2 },
     { type: 'text', prop: 'label', defaultValue: 'Uploading' },
@@ -212,6 +218,7 @@ export const skeletonDoc: ComponentDoc = {
   blurb: 'Shimmering placeholders that hold the layout while content arrives.',
   keywords: ['loading', 'placeholder', 'shimmer'],
   importLine: "import { Skeleton } from '@fj';",
+  implementation: impl('skeleton'),
   controls: [
     { type: 'select', prop: 'variant', options: ['text', 'circle', 'rect'], defaultValue: 'text' },
     { type: 'number', prop: 'lines', defaultValue: 3, min: 1, max: 6, step: 1 },
@@ -259,6 +266,7 @@ export const emptyStateDoc: ComponentDoc = {
   blurb: 'A kind placeholder for nothing-here moments, with one clear next step.',
   keywords: ['empty', 'zero', 'no results'],
   importLine: "import { EmptyState } from '@fj';",
+  implementation: impl('empty-state'),
   controls: [
     { type: 'text', prop: 'title', defaultValue: 'No sketches yet' },
     { type: 'boolean', prop: 'compact', defaultValue: false },

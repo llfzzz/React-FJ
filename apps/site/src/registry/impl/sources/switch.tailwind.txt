@@ -1,0 +1,45 @@
+// Free Joy — Switch with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+import { useId } from "react";
+
+/** Free Joy — Switch (toggle) */
+export function Switch({ checked = false, onChange, disabled = false, label, id, className = "", ...rest }) {
+  const autoId = useId();
+  const fid = id || autoId;
+  return (
+    <label
+      htmlFor={fid}
+      className={
+        "inline-flex items-center gap-2.5 " +
+        `${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${className}`
+      }
+    >
+      <span
+        className={
+          "relative h-[26px] w-11 flex-none rounded-full " +
+          "transition-colors duration-[var(--dur-base)] ease-[var(--ease-out)] " +
+          (checked ? "bg-[var(--accent)]" : "bg-[var(--paper-3)]")
+        }
+        aria-hidden="true"
+      >
+        <span
+          className={
+            "absolute top-[3px] size-5 rounded-full bg-[var(--white)] shadow-[var(--shadow-sm)] " +
+            "transition-[left] duration-[var(--dur-base)] ease-[var(--ease-out)] " +
+            (checked ? "left-[21px]" : "left-[3px]")
+          }
+        />
+      </span>
+      <input
+        id={fid}
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange && onChange(e.target.checked, e)}
+        className="absolute size-0 opacity-0"
+        {...rest}
+      />
+      {label && <span className="text-[length:var(--text-base)] text-[var(--text)]">{label}</span>}
+    </label>
+  );
+}

@@ -1,0 +1,74 @@
+// Free Joy — EmptyState (TypeScript implementation)
+// Requires the FJ tokens (tokens/*.css). The icon is a Lucide glyph painted via
+// CSS mask from the lucide-static CDN — swap for a local <svg> in production.
+import * as React from "react";
+
+export interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Lucide icon name. @default "inbox" */
+  icon?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  /** Optional CTA node (e.g. a Button). */
+  action?: React.ReactNode;
+  /** Tighter padding. @default false */
+  compact?: boolean;
+}
+
+/**
+ * Free Joy — EmptyState
+ * Centered placeholder for empty lists, no-results, and zero-data screens.
+ */
+export function EmptyState({ icon = "inbox", title, description, action, compact = false, style, ...rest }: EmptyStateProps) {
+  const maskUrl = `url(https://unpkg.com/lucide-static@0.456.0/icons/${icon}.svg)`;
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        gap: 6,
+        padding: compact ? "32px 24px" : "56px 32px",
+        ...style,
+      }}
+      {...rest}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: compact ? 48 : 64,
+          height: compact ? 48 : 64,
+          marginBottom: 8,
+          borderRadius: "var(--radius-pill)",
+          background: "var(--paper-2)",
+        }}
+      >
+        <span
+          aria-hidden="true"
+          style={{
+            width: compact ? 22 : 28,
+            height: compact ? 22 : 28,
+            backgroundColor: "var(--text-subtle)",
+            WebkitMaskImage: maskUrl,
+            maskImage: maskUrl,
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+          }}
+        />
+      </div>
+      {title && (
+        <div style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-lg)", fontWeight: "var(--weight-semibold)" as React.CSSProperties["fontWeight"], color: "var(--text)" }}>
+          {title}
+        </div>
+      )}
+      {description && <div style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: 340, lineHeight: 1.5 }}>{description}</div>}
+      {action && <div style={{ marginTop: 14 }}>{action}</div>}
+    </div>
+  );
+}

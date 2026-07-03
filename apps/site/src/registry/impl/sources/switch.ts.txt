@@ -1,0 +1,70 @@
+// Free Joy — Switch (TypeScript implementation)
+// Requires the FJ tokens (tokens/*.css).
+import * as React from "react";
+
+export interface SwitchProps {
+  /** Controlled checked state. */
+  checked?: boolean;
+  /** Called with (nextChecked, event). */
+  onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** Inline label to the right of the track. */
+  label?: string;
+  disabled?: boolean;
+  id?: string;
+  style?: React.CSSProperties;
+}
+
+/** Free Joy — Switch (toggle) */
+export function Switch({ checked = false, onChange, disabled = false, label, id, style, ...rest }: SwitchProps) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+  return (
+    <label
+      htmlFor={fid}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 10,
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.5 : 1,
+        ...style,
+      }}
+    >
+      <span
+        style={{
+          position: "relative",
+          width: 44,
+          height: 26,
+          flex: "none",
+          borderRadius: "var(--radius-pill)",
+          background: checked ? "var(--accent)" : "var(--paper-3)",
+          transition: "background var(--dur-base) var(--ease-out)",
+        }}
+      >
+        <span
+          style={{
+            position: "absolute",
+            top: 3,
+            left: checked ? 21 : 3,
+            width: 20,
+            height: 20,
+            borderRadius: "50%",
+            background: "var(--white)",
+            boxShadow: "var(--shadow-sm)",
+            transition: "left var(--dur-base) var(--ease-out)",
+          }}
+        />
+      </span>
+      <input
+        id={fid}
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange && onChange(e.target.checked, e)}
+        style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
+        {...rest}
+      />
+      {label && <span style={{ fontSize: "var(--text-base)", color: "var(--text)" }}>{label}</span>}
+    </label>
+  );
+}

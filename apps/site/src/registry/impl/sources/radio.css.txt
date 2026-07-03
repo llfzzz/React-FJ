@@ -1,0 +1,79 @@
+<!-- Free Joy — Radio / RadioGroup, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Native radios are visually hidden; :checked scales in the inner dot. -->
+
+<div class="fj-radiogroup" role="radiogroup" aria-label="Delivery">
+  <label class="fj-radio">
+    <input class="fj-radio-input" type="radio" name="delivery" value="standard" checked />
+    <span class="fj-radio-ring" aria-hidden="true"><span class="fj-radio-dot"></span></span>
+    <span class="fj-radio-label">Standard</span>
+  </label>
+  <label class="fj-radio">
+    <input class="fj-radio-input" type="radio" name="delivery" value="express" />
+    <span class="fj-radio-ring" aria-hidden="true"><span class="fj-radio-dot"></span></span>
+    <span class="fj-radio-label">Express</span>
+  </label>
+</div>
+
+<style>
+.fj-radiogroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fj-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.fj-radio-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fj-radio-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.fj-radio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: scale(0);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.fj-radio-input:checked + .fj-radio-ring { border-color: var(--accent); }
+.fj-radio-input:checked + .fj-radio-ring .fj-radio-dot { transform: scale(1); }
+
+.fj-radio-input:focus-visible + .fj-radio-ring {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.fj-radio-input:disabled ~ * { opacity: 0.5; }
+
+.fj-radio-label {
+  font-size: var(--text-base);
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-radio-ring, .fj-radio-dot { transition-duration: 0.01ms; }
+}
+</style>

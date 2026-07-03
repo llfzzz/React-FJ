@@ -1,0 +1,89 @@
+<!-- Free Joy — Input, no-framework version.
+     Requires the FJ tokens (tokens/*.css), including --ring.
+     Sizes: sm (36) | md (44) | lg (52). Error state via .fj-field--error. -->
+
+<div class="fj-field">
+  <label class="fj-field-label" for="email">Email</label>
+  <div class="fj-field-box fj-field-box--md">
+    <input class="fj-field-input" id="email" type="email" placeholder="you@studio.fm" />
+  </div>
+  <span class="fj-field-note">We only use this for receipts.</span>
+</div>
+
+<div class="fj-field fj-field--error">
+  <label class="fj-field-label" for="handle">Handle</label>
+  <div class="fj-field-box fj-field-box--md">
+    <input class="fj-field-input" id="handle" value="free joy" />
+  </div>
+  <span class="fj-field-note">Handles can’t contain spaces.</span>
+</div>
+
+<style>
+.fj-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fj-field-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+}
+
+.fj-field-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* Focus moves to the wrapper so the icon sits inside the glow. */
+.fj-field-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+
+.fj-field-box--sm { height: 36px; }
+.fj-field-box--md { height: 44px; }
+.fj-field-box--lg { height: 52px; }
+
+.fj-field-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  color: var(--text);
+}
+
+.fj-field-note {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+/* Error state overrides focus color and tints the note. */
+.fj-field--error .fj-field-box,
+.fj-field--error .fj-field-box:focus-within {
+  border-color: var(--danger-500);
+}
+.fj-field--error .fj-field-note { color: var(--danger-700); }
+
+/* Optional leading icon */
+.fj-field-icon {
+  display: inline-flex;
+  color: var(--text-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-field-box { transition-duration: 0.01ms; }
+}
+</style>

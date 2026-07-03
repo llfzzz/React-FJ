@@ -1,0 +1,63 @@
+<!-- Free Joy — EmptyState, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Drop an inline <svg> (Lucide or your own) into .fj-empty-icon.
+     Add .fj-empty--compact for tighter padding. -->
+
+<div class="fj-empty">
+  <div class="fj-empty-badge">
+    <span class="fj-empty-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+    </span>
+  </div>
+  <div class="fj-empty-title">No mixes yet</div>
+  <div class="fj-empty-text">When you publish a set it will show up here for your followers.</div>
+  <div class="fj-empty-action">
+    <button class="fj-btn fj-btn--primary fj-btn--md">Create a mix</button>
+  </div>
+</div>
+
+<style>
+.fj-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 56px 32px;
+}
+.fj-empty--compact { padding: 32px 24px; }
+
+.fj-empty-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--paper-2);
+}
+.fj-empty--compact .fj-empty-badge { width: 48px; height: 48px; }
+
+.fj-empty-icon {
+  display: inline-flex;
+  color: var(--text-subtle);
+}
+.fj-empty--compact .fj-empty-icon svg { width: 22px; height: 22px; }
+
+.fj-empty-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--text);
+}
+
+.fj-empty-text {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+.fj-empty-action { margin-top: 14px; }
+</style>

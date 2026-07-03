@@ -1,0 +1,29 @@
+// Free Joy — Spinner with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Uses Tailwind's built-in animate-spin; motion-reduce slows it rather than
+// freezing so it still reads as "busy".
+
+/**
+ * Free Joy — Spinner
+ * Minimal loading indicator. Inherits color; size in px.
+ */
+export function Spinner({ size = 22, color = "var(--accent)", thickness = 2.5, label, className = "", ...rest }) {
+  return (
+    <span
+      role="status"
+      aria-label={label || "Loading"}
+      style={{ color }}
+      className={`inline-flex items-center gap-[9px] ${className}`}
+      {...rest}
+    >
+      <span
+        style={{ width: size, height: size, borderWidth: thickness }}
+        className={
+          "flex-none rounded-full border-current border-t-transparent opacity-90 " +
+          "animate-spin [animation-duration:0.7s] motion-reduce:[animation-duration:2.4s]"
+        }
+      />
+      {label && <span className="text-[length:var(--text-sm)] text-[var(--text-muted)]">{label}</span>}
+    </span>
+  );
+}
