@@ -34,6 +34,13 @@ import {
   spotlightCardDoc,
   textRevealDoc,
 } from './entries/effects';
+import {
+  animatedUnderlineDoc,
+  gradientTextDoc,
+  highlighterDoc,
+  rotatingTextDoc,
+} from './entries/effects-text';
+import { floatDoc, shimmerDoc } from './entries/effects-surfaces';
 
 /** Every documented component, in sidebar order. */
 export const REGISTRY: ComponentDoc[] = sortByCategory([
@@ -69,6 +76,12 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   animatedBorderDoc,
   glowDoc,
   ambientBackgroundDoc,
+  gradientTextDoc,
+  rotatingTextDoc,
+  animatedUnderlineDoc,
+  highlighterDoc,
+  shimmerDoc,
+  floatDoc,
 ]);
 
 function sortByCategory(docs: ComponentDoc[]): ComponentDoc[] {

@@ -1,0 +1,40 @@
+<!-- Free Joy — Highlighter (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     A marker swipe grows from 0 to 100% width behind the text. This example
+     plays on load (.is-lit); to trigger on SCROLL, start without .is-lit and add
+     it via an IntersectionObserver. Tone modifiers: default sun | --coral | --bloom. -->
+
+<p style="font-size: var(--text-lg); line-height: 1.8">
+  Free Joy keeps the interface calm so the
+  <mark class="fj-highlight fj-highlight--sun is-lit">work stays loud</mark>.
+</p>
+
+<style>
+.fj-highlight {
+  --fj-tone: var(--sun-200);
+  --fj-duration: 480ms;
+
+  display: inline;
+  padding: 0.05em 0.15em;
+  margin: 0 -0.15em;
+  color: inherit;
+  border-radius: var(--radius-xs);
+  background-color: transparent;
+
+  background-image: linear-gradient(var(--fj-tone), var(--fj-tone));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+  transition: background-size var(--fj-duration) var(--ease-out);
+}
+
+.fj-highlight--sun   { --fj-tone: var(--sun-200); }
+.fj-highlight--coral { --fj-tone: var(--joy-100); }
+.fj-highlight--bloom { --fj-tone: var(--bloom-200); }
+
+.fj-highlight.is-lit { background-size: 100% 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-highlight { transition: none; background-size: 100% 100%; }
+}
+</style>

@@ -1,0 +1,34 @@
+<!-- Free Joy — GradientText (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The gradient is clipped to the text and slid on a loop. Reduced motion
+     holds it still (the color still reads). -->
+
+<h1 class="fj-gradient-text">made with joy</h1>
+
+<style>
+.fj-gradient-text {
+  --fj-duration: 6s;
+  --fj-angle: 100deg;
+  background-image: linear-gradient(
+    var(--fj-angle),
+    var(--joy-500),
+    var(--bloom-500),
+    var(--sun-500),
+    var(--joy-500)
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: fj-gradient-move var(--fj-duration) linear infinite;
+}
+
+@keyframes fj-gradient-move {
+  to { background-position: 200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-gradient-text { animation: none; }
+}
+</style>

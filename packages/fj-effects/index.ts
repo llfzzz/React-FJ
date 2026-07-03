@@ -31,4 +31,18 @@ export type {
   LoopEffectProps,
 } from "./motion/types";
 
-// Components are added in the effects batches (B2).
+// Text effects
+export { GradientText } from "./components/GradientText";
+export type { GradientTextProps } from "./components/GradientText";
+export { RotatingText } from "./components/RotatingText";
+export type { RotatingTextProps } from "./components/RotatingText";
+export { AnimatedUnderline } from "./components/AnimatedUnderline";
+export type { AnimatedUnderlineProps } from "./components/AnimatedUnderline";
+export { Highlighter } from "./components/Highlighter";
+export type { HighlighterProps } from "./components/Highlighter";
+
+// Surface effects
+export { Shimmer } from "./components/Shimmer";
+export type { ShimmerProps } from "./components/Shimmer";
+export { Float } from "./components/Float";
+export type { FloatProps } from "./components/Float";

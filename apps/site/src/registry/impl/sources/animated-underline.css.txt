@@ -1,0 +1,40 @@
+<!-- Free Joy — AnimatedUnderline (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Pure CSS hover: the underline is a background layer that grows from 0 to
+     100% width. For the scroll-triggered version, toggle .is-drawn from an
+     IntersectionObserver instead of :hover. -->
+
+<a href="#" class="fj-underline">design principles</a>
+
+<style>
+.fj-underline {
+  --fj-color: var(--accent);
+  --fj-thickness: 2px;
+  --fj-offset: 2px;
+  --fj-duration: 320ms;
+
+  position: relative;
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: none;
+  padding-bottom: calc(var(--fj-offset) + var(--fj-thickness));
+
+  background-image: linear-gradient(var(--fj-color), var(--fj-color));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% + var(--fj-offset));
+  background-size: 0% var(--fj-thickness);
+  transition: background-size var(--fj-duration) var(--ease-out);
+}
+
+.fj-underline:hover,
+.fj-underline:focus-visible,
+.fj-underline.is-drawn {
+  background-size: 100% var(--fj-thickness);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-underline { transition: none; }
+  /* Show a static underline so the affordance is never lost. */
+  .fj-underline { background-size: 100% var(--fj-thickness); }
+}
+</style>

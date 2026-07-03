@@ -1,0 +1,30 @@
+// Free Joy — Float (effect) with Tailwind CSS.
+// The float keyframes depend on runtime distance/rotate, so add a parametric
+// keyframes rule to your global CSS (below) and drive it with CSS variables.
+
+/**
+ * Free Joy — Float (effect)
+ * Gentle levitation loop for illustrations and hero props.
+ */
+export function Float({ children, distance = 8, duration = 4, delay = 0, rotate = 0, className = "" }) {
+  return (
+    <div
+      style={{
+        "--fj-distance": `${distance}px`,
+        "--fj-rotate": `${rotate}deg`,
+        animationDuration: `${duration}s`,
+        animationDelay: `${delay}s`,
+      }}
+      className={`inline-block will-change-transform animate-[fj-float_var(--ease-in-out)_infinite] motion-reduce:animate-none ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(calc(-1 * var(--fj-distance, 8px))) rotate(var(--fj-rotate, 0deg)); }
+}
+*/

@@ -1,0 +1,36 @@
+// Free Joy — AnimatedUnderline (effect) with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Pure-CSS hover version — the underline is a background layer grown on hover.
+// (For the inview trigger, toggle the width class from an IntersectionObserver.)
+
+/**
+ * Free Joy — AnimatedUnderline (effect)
+ * A restrained underline that draws in from the left on hover.
+ */
+export function AnimatedUnderline({ children, color = "var(--accent)", thickness = 2, className = "" }) {
+  return (
+    <a
+      href="#"
+      style={{
+        backgroundImage: `linear-gradient(${color}, ${color})`,
+        backgroundSize: "0% " + thickness + "px",
+        paddingBottom: thickness + 2,
+      }}
+      className={
+        "relative inline-block text-[var(--accent)] no-underline " +
+        "bg-[position:0_100%] bg-no-repeat " +
+        "transition-[background-size] duration-[320ms] ease-[var(--ease-out)] " +
+        "hover:bg-[length:100%_var(--fj-th)] focus-visible:bg-[length:100%_var(--fj-th)] " +
+        "motion-reduce:transition-none motion-reduce:bg-[length:100%_var(--fj-th)] " +
+        className
+      }
+    >
+      {children}
+    </a>
+  );
+}
+
+/* Note: `--fj-th` is the thickness in px — set it on the element or a parent,
+   e.g. style={{ "--fj-th": `${thickness}px` }}. Tailwind can't read the JS var
+   into an arbitrary value at build time, so keep the inline backgroundSize for
+   the resting state and the class for the hover target. */

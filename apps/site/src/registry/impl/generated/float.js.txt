@@ -1,0 +1,41 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { ensureKeyframes } from "../motion/keyframes";
+import { useReducedMotion } from "../motion/useReducedMotion";
+const KF = "fj-float";
+export function Float({
+  children,
+  distance = 8,
+  duration = 4,
+  delay = 0,
+  rotate = 0,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const name = `${KF}-${distance}-${rotate}`;
+  React.useEffect(() => {
+    ensureKeyframes(
+      name,
+      `@keyframes ${name} {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-${distance}px) rotate(${rotate}deg); }
+      }`
+    );
+  }, [name, distance, rotate]);
+  const animate = !disabled && !reduced;
+  return <div
+    style={{
+      display: "inline-block",
+      animation: animate ? `${name} ${duration}s var(--ease-in-out) ${delay}s infinite` : "none",
+      willChange: animate ? "transform" : void 0,
+      ...style
+    }}
+    {...rest}
+  >
+      {children}
+    </div>;
+}

@@ -1,0 +1,38 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import { useTrigger } from "../motion/useTrigger";
+import { useReducedMotion } from "../motion/useReducedMotion";
+export function AnimatedUnderline({
+  children,
+  trigger = "hover",
+  color = "var(--accent)",
+  thickness = 2,
+  offset = 2,
+  duration = 320,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const { ref, active, bind } = useTrigger(trigger, { once: true, disabled });
+  const drawn = disabled || reduced || active;
+  return <span
+    ref={ref}
+    {...bind}
+    style={{
+      position: "relative",
+      display: "inline-block",
+      backgroundImage: `linear-gradient(${color}, ${color})`,
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: `0 calc(100% + ${offset}px)`,
+      backgroundSize: `${drawn ? 100 : 0}% ${thickness}px`,
+      transition: reduced ? "none" : `background-size ${duration}ms var(--ease-out)`,
+      paddingBottom: offset + thickness,
+      ...style
+    }}
+    {...rest}
+  >
+      {children}
+    </span>;
+}

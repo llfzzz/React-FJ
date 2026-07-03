@@ -9,6 +9,10 @@
     "preview": "pnpm --filter fj-site preview",
     "typecheck": "pnpm --filter fj-site typecheck",
     "test": "pnpm --filter fj-site test",
-    "e2e": "pnpm --filter fj-site e2e"
+    "e2e": "pnpm --filter fj-site e2e",
+    "gen:impl": "node scripts/gen-impl-js.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
   }
 }
