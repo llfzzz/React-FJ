@@ -1,0 +1,59 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { ensureKeyframes } from "../motion/keyframes";
+import { useReducedMotion } from "../motion/useReducedMotion";
+ensureKeyframes(
+  "fj-sparkle",
+  `@keyframes fj-sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.4); }
+    50% { opacity: 1; transform: scale(1); }
+  }`
+);
+const MAX = 24;
+export function Sparkles({
+  children,
+  count = 14,
+  sizeRange = [2, 5],
+  colors = ["var(--sun-400)", "var(--joy-400)", "var(--bloom-400)"],
+  speed = 1,
+  performance = "full",
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const n = Math.min(MAX, Math.max(0, performance === "lite" ? Math.floor(count / 2) : count));
+  const sparks = React.useMemo(() => {
+    const [minS, maxS] = sizeRange;
+    return Array.from({ length: n }, () => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      size: minS + Math.random() * (maxS - minS),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      delay: Math.random() * 3,
+      dur: (2.4 + Math.random() * 2) / speed
+    }));
+  }, [n, sizeRange, colors, speed]);
+  const show = !disabled && !reduced;
+  return <div style={{ position: "relative", overflow: "hidden", ...style }} {...rest}>
+      {show && sparks.map((s, i) => <span
+    key={i}
+    aria-hidden="true"
+    style={{
+      position: "absolute",
+      top: `${s.top}%`,
+      left: `${s.left}%`,
+      width: s.size,
+      height: s.size,
+      borderRadius: "50%",
+      background: s.color,
+      opacity: 0,
+      animation: `fj-sparkle ${s.dur}s var(--ease-in-out) ${s.delay}s infinite`,
+      pointerEvents: "none"
+    }}
+  />)}
+      <div style={{ position: "relative" }}>{children}</div>
+    </div>;
+}

@@ -1,0 +1,58 @@
+<!-- Free Joy — Aurora (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Three blurred radial ribbons drift slowly behind the content. Only
+     transform animates. Palette modifiers: default warm | --cool | --joy.
+     Static under reduced motion. -->
+
+<section class="fj-aurora fj-aurora--warm">
+  <div class="fj-aurora-ribbon fj-aurora-ribbon--1" aria-hidden="true"></div>
+  <div class="fj-aurora-ribbon fj-aurora-ribbon--2" aria-hidden="true"></div>
+  <div class="fj-aurora-ribbon fj-aurora-ribbon--3" aria-hidden="true"></div>
+  <div class="fj-aurora-content">
+    <h1>Made with joy</h1>
+  </div>
+</section>
+
+<style>
+.fj-aurora {
+  --fj-blur: 60px;
+  --fj-opacity: 0.5;
+  --fj-c1: var(--joy-400);
+  --fj-c2: var(--sun-300);
+  --fj-c3: var(--bloom-300);
+
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+.fj-aurora--cool { --fj-c1: var(--bloom-400); --fj-c2: var(--info-300); --fj-c3: var(--joy-300); }
+.fj-aurora--joy  { --fj-c1: var(--joy-500);   --fj-c2: var(--joy-300);  --fj-c3: var(--sun-300); }
+
+.fj-aurora-ribbon {
+  position: absolute;
+  left: -20%;
+  width: 140%;
+  height: 60%;
+  border-radius: 50%;
+  filter: blur(var(--fj-blur));
+  opacity: var(--fj-opacity);
+  pointer-events: none;
+  will-change: transform;
+  animation: fj-aurora 24s var(--ease-in-out) infinite;
+}
+.fj-aurora-ribbon--1 { top: -15%; background: radial-gradient(closest-side, var(--fj-c1), transparent); }
+.fj-aurora-ribbon--2 { top: 10%;  background: radial-gradient(closest-side, var(--fj-c2), transparent); animation-duration: 30s; }
+.fj-aurora-ribbon--3 { top: 35%;  background: radial-gradient(closest-side, var(--fj-c3), transparent); animation-duration: 26s; }
+
+.fj-aurora-content { position: relative; }
+
+@keyframes fj-aurora {
+  0%   { transform: translate3d(-10%, 0, 0) rotate(0deg); }
+  50%  { transform: translate3d(10%, 4%, 0) rotate(8deg); }
+  100% { transform: translate3d(-10%, 0, 0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-aurora-ribbon { animation: none; }
+}
+</style>

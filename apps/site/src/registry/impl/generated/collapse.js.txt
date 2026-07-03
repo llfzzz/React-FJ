@@ -1,0 +1,49 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { useReducedMotion } from "../motion/useReducedMotion";
+import { easeVar } from "../motion/types";
+export function Collapse({ children, open, duration = 280, easing = "out", unmountOnExit = false, style, ...rest }) {
+  const reduced = useReducedMotion();
+  const innerRef = React.useRef(null);
+  const [height, setHeight] = React.useState(open ? void 0 : 0);
+  const [render, setRender] = React.useState(open);
+  React.useEffect(() => {
+    if (open) setRender(true);
+  }, [open]);
+  React.useLayoutEffect(() => {
+    const inner = innerRef.current;
+    if (!inner) return;
+    if (reduced) {
+      setHeight(open ? void 0 : 0);
+      if (!open && unmountOnExit) setRender(false);
+      return;
+    }
+    if (open) {
+      setHeight(inner.scrollHeight);
+      const id = setTimeout(() => setHeight(void 0), duration);
+      return () => clearTimeout(id);
+    } else {
+      setHeight(inner.scrollHeight);
+      const id = requestAnimationFrame(() => setHeight(0));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [open, reduced, duration, unmountOnExit]);
+  const onEnd = () => {
+    if (!open && unmountOnExit) setRender(false);
+  };
+  return <div
+    style={{
+      overflow: "hidden",
+      height: height === void 0 ? "auto" : height,
+      transition: reduced ? "none" : `height ${duration}ms ${easeVar(easing)}`,
+      ...style
+    }}
+    onTransitionEnd={onEnd}
+    aria-hidden={!open}
+    {...rest}
+  >
+      <div ref={innerRef}>{render ? children : null}</div>
+    </div>;
+}

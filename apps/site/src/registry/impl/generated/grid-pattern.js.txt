@@ -1,0 +1,32 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+export function GridPattern({
+  children,
+  type = "dot",
+  size = 24,
+  opacity = 0.5,
+  fade = true,
+  color = "var(--border)",
+  style,
+  ...rest
+}) {
+  const image = type === "dot" ? `radial-gradient(${color} 1px, transparent 1px)` : `linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px)`;
+  const mask = fade ? "radial-gradient(ellipse at center, #000 40%, transparent 75%)" : void 0;
+  return <div style={{ position: "relative", ...style }} {...rest}>
+      <div
+    aria-hidden="true"
+    style={{
+      position: "absolute",
+      inset: 0,
+      pointerEvents: "none",
+      backgroundImage: image,
+      backgroundSize: `${size}px ${size}px`,
+      opacity,
+      WebkitMaskImage: mask,
+      maskImage: mask
+    }}
+  />
+      <div style={{ position: "relative" }}>{children}</div>
+    </div>;
+}

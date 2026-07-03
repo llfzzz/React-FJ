@@ -48,6 +48,20 @@ import {
   tiltCardDoc,
 } from './entries/effects-interaction';
 import { errorShakeDoc, loaderDotsDoc, successCheckDoc } from './entries/effects-status';
+import {
+  auroraDoc,
+  confettiBurstDoc,
+  gridPatternDoc,
+  noiseOverlayDoc,
+  sparklesDoc,
+} from './entries/effects-backgrounds';
+import {
+  collapseDoc,
+  fadeSwitchDoc,
+  scrollProgressDoc,
+  staggerListDoc,
+  themeTransitionDoc,
+} from './entries/effects-motion';
 
 /** Every documented component, in sidebar order. */
 export const REGISTRY: ComponentDoc[] = sortByCategory([
@@ -96,6 +110,16 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   successCheckDoc,
   errorShakeDoc,
   loaderDotsDoc,
+  auroraDoc,
+  gridPatternDoc,
+  noiseOverlayDoc,
+  sparklesDoc,
+  confettiBurstDoc,
+  staggerListDoc,
+  scrollProgressDoc,
+  fadeSwitchDoc,
+  collapseDoc,
+  themeTransitionDoc,
 ]);
 
 function sortByCategory(docs: ComponentDoc[]): ComponentDoc[] {

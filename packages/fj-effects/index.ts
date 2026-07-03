@@ -64,3 +64,27 @@ export { ErrorShake } from "./components/ErrorShake";
 export type { ErrorShakeProps } from "./components/ErrorShake";
 export { LoaderDots } from "./components/LoaderDots";
 export type { LoaderDotsProps } from "./components/LoaderDots";
+
+// Background effects
+export { Aurora } from "./components/Aurora";
+export type { AuroraProps } from "./components/Aurora";
+export { GridPattern } from "./components/GridPattern";
+export type { GridPatternProps } from "./components/GridPattern";
+export { NoiseOverlay } from "./components/NoiseOverlay";
+export type { NoiseOverlayProps } from "./components/NoiseOverlay";
+export { Sparkles } from "./components/Sparkles";
+export type { SparklesProps } from "./components/Sparkles";
+export { ConfettiBurst } from "./components/ConfettiBurst";
+export type { ConfettiBurstProps } from "./components/ConfettiBurst";
+
+// Motion & transitions
+export { StaggerList } from "./components/StaggerList";
+export type { StaggerListProps } from "./components/StaggerList";
+export { ScrollProgress } from "./components/ScrollProgress";
+export type { ScrollProgressProps } from "./components/ScrollProgress";
+export { FadeSwitch } from "./components/FadeSwitch";
+export type { FadeSwitchProps } from "./components/FadeSwitch";
+export { Collapse } from "./components/Collapse";
+export type { CollapseProps } from "./components/Collapse";
+export { ThemeTransition, runThemeTransition } from "./components/ThemeTransition";
+export type { ThemeTransitionProps } from "./components/ThemeTransition";

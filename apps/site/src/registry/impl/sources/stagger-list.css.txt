@@ -1,0 +1,40 @@
+<!-- Free Joy — StaggerList (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Children rise + fade in with a per-item delay set from --fj-i. This example
+     plays on load; to trigger on SCROLL, start without .is-in and add it via an
+     IntersectionObserver. -->
+
+<div class="fj-stagger is-in">
+  <div class="fj-stagger-item" style="--fj-i: 0"><div class="fj-card">Sketches</div></div>
+  <div class="fj-stagger-item" style="--fj-i: 1"><div class="fj-card">Notes</div></div>
+  <div class="fj-stagger-item" style="--fj-i: 2"><div class="fj-card">Circles</div></div>
+  <div class="fj-stagger-item" style="--fj-i: 3"><div class="fj-card">Sets</div></div>
+</div>
+
+<style>
+.fj-stagger {
+  --fj-stagger: 60ms;
+  --fj-duration: 480ms;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.fj-stagger-item {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--fj-duration) var(--ease-emphasized),
+    transform var(--fj-duration) var(--ease-emphasized);
+  transition-delay: calc(var(--fj-i) * var(--fj-stagger));
+}
+
+.fj-stagger.is-in .fj-stagger-item {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-stagger-item { opacity: 1; transform: none; transition: none; }
+}
+</style>

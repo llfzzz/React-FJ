@@ -1,0 +1,31 @@
+// Free Joy — GridPattern (effect) with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Fully static — no keyframes, no reduced-motion concern.
+
+/**
+ * Free Joy — GridPattern (effect)
+ * A subtle dot or line grid with an optional radial fade.
+ */
+export function GridPattern({ children, type = "dot", size = 24, opacity = 0.5, fade = true, color = "var(--border)", className = "" }) {
+  const image =
+    type === "dot"
+      ? `radial-gradient(${color} 1px, transparent 1px)`
+      : `linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px)`;
+  const mask = fade ? "radial-gradient(ellipse at center, #000 40%, transparent 75%)" : undefined;
+  return (
+    <div className={`relative ${className}`}>
+      <div
+        aria-hidden="true"
+        style={{
+          backgroundImage: image,
+          backgroundSize: `${size}px ${size}px`,
+          opacity,
+          WebkitMaskImage: mask,
+          maskImage: mask,
+        }}
+        className="pointer-events-none absolute inset-0"
+      />
+      <div className="relative">{children}</div>
+    </div>
+  );
+}

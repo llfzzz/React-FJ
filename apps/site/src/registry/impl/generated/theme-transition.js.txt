@@ -1,0 +1,51 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { useReducedMotion } from "../motion/useReducedMotion";
+export function runThemeTransition(update) {
+  const start = document.startViewTransition;
+  const prefersReduced = typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReduced || typeof start !== "function") {
+    update();
+    return;
+  }
+  start.call(document, update);
+}
+export function ThemeTransition({ children, duration = 320, disabled = false, style, ...rest }) {
+  const reduced = useReducedMotion();
+  const [theme, setTheme] = React.useState("light");
+  const [fading, setFading] = React.useState(false);
+  const instant = disabled || reduced;
+  const flip = () => {
+    const next = theme === "light" ? "dark" : "light";
+    if (instant) {
+      setTheme(next);
+      return;
+    }
+    setFading(true);
+    setTimeout(() => {
+      setTheme(next);
+      setFading(false);
+    }, duration / 2);
+  };
+  return <div
+    data-theme={theme}
+    onClick={flip}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && flip()}
+    style={{
+      cursor: "pointer",
+      borderRadius: "var(--radius-lg)",
+      background: "var(--bg)",
+      color: "var(--text)",
+      opacity: fading ? 0 : 1,
+      transition: instant ? "none" : `opacity ${duration / 2}ms var(--ease-in-out)`,
+      ...style
+    }}
+    {...rest}
+  >
+      {children}
+    </div>;
+}

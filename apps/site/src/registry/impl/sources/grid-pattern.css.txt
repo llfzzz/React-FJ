@@ -1,0 +1,45 @@
+<!-- Free Joy — GridPattern (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     A static dot (or line) grid with a radial fade mask. No animation.
+     Line variant: swap the background-image (commented below). -->
+
+<section class="fj-grid fj-grid--fade">
+  <div class="fj-grid-content">
+    <h2>Section background</h2>
+  </div>
+</section>
+
+<style>
+.fj-grid {
+  --fj-size: 24px;
+  --fj-color: var(--border);
+  --fj-opacity: 0.5;
+  position: relative;
+}
+
+.fj-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--fj-opacity);
+
+  /* Dot grid */
+  background-image: radial-gradient(var(--fj-color) 1px, transparent 1px);
+  background-size: var(--fj-size) var(--fj-size);
+
+  /* Line grid — use instead of the dot grid above:
+  background-image:
+    linear-gradient(to right, var(--fj-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--fj-color) 1px, transparent 1px);
+  */
+}
+
+/* Radial fade so the grid dissolves toward the edges. */
+.fj-grid--fade::before {
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 40%, transparent 75%);
+}
+
+.fj-grid-content { position: relative; }
+</style>

@@ -1,0 +1,48 @@
+<!-- Free Joy — Collapse (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The modern grid-template-rows 0fr → 1fr trick animates to the content's
+     natural height with pure CSS — no JS height measuring. Toggle .is-open. -->
+
+<button class="fj-btn fj-btn--secondary fj-btn--md" aria-expanded="true" aria-controls="panel">
+  Toggle details
+</button>
+
+<div class="fj-collapse is-open" id="panel">
+  <div class="fj-collapse-inner">
+    <div class="fj-card">
+      Free Joy keeps disclosure gentle — the panel eases to its natural height.
+    </div>
+  </div>
+</div>
+
+<style>
+.fj-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-out);
+}
+
+.fj-collapse.is-open {
+  grid-template-rows: 1fr;
+}
+
+/* The inner wrapper must have min-height: 0 for the row to collapse fully. */
+.fj-collapse-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-collapse { transition: none; }
+}
+</style>
+
+<script>
+  // Toggle open/closed and keep aria-expanded in sync.
+  const btn = document.querySelector('[aria-controls="panel"]');
+  const panel = document.getElementById("panel");
+  btn.addEventListener("click", () => {
+    const open = panel.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", String(open));
+  });
+</script>

@@ -1,0 +1,40 @@
+<!-- Free Joy — ThemeTransition (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The crossfade is the browser's View Transitions API. You still flip
+     data-theme in JS; the CSS below tunes the default old/new fade and honours
+     reduced motion. Unsupported browsers just swap instantly (graceful). -->
+
+<button id="theme-toggle" class="fj-btn fj-btn--secondary fj-btn--md">Toggle theme</button>
+
+<style>
+/* Tune the default crossfade the View Transitions API applies to <html>. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-in-out);
+}
+
+/* Respect reduced motion — skip the crossfade, keep the instant swap. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+</style>
+
+<script>
+  const toggle = document.getElementById("theme-toggle");
+  toggle.addEventListener("click", () => {
+    const flip = () => {
+      const el = document.documentElement;
+      el.dataset.theme = el.dataset.theme === "dark" ? "light" : "dark";
+    };
+    // Progressive enhancement: crossfade when supported, else swap instantly.
+    if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.startViewTransition(flip);
+    } else {
+      flip();
+    }
+  });
+</script>
