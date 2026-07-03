@@ -1,0 +1,52 @@
+<!-- Free Joy — Card, no-framework version.
+     Requires the FJ tokens (tokens/*.css), including the glass tokens. -->
+
+<div class="fj-card">
+  <h3>Quiet surface</h3>
+  <p>White, hairline border, generous padding.</p>
+</div>
+
+<div class="fj-card fj-card--interactive" tabindex="0">
+  <h3>Interactive</h3>
+  <p>Lifts 2px with a soft shadow on hover.</p>
+</div>
+
+<div class="fj-card fj-card--glass">
+  <h3>Glass</h3>
+  <p>Frosted iOS-18-style translucent panel.</p>
+</div>
+
+<style>
+.fj-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-xs);
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.fj-card--interactive { cursor: pointer; }
+.fj-card--interactive:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.fj-card--interactive:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.fj-card--glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border: 1px solid var(--glass-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-card { transition-duration: 0.01ms; }
+  .fj-card--interactive:hover { transform: none; }
+}
+</style>

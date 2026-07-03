@@ -1,6 +1,7 @@
 import { Bookmark, Heart, Pencil, Search, Trash2 } from 'lucide-react';
 import { Avatar, IconButton, Stack, StatusDot, Tag, type AvatarProps, type IconButtonProps } from '@fj';
 import type { ComponentDoc } from '../types';
+import { impl } from '../impl';
 
 export const iconButtonDoc: ComponentDoc = {
   id: 'icon-button',
@@ -9,6 +10,7 @@ export const iconButtonDoc: ComponentDoc = {
   blurb: 'A quiet square for a single icon action. Always labeled, never mysterious.',
   keywords: ['icon', 'action', 'toolbar'],
   importLine: "import { IconButton } from '@fj';",
+  implementation: impl('icon-button'),
   controls: [
     { type: 'select', prop: 'variant', options: ['ghost', 'solid', 'outline'], defaultValue: 'ghost' },
     { type: 'select', prop: 'size', options: ['sm', 'md', 'lg'], defaultValue: 'md' },
@@ -79,6 +81,7 @@ export const tagDoc: ComponentDoc = {
   blurb: 'A compact chip for topics and filters — with an optional dot, icon, or remove affordance.',
   keywords: ['chip', 'filter', 'topic', 'label'],
   importLine: "import { Tag } from '@fj';",
+  implementation: impl('tag'),
   controls: [
     { type: 'text', prop: 'children', label: 'Label', defaultValue: 'Sketchbook' },
     { type: 'select', prop: 'accent', options: ['neutral', 'coral', 'sun', 'bloom'], defaultValue: 'neutral' },
@@ -131,6 +134,7 @@ export const avatarDoc: ComponentDoc = {
   blurb: 'A circular portrait with warm initials when no image exists.',
   keywords: ['user', 'profile', 'portrait', 'initials'],
   importLine: "import { Avatar } from '@fj';",
+  implementation: impl('avatar'),
   controls: [
     { type: 'text', prop: 'name', defaultValue: 'June Ito' },
     { type: 'select', prop: 'size', options: ['sm', 'md', 'lg'], defaultValue: 'md' },

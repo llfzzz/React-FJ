@@ -1,0 +1,72 @@
+<!-- Free Joy — Tag / Chip, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Accents: neutral (default) | coral | sun | bloom -->
+
+<span class="fj-tag">Neutral</span>
+<span class="fj-tag fj-tag--coral"><span class="fj-tag-dot"></span>Coral</span>
+<span class="fj-tag fj-tag--sun">Sun</span>
+<span class="fj-tag fj-tag--bloom fj-tag--selected">Selected</span>
+<span class="fj-tag fj-tag--coral fj-tag--removable">
+  Removable
+  <button class="fj-tag-remove" aria-label="Remove">×</button>
+</span>
+
+<style>
+.fj-tag {
+  --fj-tag-bg: var(--paper-2);
+  --fj-tag-fg: var(--text-muted);
+  --fj-tag-dot: var(--ink-3);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1.3;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  background: var(--fj-tag-bg);
+  color: var(--fj-tag-fg);
+}
+
+.fj-tag--removable { padding: 4px 6px 4px 12px; }
+
+.fj-tag--selected { border-color: currentColor; }
+
+.fj-tag--coral { --fj-tag-bg: var(--joy-50);    --fj-tag-fg: var(--joy-700);   --fj-tag-dot: var(--joy-200); }
+.fj-tag--sun   { --fj-tag-bg: var(--sun-100);   --fj-tag-fg: var(--sun-700);   --fj-tag-dot: var(--sun-300); }
+.fj-tag--bloom { --fj-tag-bg: var(--bloom-100); --fj-tag-fg: var(--bloom-700); --fj-tag-dot: var(--bloom-300); }
+
+.fj-tag-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fj-tag-dot);
+  flex: none;
+}
+
+.fj-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  opacity: 0.7;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+}
+.fj-tag-remove:hover { opacity: 1; }
+.fj-tag-remove:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+</style>

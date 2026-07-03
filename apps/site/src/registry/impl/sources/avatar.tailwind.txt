@@ -1,0 +1,34 @@
+// Free Joy — Avatar with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+
+const SIZES = {
+  sm: "size-7 text-[10px]",
+  md: "size-10 text-sm",
+  lg: "size-14 text-xl",
+};
+
+/**
+ * Free Joy — Avatar
+ * Image or initials, circular. sizes: sm | md | lg
+ */
+export function Avatar({ src, name = "", size = "md", className = "", ...rest }) {
+  const initials = name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+  return (
+    <span
+      className={
+        "inline-flex flex-none items-center justify-center overflow-hidden rounded-full " +
+        "bg-[var(--joy-100)] text-[var(--joy-700)] " +
+        "font-[family-name:var(--font-text)] font-semibold " +
+        `${SIZES[size] ?? SIZES.md} ${className}`
+      }
+      {...rest}
+    >
+      {src ? <img src={src} alt={name} className="size-full object-cover" /> : initials || "?"}
+    </span>
+  );
+}

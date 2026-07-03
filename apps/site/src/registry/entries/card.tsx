@@ -1,5 +1,6 @@
 import { Badge, Card, Stack, Text, type CardProps } from '@fj';
 import type { ComponentDoc } from '../types';
+import { impl } from '../impl';
 
 function SampleContent() {
   return (
@@ -20,6 +21,7 @@ export const cardDoc: ComponentDoc = {
   blurb: "The system's signature container — hairline border, 18px radius, generous padding.",
   keywords: ['surface', 'panel', 'container', 'glass'],
   importLine: "import { Card } from '@fj';",
+  implementation: impl('card'),
   controls: [
     { type: 'boolean', prop: 'interactive', defaultValue: false },
     { type: 'boolean', prop: 'glass', defaultValue: false },

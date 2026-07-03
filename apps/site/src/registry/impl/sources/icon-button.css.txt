@@ -1,0 +1,81 @@
+<!-- Free Joy — IconButton, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Variants: ghost | solid | outline · Sizes: sm (32) | md (40) | lg (48)
+     Icon-only: always set aria-label. -->
+
+<button class="fj-iconbtn fj-iconbtn--ghost fj-iconbtn--md" aria-label="Settings">
+  <!-- your 16–20px icon (svg) here -->
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
+<button class="fj-iconbtn fj-iconbtn--solid fj-iconbtn--md" aria-label="Add">＋</button>
+<button class="fj-iconbtn fj-iconbtn--outline fj-iconbtn--md fj-iconbtn--square" aria-label="More">…</button>
+<button class="fj-iconbtn fj-iconbtn--ghost fj-iconbtn--md" aria-label="Unavailable" disabled>×</button>
+
+<style>
+.fj-iconbtn {
+  /* Solid-fill recoloring: override these for accent="sun" / "bloom" / custom. */
+  --fj-iconbtn-accent: var(--joy-500);
+  --fj-iconbtn-accent-hover: var(--joy-600);
+  --fj-iconbtn-on-accent: var(--white);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.fj-iconbtn--square { border-radius: var(--radius-md); }
+
+.fj-iconbtn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.fj-iconbtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* Sizes */
+.fj-iconbtn--sm { width: 32px; height: 32px; }
+.fj-iconbtn--md { width: 40px; height: 40px; }
+.fj-iconbtn--lg { width: 48px; height: 48px; }
+
+/* Variants */
+.fj-iconbtn--ghost { background: transparent; color: var(--text); }
+.fj-iconbtn--ghost:hover:not(:disabled) { background: var(--surface-hover); }
+
+.fj-iconbtn--solid {
+  background: var(--fj-iconbtn-accent);
+  color: var(--fj-iconbtn-on-accent);
+}
+.fj-iconbtn--solid:hover:not(:disabled) { background: var(--fj-iconbtn-accent-hover); }
+
+.fj-iconbtn--outline {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.fj-iconbtn--outline:hover:not(:disabled) { background: var(--surface-hover); }
+
+/* Named accents (accent="sun" / accent="bloom") */
+.fj-iconbtn--accent-sun {
+  --fj-iconbtn-accent: var(--sun-500);
+  --fj-iconbtn-accent-hover: var(--sun-700);
+  --fj-iconbtn-on-accent: var(--ink);
+}
+.fj-iconbtn--accent-bloom {
+  --fj-iconbtn-accent: var(--bloom-500);
+  --fj-iconbtn-accent-hover: var(--bloom-700);
+  --fj-iconbtn-on-accent: var(--white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-iconbtn { transition-duration: 0.01ms; }
+}
+</style>

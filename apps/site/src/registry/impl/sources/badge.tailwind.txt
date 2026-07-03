@@ -1,0 +1,53 @@
+// Free Joy — Badge with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+
+const TONES = {
+  neutral: {
+    soft: "bg-[var(--paper-2)] text-[var(--ink-2)]",
+    solid: "bg-[var(--ink)] text-[var(--white)]",
+  },
+  accent: {
+    soft: "bg-[var(--joy-50)] text-[var(--joy-700)]",
+    solid: "bg-[var(--joy-500)] text-[var(--white)]",
+  },
+  success: {
+    soft: "bg-[var(--success-100)] text-[var(--success-700)]",
+    solid: "bg-[var(--success-500)] text-[var(--white)]",
+  },
+  warn: {
+    soft: "bg-[var(--warn-100)] text-[var(--warn-700)]",
+    solid: "bg-[var(--warn-500)] text-[var(--white)]",
+  },
+  danger: {
+    soft: "bg-[var(--danger-100)] text-[var(--danger-700)]",
+    solid: "bg-[var(--danger-500)] text-[var(--white)]",
+  },
+  sun: {
+    soft: "bg-[var(--sun-100)] text-[var(--sun-700)]",
+    solid: "bg-[var(--sun-500)] text-[var(--ink)]",
+  },
+  bloom: {
+    soft: "bg-[var(--bloom-100)] text-[var(--bloom-700)]",
+    solid: "bg-[var(--bloom-500)] text-[var(--white)]",
+  },
+};
+
+/**
+ * Free Joy — Badge (status / count)
+ * tones: neutral | accent | success | warn | danger | sun | bloom
+ */
+export function Badge({ tone = "neutral", solid = false, className = "", children, ...rest }) {
+  const t = TONES[tone] ?? TONES.neutral;
+  return (
+    <span
+      className={
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-[3px] " +
+        "font-[family-name:var(--font-text)] text-[length:var(--text-xs)] font-semibold leading-[1.4] " +
+        `${solid ? t.solid : t.soft} ${className}`
+      }
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+}

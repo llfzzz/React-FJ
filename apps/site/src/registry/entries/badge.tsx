@@ -1,5 +1,6 @@
 import { Badge, Stack, type BadgeProps } from '@fj';
 import type { ComponentDoc } from '../types';
+import { impl } from '../impl';
 
 export const badgeDoc: ComponentDoc = {
   id: 'badge',
@@ -8,6 +9,7 @@ export const badgeDoc: ComponentDoc = {
   blurb: 'A small status pill. Soft tints by default; solid fills when it must carry more weight.',
   keywords: ['status', 'pill', 'count', 'label'],
   importLine: "import { Badge } from '@fj';",
+  implementation: impl('badge'),
   controls: [
     { type: 'text', prop: 'children', label: 'Label', defaultValue: 'Published' },
     {

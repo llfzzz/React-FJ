@@ -1,0 +1,47 @@
+<!-- Free Joy — Badge, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Tones: neutral | accent | success | warn | danger | sun | bloom
+     Soft tint by default; add .fj-badge--solid for a filled pill. -->
+
+<span class="fj-badge">Neutral</span>
+<span class="fj-badge fj-badge--accent">Accent</span>
+<span class="fj-badge fj-badge--success">Success</span>
+<span class="fj-badge fj-badge--warn">Warn</span>
+<span class="fj-badge fj-badge--danger">Danger</span>
+<span class="fj-badge fj-badge--sun">Sun</span>
+<span class="fj-badge fj-badge--bloom">Bloom</span>
+<span class="fj-badge fj-badge--accent fj-badge--solid">Solid</span>
+
+<style>
+.fj-badge {
+  /* Soft tint (default) and solid fill per tone, via custom properties. */
+  --fj-badge-soft-bg: var(--paper-2);
+  --fj-badge-soft-fg: var(--ink-2);
+  --fj-badge-solid-bg: var(--ink);
+  --fj-badge-solid-fg: var(--white);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-family: var(--font-text);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+  border-radius: var(--radius-pill);
+  background: var(--fj-badge-soft-bg);
+  color: var(--fj-badge-soft-fg);
+}
+
+.fj-badge--solid {
+  background: var(--fj-badge-solid-bg);
+  color: var(--fj-badge-solid-fg);
+}
+
+.fj-badge--accent  { --fj-badge-soft-bg: var(--joy-50);      --fj-badge-soft-fg: var(--joy-700);     --fj-badge-solid-bg: var(--joy-500);     --fj-badge-solid-fg: var(--white); }
+.fj-badge--success { --fj-badge-soft-bg: var(--success-100); --fj-badge-soft-fg: var(--success-700); --fj-badge-solid-bg: var(--success-500); --fj-badge-solid-fg: var(--white); }
+.fj-badge--warn    { --fj-badge-soft-bg: var(--warn-100);    --fj-badge-soft-fg: var(--warn-700);    --fj-badge-solid-bg: var(--warn-500);    --fj-badge-solid-fg: var(--white); }
+.fj-badge--danger  { --fj-badge-soft-bg: var(--danger-100);  --fj-badge-soft-fg: var(--danger-700);  --fj-badge-solid-bg: var(--danger-500);  --fj-badge-solid-fg: var(--white); }
+.fj-badge--sun     { --fj-badge-soft-bg: var(--sun-100);     --fj-badge-soft-fg: var(--sun-700);     --fj-badge-solid-bg: var(--sun-500);     --fj-badge-solid-fg: var(--ink); }
+.fj-badge--bloom   { --fj-badge-soft-bg: var(--bloom-100);   --fj-badge-soft-fg: var(--bloom-700);   --fj-badge-solid-bg: var(--bloom-500);   --fj-badge-solid-fg: var(--white); }
+</style>
