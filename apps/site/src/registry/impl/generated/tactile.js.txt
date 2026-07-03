@@ -1,0 +1,29 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { useReducedMotion } from "../motion/useReducedMotion";
+export function Tactile({ children, scale = 0.96, duration = 120, disabled = false, style, ...rest }) {
+  const reduced = useReducedMotion();
+  const [pressed, setPressed] = React.useState(false);
+  const inactive = disabled || reduced;
+  const down = () => !inactive && setPressed(true);
+  const up = () => setPressed(false);
+  return <span
+    onMouseDown={down}
+    onMouseUp={up}
+    onMouseLeave={up}
+    onTouchStart={down}
+    onTouchEnd={up}
+    style={{
+      display: "inline-block",
+      transform: pressed ? `scale(${scale})` : "scale(1)",
+      transition: inactive ? "none" : `transform ${duration}ms var(--ease-out)`,
+      WebkitTapHighlightColor: "transparent",
+      ...style
+    }}
+    {...rest}
+  >
+      {children}
+    </span>;
+}

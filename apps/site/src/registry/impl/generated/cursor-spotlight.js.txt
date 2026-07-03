@@ -1,0 +1,48 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { useReducedMotion } from "../motion/useReducedMotion";
+export function CursorSpotlight({
+  children,
+  size = 400,
+  color = "var(--accent-soft)",
+  intensity = 1,
+  performance = "full",
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const ref = React.useRef(null);
+  const [pos, setPos] = React.useState({ x: -9999, y: -9999 });
+  const inactive = disabled || reduced;
+  const diameter = performance === "lite" ? size * 0.6 : size;
+  const onMove = (e) => {
+    if (inactive) return;
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    setPos({ x: e.clientX - r.left, y: e.clientY - r.top });
+  };
+  return <div
+    ref={ref}
+    onMouseMove={onMove}
+    onMouseLeave={() => setPos({ x: -9999, y: -9999 })}
+    style={{ position: "relative", ...style }}
+    {...rest}
+  >
+      {!inactive && <div
+    aria-hidden="true"
+    style={{
+      position: "absolute",
+      inset: 0,
+      pointerEvents: "none",
+      opacity: intensity,
+      background: `radial-gradient(${diameter}px circle at ${pos.x}px ${pos.y}px, ${color}, transparent 65%)`,
+      transition: "background 60ms linear"
+    }}
+  />}
+      <div style={{ position: "relative" }}>{children}</div>
+    </div>;
+}

@@ -1,0 +1,51 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { useReducedMotion } from "../motion/useReducedMotion";
+export function Magnetic({
+  children,
+  strength = 0.3,
+  radius = 120,
+  restDuration = 400,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const ref = React.useRef(null);
+  const [offset, setOffset] = React.useState({ x: 0, y: 0 });
+  const inactive = disabled || reduced;
+  const onMove = (e) => {
+    if (inactive) return;
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    const dist = Math.hypot(dx, dy);
+    if (dist > radius) {
+      setOffset({ x: 0, y: 0 });
+      return;
+    }
+    setOffset({ x: dx * strength, y: dy * strength });
+  };
+  const reset = () => setOffset({ x: 0, y: 0 });
+  return <div
+    ref={ref}
+    onMouseMove={onMove}
+    onMouseLeave={reset}
+    style={{
+      display: "inline-block",
+      transform: `translate(${offset.x}px, ${offset.y}px)`,
+      transition: offset.x === 0 && offset.y === 0 ? `transform ${restDuration}ms var(--ease-spring)` : "transform 80ms var(--ease-out)",
+      willChange: inactive ? void 0 : "transform",
+      ...style
+    }}
+    {...rest}
+  >
+      {children}
+    </div>;
+}

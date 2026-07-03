@@ -41,6 +41,13 @@ import {
   rotatingTextDoc,
 } from './entries/effects-text';
 import { floatDoc, shimmerDoc } from './entries/effects-surfaces';
+import {
+  cursorSpotlightDoc,
+  magneticDoc,
+  tactileDoc,
+  tiltCardDoc,
+} from './entries/effects-interaction';
+import { errorShakeDoc, loaderDotsDoc, successCheckDoc } from './entries/effects-status';
 
 /** Every documented component, in sidebar order. */
 export const REGISTRY: ComponentDoc[] = sortByCategory([
@@ -82,6 +89,13 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   highlighterDoc,
   shimmerDoc,
   floatDoc,
+  magneticDoc,
+  tiltCardDoc,
+  tactileDoc,
+  cursorSpotlightDoc,
+  successCheckDoc,
+  errorShakeDoc,
+  loaderDotsDoc,
 ]);
 
 function sortByCategory(docs: ComponentDoc[]): ComponentDoc[] {

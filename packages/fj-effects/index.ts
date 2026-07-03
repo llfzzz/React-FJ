@@ -46,3 +46,21 @@ export { Shimmer } from "./components/Shimmer";
 export type { ShimmerProps } from "./components/Shimmer";
 export { Float } from "./components/Float";
 export type { FloatProps } from "./components/Float";
+
+// Interaction effects
+export { Magnetic } from "./components/Magnetic";
+export type { MagneticProps } from "./components/Magnetic";
+export { TiltCard } from "./components/TiltCard";
+export type { TiltCardProps } from "./components/TiltCard";
+export { Tactile } from "./components/Tactile";
+export type { TactileProps } from "./components/Tactile";
+export { CursorSpotlight } from "./components/CursorSpotlight";
+export type { CursorSpotlightProps } from "./components/CursorSpotlight";
+
+// Status effects
+export { SuccessCheck } from "./components/SuccessCheck";
+export type { SuccessCheckProps } from "./components/SuccessCheck";
+export { ErrorShake } from "./components/ErrorShake";
+export type { ErrorShakeProps } from "./components/ErrorShake";
+export { LoaderDots } from "./components/LoaderDots";
+export type { LoaderDotsProps } from "./components/LoaderDots";
