@@ -13,7 +13,8 @@ describe('registry integrity', () => {
   it('keeps every doc complete: blurb, import line, props, a11y', () => {
     for (const doc of REGISTRY) {
       expect(doc.blurb.length, doc.id).toBeGreaterThan(10);
-      expect(doc.importLine, doc.id).toContain("from '@fj'");
+      // Components import from '@fj'; new effects import from '@fj-effects'.
+      expect(doc.importLine, doc.id).toMatch(/from '@fj(-effects)?'/);
       expect(doc.importLine, doc.id).toContain(doc.name);
       expect(doc.props.length, doc.id).toBeGreaterThan(0);
       expect(doc.a11y.length, doc.id).toBeGreaterThan(0);

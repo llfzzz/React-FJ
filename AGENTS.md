@@ -53,16 +53,18 @@ docs). Local mirror lives in `packages/fj-ui/`.
 ```
 pnpm workspace
 ├── packages/fj-ui/        synced FJ mirror (jsx + d.ts, tokens, assets) + local barrel index.ts
+├── packages/fj-effects/   LOCAL effects package (tsx): motion primitives + effect components
 └── apps/site/             Vite + React + TS strict website
-    ├── src/app/           router, providers, error boundary, 404
+    ├── src/app/           router, providers (theme + code-style), error boundary, 404
     ├── src/chrome/        top bar, sidebar, footer, ⌘K
-    ├── src/pages/         landing, get-started, tokens, components, playground
-    ├── src/docs/          Showcase, CodeBlock (shiki), PropsTable, ControlPanel
-    ├── src/registry/      component docs registry (demos as real code via ?raw)
-    └── src/lib/           theme store, search index, hooks
+    ├── src/pages/         landing, get-started, tokens, components, effects, playground
+    ├── src/docs/          Showcase, CodeBlock (shiki), ImplementationBlock, PropsTable, ControlPanel
+    ├── src/registry/      component docs registry + impl/ (4-format raw sources via ?raw)
+    └── src/lib/           theme store, code-style store, search index, hooks
 ```
 
-- `@fj` alias → `packages/fj-ui` (vite alias + tsconfig paths, react deduped).
+- `@fj` alias → `packages/fj-ui`; `@fj-effects` alias → `packages/fj-effects` (vite alias +
+  tsconfig paths, react deduped). `@fj-effects` prefixes are matched before `@fj` in the alias list.
 - Fonts self-hosted via @fontsource (variable); family names mapped to FJ tokens in site CSS.
 - Site chrome icons: `lucide-react` (bundled). Synced FJ `Icon` uses lucide-static CDN (upstream
   convention, documented as-is).
@@ -196,6 +198,89 @@ React Bits informed the product experience only — nothing was copied:
 - Restrained landing composition: animated hero, principle cards, live component peek, one
   flagship CTA treatment.
 All visuals, tokens, voice, and component APIs are Free Joy's own.
+
+## Implementation code (4 formats)
+
+Every documented component exposes its full implementation in four styles via a global
+code-style switcher (JavaScript / TypeScript / CSS / Tailwind), in a new "Implementation"
+DocSection on each component page. State lives in `src/lib/codeStyle.tsx` (React context +
+`localStorage('fj-code-style')`, default `ts`), rendered by `src/docs/ImplementationBlock.tsx`
+(FJ `SegmentedControl` + `CodeBlock` + notes + a not-applicable panel).
+
+- **Sources** are raw text, loaded lazily via `import.meta.glob(..., { query: '?raw' })` in
+  `src/registry/impl/index.ts`. Each `ComponentDoc.implementation = impl('<id>', opts?)`.
+- **JavaScript** = the real source. For `fj-ui` components it's the synced `.jsx` file itself
+  (glob over `packages/fj-ui/components/*/*.jsx`) — it can never drift. For `fj-effects`
+  components it's a generated type-stripped port under `src/registry/impl/generated/<id>.js.txt`
+  (esbuild `jsx:'preserve'`, produced by `scripts/gen-impl-js.mjs` via `pnpm gen:impl`, committed).
+- **TypeScript** = for `fj-ui`, a hand-authored port under `src/registry/impl/sources/<id>.ts.txt`
+  (the `.jsx` merged with its `.d.ts`); for `fj-effects`, the real `.tsx` source (glob).
+- **CSS** = a self-contained HTML+`<style>` reproduction, `sources/<id>.css.txt`, highlighted with
+  the Shiki `html` grammar. **Tailwind** = a JSX+utilities reproduction, `sources/<id>.tailwind.txt`,
+  referencing FJ token vars (`bg-[var(--accent)]`) so both themes work; an optional shared `@theme`
+  mapping (`sources/_tailwind-theme.txt`) is shown on the Installation page.
+- Sources are `.txt` so `tsc` doesn't type-check standalone ports (which import modules that don't
+  exist as compiled files). `registry.test.ts` + `impl/impl.test.ts` guard content instead.
+- Where CSS/Tailwind genuinely can't reproduce JS-driven behavior, `impl('<id>', { notApplicable })`
+  supplies a reason panel instead of code (e.g. CountUp — counting needs JS on scroll).
+
+**DesignSync drift rule**: the JS variant of an fj-ui component is the synced file, so it never
+drifts; the TS/CSS/Tailwind ports are hand-authored and *can*. After any DesignSync pull that
+touches `packages/fj-ui/components/`, run `pnpm test` (the registry drift canary asserts every
+documented prop name appears in the TS port) and re-verify the affected `sources/<id>.*.txt`.
+
+## Effects audit & motion policy
+
+**fj-effects** (`packages/fj-effects/`, local — NOT synced) adds reusable, configurable motion and
+visual-effect components on top of the 7 synced fj-ui effects. Consumed via `@fj-effects`.
+
+Shared motion primitives (`packages/fj-effects/motion/`): `useReducedMotion` (live, single shared
+hook — the synced fj-ui effects each ship a private copy; new code uses this one), `useInView`
+(IntersectionObserver scroll trigger), `useTrigger` (unifies mount/inview/hover/click/manual +
+`replay()`), `ensureKeyframes` (idempotent single `<style data-fj-effects>` injection — dedupes the
+per-instance `<style>` tags fj-ui uses), `easeVar` + shared prop types
+(`BaseEffectProps`/`TriggeredEffectProps`/`LoopEffectProps`, `TriggerMode`, `PerformanceMode`).
+
+Existing motion (audited, pre-existing): fj-ui effects TextReveal, Reveal, CountUp, SpotlightCard,
+AnimatedBorder, Glow, AmbientBackground; plus built-in micro-motion in Spinner, Progress
+(indeterminate sweep), Skeleton (shimmer), Toast/Modal/CommandMenu (entrances), StatusDot (pulse),
+Drawer (slide), card lifts, button/press scales, the site's CopyIconButton copy-feedback, and the
+theme toggle.
+
+Additions (23, in six IA sub-categories — see `EFFECT_CATEGORIES` in `registry/types.ts`):
+- **effects-text**: GradientText, RotatingText, AnimatedUnderline, Highlighter
+- **effects-interaction**: Magnetic, TiltCard, Tactile, CursorSpotlight
+- **effects-surfaces**: Shimmer, Float
+- **effects-backgrounds**: Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst
+- **effects-status**: SuccessCheck, ErrorShake, LoaderDots
+- **effects-motion**: StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition
+
+**Performance rules**: animate `transform`/`opacity` only (no layout-shifting properties); no
+parallax, no flashing; blur radii and particle counts are hard-capped; `performance="lite"` has a
+documented per-effect meaning (Sparkles: half the particles; Aurora: lower blur; TiltCard: no glare
+layer; ConfettiBurst: cap 20). Decorative loops stay in effects only — never dense product UI.
+Richer motion is reserved for the landing page, hero sections, the effects gallery, empty states,
+and selected featured cards; docs prose, props tables, search, and dense content stay restrained.
+
+**Accessibility rules**: decorative layers are `aria-hidden`; text effects keep the full readable
+string as the accessible name (`aria-label`); focus is never animated away; nothing relies on color
+alone.
+
+**Reduced-motion behavior**: the global CSS kill switch (`tokens/base.css`) collapses CSS
+animations/transitions, but it can't stop rAF/timer/pointer JS — so every effect that runs such
+logic reads `useReducedMotion()` and returns an explicit static fallback (final value, plain text,
+no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
+
+## Attributions
+
+- **React Bits** (MIT) — inspiration for the effects catalog/IA and individual effect *ideas* only.
+  No source, assets, branding, or pages were copied; all implementations are original FJ code over
+  FJ tokens.
+- **Lucide** (ISC) — icons (`lucide-react` bundled in site chrome; `lucide-static` CDN glyphs in
+  some synced fj-ui components, upstream convention).
+- **Shiki** (MIT) — code highlighting. **Fontsource** variable fonts (OFL) — self-hosted typefaces.
+- The repo intentionally ships no root LICENSE file (private product site); this section records
+  third-party license status for the reused/inspired work.
 
 ## Site pages
 

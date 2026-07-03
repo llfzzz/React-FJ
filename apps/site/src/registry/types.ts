@@ -8,7 +8,12 @@ export type Category =
   | 'overlay'
   | 'navigation'
   | 'data'
-  | 'effects';
+  | 'effects-text'
+  | 'effects-interaction'
+  | 'effects-surfaces'
+  | 'effects-backgrounds'
+  | 'effects-status'
+  | 'effects-motion';
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   core: 'Core',
@@ -18,7 +23,12 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   overlay: 'Overlay',
   navigation: 'Navigation',
   data: 'Data',
-  effects: 'Effects',
+  'effects-text': 'Text effects',
+  'effects-interaction': 'Interaction',
+  'effects-surfaces': 'Surfaces',
+  'effects-backgrounds': 'Backgrounds',
+  'effects-status': 'Status effects',
+  'effects-motion': 'Motion & transitions',
 };
 
 export const CATEGORY_ORDER: Category[] = [
@@ -29,8 +39,27 @@ export const CATEGORY_ORDER: Category[] = [
   'overlay',
   'navigation',
   'data',
-  'effects',
+  'effects-text',
+  'effects-interaction',
+  'effects-surfaces',
+  'effects-backgrounds',
+  'effects-status',
+  'effects-motion',
 ];
+
+/** Categories that make up the Effects & Motion section. */
+export const EFFECT_CATEGORIES: Category[] = [
+  'effects-text',
+  'effects-interaction',
+  'effects-surfaces',
+  'effects-backgrounds',
+  'effects-status',
+  'effects-motion',
+];
+
+export function isEffectCategory(category: Category): boolean {
+  return EFFECT_CATEGORIES.includes(category);
+}
 
 /** Values a playground control can produce. */
 export type ControlValue = string | number | boolean;

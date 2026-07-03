@@ -21,10 +21,12 @@
     "paths": {
       "@fj": ["../../packages/fj-ui/index.ts"],
       "@fj/*": ["../../packages/fj-ui/*"],
+      "@fj-effects": ["../../packages/fj-effects/index.ts"],
+      "@fj-effects/*": ["../../packages/fj-effects/*"],
       "react": ["./node_modules/@types/react/index.d.ts"],
       "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime.d.ts"],
       "react-dom": ["./node_modules/@types/react-dom/index.d.ts"]
     }
   },
-  "include": ["src", "../../packages/fj-ui"]
+  "include": ["src", "../../packages/fj-ui", "../../packages/fj-effects"]
 }
