@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Monitor, Moon, Search, Sun } from 'lucide-react';
+import { Moon, Search, Sun } from 'lucide-react';
 import { Kbd } from '@fj';
-import { useTheme, type ThemeMode } from '../lib/theme';
+import { useTheme } from '../lib/theme';
 import logoMark from '@fj/assets/logo-mark.svg';
 
 const NAV = [
@@ -10,25 +10,18 @@ const NAV = [
   { label: 'Playground', to: '/playground', match: '/playground' },
 ];
 
-const NEXT_MODE: Record<ThemeMode, ThemeMode> = { light: 'dark', dark: 'system', system: 'light' };
-const MODE_ICON: Record<ThemeMode, typeof Sun> = { light: Sun, dark: Moon, system: Monitor };
-const MODE_LABEL: Record<ThemeMode, string> = {
-  light: 'Theme: light',
-  dark: 'Theme: dark',
-  system: 'Theme: follows your system',
-};
-
 export function ThemeToggle() {
-  const { mode, setMode } = useTheme();
-  const Icon = MODE_ICON[mode];
-  const label = `${MODE_LABEL[mode]} — switch to ${NEXT_MODE[mode]}`;
+  const { resolved, setMode } = useTheme();
+  const next = resolved === 'dark' ? 'light' : 'dark';
+  const Icon = resolved === 'dark' ? Moon : Sun;
+  const label = `Theme: ${resolved} — switch to ${next}`;
   return (
     <button
       type="button"
       className="icon-btn"
       aria-label={label}
       title={label}
-      onClick={() => setMode(NEXT_MODE[mode])}
+      onClick={() => setMode(next)}
     >
       <Icon size={18} aria-hidden />
     </button>
