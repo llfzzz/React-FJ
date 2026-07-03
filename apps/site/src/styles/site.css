@@ -770,6 +770,47 @@ html {
   color: var(--text);
 }
 
+.showcase-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Implementation section — the 4-format code switcher */
+
+.impl-block {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.impl-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.impl-note {
+  margin: 0;
+}
+
+.impl-unavailable {
+  margin: 0;
+  padding: var(--space-5);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.impl-loading {
+  min-height: 200px;
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-md);
+  background: var(--code-bg);
+}
+
 .showcase-stage {
   display: flex;
   align-items: center;

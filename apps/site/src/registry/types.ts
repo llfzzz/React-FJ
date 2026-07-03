@@ -70,6 +70,29 @@ export interface NumberControl extends ControlBase {
 
 export type ControlDef = SelectControl | BooleanControl | TextControl | NumberControl;
 
+/** The four code styles the implementation switcher offers. */
+export type ImplFormat = 'js' | 'ts' | 'css' | 'tailwind';
+
+export const IMPL_FORMAT_LABELS: Record<ImplFormat, string> = {
+  js: 'JavaScript',
+  ts: 'TypeScript',
+  css: 'CSS',
+  tailwind: 'Tailwind',
+};
+
+export const IMPL_FORMAT_ORDER: ImplFormat[] = ['js', 'ts', 'css', 'tailwind'];
+
+export interface ImplementationDoc {
+  /** Lazy raw-source loaders; a missing css/tailwind key must have a notApplicable reason. */
+  sources: Partial<Record<ImplFormat, () => Promise<string>>>;
+  /** Shiki lang overrides (defaults: js/ts/tailwind → 'tsx', css → 'html'). */
+  langs?: Partial<Record<ImplFormat, string>>;
+  /** Short caveat rendered above the code for a format. */
+  notes?: Partial<Record<ImplFormat, string>>;
+  /** Why css/tailwind is intentionally absent (rendered instead of code). */
+  notApplicable?: Partial<Record<'css' | 'tailwind', string>>;
+}
+
 export interface PropDef {
   name: string;
   type: string;
@@ -112,4 +135,11 @@ export interface ComponentDoc {
   props: PropDef[];
   /** Accessibility notes (rendered as a list). */
   a11y: string[];
+  /**
+   * Full implementation code per format (JS / TS / CSS / Tailwind).
+   * Optional only while the catalog is being backfilled — see registry.test.
+   */
+  implementation?: ImplementationDoc;
+  /** Effects: show a Replay button that remounts the preview. */
+  replayable?: boolean;
 }

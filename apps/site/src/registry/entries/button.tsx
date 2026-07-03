@@ -1,6 +1,7 @@
 import { ArrowRight, Heart } from 'lucide-react';
 import { Button, Stack, type ButtonProps } from '@fj';
 import type { ComponentDoc } from '../types';
+import { impl } from '../impl';
 
 export const buttonDoc: ComponentDoc = {
   id: 'button',
@@ -9,6 +10,13 @@ export const buttonDoc: ComponentDoc = {
   blurb: 'The pill-shaped action. One vivid fill for the primary path; quiet variants for everything else.',
   keywords: ['action', 'cta', 'submit', 'press'],
   importLine: "import { Button } from '@fj';",
+  implementation: impl('button', {
+    notes: {
+      js: 'The exact source that ships in @fj — inline styles over FJ tokens, no build step needed.',
+      css: 'Same look and states without React: hover, press scale, focus ring, disabled and loading.',
+      tailwind: 'Utilities point at FJ token variables, so both themes keep working unchanged.',
+    },
+  }),
   controls: [
     { type: 'text', prop: 'children', label: 'Label', defaultValue: 'Start free' },
     { type: 'select', prop: 'variant', options: ['primary', 'secondary', 'ghost', 'danger'], defaultValue: 'primary' },

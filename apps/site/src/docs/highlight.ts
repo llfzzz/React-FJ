@@ -21,6 +21,7 @@ function loadHighlighter(): Promise<HighlighterCore> {
         import('@shikijs/langs/bash'),
         import('@shikijs/langs/css'),
         import('@shikijs/langs/jsonc'),
+        import('@shikijs/langs/html'),
       ],
       engine: createJavaScriptRegexEngine({ forgiving: true }),
     });

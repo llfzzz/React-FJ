@@ -1,0 +1,122 @@
+<!-- Free Joy — Button, no-framework version.
+     Requires the FJ tokens (tokens/*.css) for the var(--*) values.
+     Variants: primary | secondary | ghost | danger · Sizes: sm | md | lg -->
+
+<button class="fj-btn fj-btn--primary fj-btn--md">Start free</button>
+<button class="fj-btn fj-btn--secondary fj-btn--md">Continue</button>
+<button class="fj-btn fj-btn--ghost fj-btn--md">Skip</button>
+<button class="fj-btn fj-btn--danger fj-btn--md">Delete sketchbook</button>
+
+<!-- States -->
+<button class="fj-btn fj-btn--primary fj-btn--md" disabled>Unavailable</button>
+<button class="fj-btn fj-btn--primary fj-btn--md is-loading" aria-busy="true" disabled>
+  <span class="fj-btn-spinner" aria-hidden="true"></span>
+  Saving
+</button>
+
+<!-- Full width -->
+<button class="fj-btn fj-btn--primary fj-btn--md fj-btn--full">Create account</button>
+
+<style>
+.fj-btn {
+  /* Per-instance accent recoloring: override these three custom properties
+     (they default to Joy Coral, matching accent="coral"). */
+  --fj-btn-accent: var(--accent);
+  --fj-btn-accent-hover: var(--accent-hover);
+  --fj-btn-on-accent: var(--text-on-accent);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-text);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* Press feedback — the tactile scale-down. */
+.fj-btn:active:not(:disabled) { transform: scale(0.97); }
+
+/* Keyboard focus — the 3px coral ring. Never remove it. */
+.fj-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.fj-btn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+.fj-btn.is-loading { cursor: progress; opacity: 1; }
+
+/* Sizes (36 / 44 / 54 px tall) */
+.fj-btn--sm { height: 36px; padding: 0 14px; font-size: var(--text-sm); gap: 6px; }
+.fj-btn--md { height: 44px; padding: 0 20px; font-size: var(--text-base); gap: 8px; }
+.fj-btn--lg { height: 54px; padding: 0 28px; font-size: var(--text-md); gap: 10px; }
+
+/* Variants */
+.fj-btn--primary {
+  background: var(--fj-btn-accent);
+  color: var(--fj-btn-on-accent);
+}
+.fj-btn--primary:hover:not(:disabled) { background: var(--fj-btn-accent-hover); }
+
+.fj-btn--secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.fj-btn--secondary:hover:not(:disabled) { background: var(--surface-hover); }
+
+.fj-btn--ghost {
+  background: transparent;
+  color: var(--text);
+}
+.fj-btn--ghost:hover:not(:disabled) { background: var(--surface-hover); }
+
+.fj-btn--danger {
+  background: var(--danger-500);
+  color: var(--white);
+}
+.fj-btn--danger:hover:not(:disabled) { background: var(--danger-700); }
+
+.fj-btn--full { display: flex; width: 100%; }
+
+/* Named accents from the FJ palette (accent="sun" / accent="bloom") */
+.fj-btn--accent-sun {
+  --fj-btn-accent: var(--sun-500);
+  --fj-btn-accent-hover: var(--sun-700);
+  --fj-btn-on-accent: var(--ink);
+}
+.fj-btn--accent-bloom {
+  --fj-btn-accent: var(--bloom-500);
+  --fj-btn-accent-hover: var(--bloom-700);
+  --fj-btn-on-accent: var(--white);
+}
+
+/* Loading spinner (matches the FJ Spinner component) */
+.fj-btn-spinner {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  opacity: 0.9;
+  animation: fj-btn-spin 0.7s linear infinite;
+}
+@keyframes fj-btn-spin { to { transform: rotate(360deg); } }
+
+/* Reduced motion: collapse movement, keep the state change. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-btn { transition-duration: 0.01ms; }
+  .fj-btn:active:not(:disabled) { transform: none; }
+  .fj-btn-spinner { animation-duration: 1.4s; }
+}
+</style>

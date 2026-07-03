@@ -4,6 +4,7 @@ import { Badge, PageHeader } from '@fj';
 import { adjacentDocs, CATEGORY_LABELS, getComponentDoc } from '../../registry';
 import { Showcase } from '../../docs/Showcase';
 import { CodeBlock } from '../../docs/CodeBlock';
+import { ImplementationBlock } from '../../docs/ImplementationBlock';
 import { PropsTable } from '../../docs/PropsTable';
 import { DocSection } from '../../docs/DocSection';
 import { usePageTitle } from '../../lib/usePageTitle';
@@ -44,6 +45,16 @@ export function ComponentPage() {
       <DocSection id="usage" title="Usage">
         <CodeBlock code={doc.importLine} lang="tsx" />
       </DocSection>
+
+      {doc.implementation && (
+        <DocSection id="implementation" title="Implementation">
+          <p className="doc-note">
+            The full component source, ready to copy into your own project. Pick the style you
+            work in — the CSS and Tailwind versions reproduce the same look and states.
+          </p>
+          <ImplementationBlock doc={doc} />
+        </DocSection>
+      )}
 
       {doc.examples?.map((example) => (
         <DocSection key={example.title} id={example.title.toLowerCase().replace(/\s+/g, '-')} title={example.title}>
