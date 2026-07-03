@@ -1,0 +1,94 @@
+// Free Joy — CountUp (effect) (TypeScript implementation)
+// Requires the FJ tokens (tokens/*.css). Shows the final value instantly under
+// reduced motion.
+import * as React from "react";
+
+function useReducedMotion(): boolean {
+  const [r, setR] = React.useState(
+    () => typeof window !== "undefined" && !!window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  React.useEffect(() => {
+    const m = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const f = () => setR(m.matches);
+    m.addEventListener("change", f);
+    return () => m.removeEventListener("change", f);
+  }, []);
+  return r;
+}
+
+function format(n: number, decimals: number, separator: string): string {
+  const parts = n.toFixed(decimals).split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+  return parts.join(".");
+}
+
+export interface CountUpProps extends React.HTMLAttributes<HTMLSpanElement> {
+  value?: number;
+  /** @default 1200 */
+  duration?: number;
+  /** @default 0 */
+  decimals?: number;
+  prefix?: string;
+  suffix?: string;
+  /** Thousands separator. @default "," */
+  separator?: string;
+  /** Animate only on first entry. @default true */
+  once?: boolean;
+}
+
+/**
+ * Free Joy — CountUp (effect)
+ * Number that counts up when scrolled into view.
+ */
+export function CountUp({ value = 0, duration = 1200, decimals = 0, prefix = "", suffix = "", separator = ",", once = true, style, ...rest }: CountUpProps) {
+  const reduced = useReducedMotion();
+  const ref = React.useRef<HTMLSpanElement>(null);
+  const [display, setDisplay] = React.useState(reduced ? value : 0);
+  const started = React.useRef(false);
+
+  React.useEffect(() => {
+    if (reduced) {
+      setDisplay(value);
+      return;
+    }
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    const run = () => {
+      const t0 = performance.now();
+      const tick = (t: number) => {
+        const p = Math.min(1, (t - t0) / duration);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setDisplay(value * eased);
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && (!once || !started.current)) {
+            started.current = true;
+            run();
+          }
+        });
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [value, duration, once, reduced]);
+
+  return (
+    <span ref={ref} aria-label={`${prefix}${format(value, decimals, separator)}${suffix}`} style={{ fontVariantNumeric: "tabular-nums", ...style }} {...rest}>
+      <span aria-hidden="true">
+        {prefix}
+        {format(display, decimals, separator)}
+        {suffix}
+      </span>
+    </span>
+  );
+}

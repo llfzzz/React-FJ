@@ -1,0 +1,73 @@
+<!-- Free Joy — SegmentedControl, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Equal-width grid columns; the thumb is a 1/n slice moved with --fj-idx.
+     Set --fj-n (segment count) and --fj-idx (active index) from JS on click. -->
+
+<div class="fj-seg" style="--fj-n: 3; --fj-idx: 0" role="tablist">
+  <div class="fj-seg-thumb" aria-hidden="true"></div>
+  <button class="fj-seg-btn is-active" aria-selected="true">Day</button>
+  <button class="fj-seg-btn" aria-selected="false">Week</button>
+  <button class="fj-seg-btn" aria-selected="false">Month</button>
+</div>
+
+<style>
+.fj-seg {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(var(--fj-n, 3), minmax(0, 1fr));
+  grid-auto-columns: 1fr;
+  padding: 4px;
+  height: 40px;
+  box-sizing: border-box;
+  background: var(--paper-2);
+  border-radius: var(--radius-pill);
+}
+.fj-seg--full { display: grid; width: 100%; }
+.fj-seg--sm { height: 34px; }
+.fj-seg--lg { height: 46px; }
+
+.fj-seg-thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / var(--fj-n, 3));
+  transform: translateX(calc(var(--fj-idx, 0) * 100%));
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--dur-base) var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fj-seg-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 100%;
+  padding: 0 18px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-subtle);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.fj-seg-btn.is-active { color: var(--text); }
+.fj-seg-btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-pill);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-seg-thumb, .fj-seg-btn { transition-duration: 0.01ms; }
+}
+</style>

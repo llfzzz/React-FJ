@@ -1,0 +1,49 @@
+<!-- Free Joy — Tabs, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The active pill is the button with [aria-selected="true"]. Toggle that
+     attribute (and your panel visibility) from JS. -->
+
+<div class="fj-tabs" role="tablist">
+  <button class="fj-tab" role="tab" aria-selected="true">Sketches</button>
+  <button class="fj-tab" role="tab" aria-selected="false">Notes</button>
+  <button class="fj-tab" role="tab" aria-selected="false">Circles</button>
+</div>
+
+<style>
+.fj-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--paper-2);
+  border-radius: var(--radius-pill);
+}
+
+.fj-tab {
+  border: none;
+  cursor: pointer;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  background: transparent;
+  color: var(--text-subtle);
+  box-shadow: none;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.fj-tab[aria-selected="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-xs);
+}
+
+.fj-tab:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-tab { transition-duration: 0.01ms; }
+}
+</style>

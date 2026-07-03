@@ -24,7 +24,7 @@ const FJ_EFFECTS_SOURCES = import.meta.glob('../../../../../packages/fj-effects/
   import: 'default',
 }) as RawLoaders;
 
-const AUTHORED_SOURCES = import.meta.glob('./sources/*.txt', {
+const AUTHORED_SOURCES = import.meta.glob('./sources/*.{ts,css,tailwind}.txt', {
   query: '?raw',
   import: 'default',
 }) as RawLoaders;

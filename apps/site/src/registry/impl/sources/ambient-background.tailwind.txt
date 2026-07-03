@@ -1,0 +1,34 @@
+// Free Joy — AmbientBackground (effect) with Tailwind CSS.
+// The three drift keyframes can't be expressed as utilities — add the CSS block
+// below to your global stylesheet once. The blobs then use utilities + those
+// named animations.
+
+const VARIANTS = {
+  warm: ["var(--joy-500)", "var(--sun-500)", "var(--bloom-500)"],
+  cool: ["var(--bloom-500)", "var(--info-500)", "var(--joy-500)"],
+  joy: ["var(--joy-500)", "var(--joy-400)", "var(--sun-500)"],
+};
+
+/**
+ * Free Joy — AmbientBackground (effect)
+ * Section wrapper with 2–3 huge, slow-drifting color washes. Heroes only.
+ */
+export function AmbientBackground({ variant = "warm", animate = true, opacity = 0.14, className = "", children }) {
+  const [c1, c2, c3] = VARIANTS[variant] || VARIANTS.warm;
+  const wash = (c) => `radial-gradient(circle, color-mix(in srgb, ${c} ${Math.round(opacity * 100)}%, transparent), transparent 70%)`;
+  const anim = (name, dur) => (animate ? `${name} ${dur}s var(--ease-in-out) infinite alternate` : "none");
+  return (
+    <div className={`relative overflow-hidden bg-[var(--bg)] ${className}`}>
+      <div aria-hidden="true" style={{ background: wash(c1), animation: anim("fj-drift-a", 26) }} className="pointer-events-none absolute -left-[10%] -top-[20%] aspect-square w-[55%] rounded-full motion-reduce:animate-none" />
+      <div aria-hidden="true" style={{ background: wash(c2), animation: anim("fj-drift-b", 32) }} className="pointer-events-none absolute -right-[15%] -top-[10%] aspect-square w-1/2 rounded-full motion-reduce:animate-none" />
+      <div aria-hidden="true" style={{ background: wash(c3), animation: anim("fj-drift-c", 29) }} className="pointer-events-none absolute -bottom-[25%] left-1/4 aspect-square w-[48%] rounded-full motion-reduce:animate-none" />
+      <div className="relative">{children}</div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-drift-a { from { transform: translate(0,0) scale(1); }    to { transform: translate(6%,-8%) scale(1.08); } }
+@keyframes fj-drift-b { from { transform: translate(0,0) scale(1.05); } to { transform: translate(-7%,6%) scale(1); } }
+@keyframes fj-drift-c { from { transform: translate(0,0) scale(1); }    to { transform: translate(4%,7%) scale(1.06); } }
+*/

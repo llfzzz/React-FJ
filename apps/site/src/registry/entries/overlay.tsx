@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, ConfirmDialog, Drawer, Input, Modal, Stack, type DrawerProps } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
+import { impl } from '../impl';
 
 function ModalDemo({ values }: { values: ControlValues }) {
   const [open, setOpen] = useState(false);
@@ -36,6 +37,7 @@ export const modalDoc: ComponentDoc = {
   blurb: 'A centered dialog for one focused decision — traps focus, restores it on close.',
   keywords: ['dialog', 'popup', 'confirm'],
   importLine: "import { Modal } from '@fj';",
+  implementation: impl('modal'),
   controls: [
     { type: 'text', prop: 'title', defaultValue: 'Publish this sketch?' },
     { type: 'boolean', prop: 'glass', defaultValue: false },
@@ -146,6 +148,7 @@ export const drawerDoc: ComponentDoc = {
   blurb: 'A panel that slides in from an edge — room for details without losing the page.',
   keywords: ['panel', 'slide', 'sheet'],
   importLine: "import { Drawer } from '@fj';",
+  implementation: impl('drawer'),
   controls: [
     { type: 'select', prop: 'side', options: ['right', 'left', 'top', 'bottom'], defaultValue: 'right' },
   ],

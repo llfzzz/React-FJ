@@ -2,6 +2,7 @@ import { PageHeader } from '@fj';
 import { DocSection } from '../../docs/DocSection';
 import { CodeBlock } from '../../docs/CodeBlock';
 import { usePageTitle } from '../../lib/usePageTitle';
+import tailwindTheme from '../../registry/impl/sources/_tailwind-theme.txt?raw';
 
 const FONTS_SNIPPET = `pnpm add @fontsource-variable/bricolage-grotesque \\
   @fontsource-variable/hanken-grotesk \\
@@ -93,6 +94,19 @@ export function InstallationPage() {
           </p>
         </div>
         <CodeBlock code={`document.documentElement.dataset.theme = 'dark';`} lang="ts" />
+      </DocSection>
+
+      <DocSection id="tailwind" title="Using FJ with Tailwind">
+        <div className="doc-prose">
+          <p>
+            Every component’s <strong>Implementation</strong> section offers a Tailwind version. Those
+            examples reference FJ tokens directly with arbitrary values (e.g.{' '}
+            <code>bg-[var(--accent)]</code>), so they stay theme- and dark-mode-correct with no extra
+            setup. If you’d rather write the shorter <code>bg-accent</code> / <code>rounded-lg</code>{' '}
+            forms, add the optional <code>@theme</code> mapping below to your main CSS.
+          </p>
+        </div>
+        <CodeBlock code={tailwindTheme} lang="css" maxHeight={420} />
       </DocSection>
     </article>
   );

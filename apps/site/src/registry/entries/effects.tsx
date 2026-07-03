@@ -14,6 +14,7 @@ import {
   type TextRevealProps,
 } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
+import { impl } from '../impl';
 
 /** Remount on knob change so entrance effects replay. */
 const replayKey = (values: ControlValues) => JSON.stringify(values);
@@ -25,6 +26,8 @@ export const textRevealDoc: ComponentDoc = {
   blurb: 'Words rise in with a gentle stagger — for heroes and section openers only.',
   keywords: ['animation', 'headline', 'stagger', 'motion'],
   importLine: "import { TextReveal } from '@fj';",
+  implementation: impl('text-reveal'),
+  replayable: true,
   controls: [
     { type: 'text', prop: 'text', defaultValue: 'Built for the making.' },
     { type: 'select', prop: 'by', options: ['word', 'char'], defaultValue: 'word' },
@@ -67,6 +70,8 @@ export const revealDoc: ComponentDoc = {
   blurb: 'A section fades and rises as it enters the viewport — cascade staggers its children.',
   keywords: ['animation', 'scroll', 'entrance', 'motion'],
   importLine: "import { Reveal } from '@fj';",
+  implementation: impl('reveal'),
+  replayable: true,
   controls: [
     { type: 'number', prop: 'y', defaultValue: 14, min: 0, max: 40, step: 2 },
     { type: 'number', prop: 'duration', defaultValue: 640, min: 240, max: 1200, step: 80 },
@@ -110,6 +115,13 @@ export const countUpDoc: ComponentDoc = {
   blurb: 'A number that eases up to its value when it scrolls into view.',
   keywords: ['animation', 'number', 'stat', 'metric'],
   importLine: "import { CountUp } from '@fj';",
+  implementation: impl('count-up', {
+    notApplicable: {
+      css: 'Counting numbers needs to run JavaScript on scroll — a CSS-only version can only show the final value, not the count-up. Use the JavaScript or TypeScript implementation.',
+      tailwind: 'Counting numbers needs to run JavaScript on scroll — utility classes can style the number but cannot animate it. Use the JavaScript or TypeScript implementation.',
+    },
+  }),
+  replayable: true,
   controls: [
     { type: 'number', prop: 'value', defaultValue: 1284, min: 0, max: 100000, step: 1 },
     { type: 'number', prop: 'duration', defaultValue: 1200, min: 400, max: 3000, step: 100 },
@@ -144,6 +156,7 @@ export const spotlightCardDoc: ComponentDoc = {
   blurb: 'A card whose surface warms under the cursor — for one flagship card per view.',
   keywords: ['hover', 'card', 'highlight', 'motion'],
   importLine: "import { SpotlightCard } from '@fj';",
+  implementation: impl('spotlight-card'),
   controls: [{ type: 'number', prop: 'size', defaultValue: 320, min: 160, max: 560, step: 40 }],
   render: (v) => (
     <SpotlightCard size={Number(v.size)} style={{ width: 'min(340px, 100%)' }}>
@@ -180,6 +193,7 @@ export const animatedBorderDoc: ComponentDoc = {
   blurb: 'A hairline gradient that sweeps slowly around one flagship panel.',
   keywords: ['border', 'gradient', 'loop', 'motion'],
   importLine: "import { AnimatedBorder } from '@fj';",
+  implementation: impl('animated-border'),
   controls: [
     { type: 'number', prop: 'speed', defaultValue: 8, min: 3, max: 20, step: 1 },
     { type: 'number', prop: 'width', defaultValue: 1, min: 1, max: 3, step: 1 },
@@ -218,6 +232,7 @@ export const glowDoc: ComponentDoc = {
   blurb: 'A static warm halo that lifts a hero element off the paper. No animation at all.',
   keywords: ['halo', 'gradient', 'hero'],
   importLine: "import { Glow } from '@fj';",
+  implementation: impl('glow'),
   controls: [
     { type: 'number', prop: 'intensity', defaultValue: 0.35, min: 0.1, max: 0.7, step: 0.05 },
     { type: 'number', prop: 'blur', defaultValue: 48, min: 16, max: 96, step: 8 },
@@ -251,6 +266,7 @@ export const ambientBackgroundDoc: ComponentDoc = {
   blurb: 'Huge, slow color washes behind hero content — never behind dense product UI.',
   keywords: ['background', 'gradient', 'hero', 'motion'],
   importLine: "import { AmbientBackground } from '@fj';",
+  implementation: impl('ambient-background'),
   controls: [
     { type: 'select', prop: 'variant', options: ['warm', 'cool', 'joy'], defaultValue: 'warm' },
     { type: 'number', prop: 'opacity', defaultValue: 0.14, min: 0.06, max: 0.3, step: 0.02 },

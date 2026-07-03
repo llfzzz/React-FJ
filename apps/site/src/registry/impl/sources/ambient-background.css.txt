@@ -1,0 +1,61 @@
+<!-- Free Joy — AmbientBackground (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     A section wrapper with 2–3 huge, slow-drifting color washes. Heroes,
+     onboarding, empty states and success screens ONLY — never dense UI.
+     Swap the wash colors via the .fj-ambient--cool / --joy modifiers. -->
+
+<section class="fj-ambient fj-ambient--warm" style="--fj-wash: 0.14">
+  <div class="fj-ambient-blob fj-ambient-blob--a" aria-hidden="true"></div>
+  <div class="fj-ambient-blob fj-ambient-blob--b" aria-hidden="true"></div>
+  <div class="fj-ambient-blob fj-ambient-blob--c" aria-hidden="true"></div>
+  <div class="fj-ambient-content">
+    <h1>Make something you love</h1>
+  </div>
+</section>
+
+<style>
+.fj-ambient {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  /* Default warm palette; overridden by the modifiers below. */
+  --fj-c1: var(--joy-500);
+  --fj-c2: var(--sun-500);
+  --fj-c3: var(--bloom-500);
+}
+.fj-ambient--cool { --fj-c1: var(--bloom-500); --fj-c2: var(--info-500); --fj-c3: var(--joy-500); }
+.fj-ambient--joy  { --fj-c1: var(--joy-500);   --fj-c2: var(--joy-400);  --fj-c3: var(--sun-500); }
+
+.fj-ambient-blob {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.fj-ambient-blob--a {
+  top: -20%; left: -10%; width: 55%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--fj-c1) calc(var(--fj-wash, 0.14) * 100%), transparent), transparent 70%);
+  animation: fj-drift-a 26s var(--ease-in-out) infinite alternate;
+}
+.fj-ambient-blob--b {
+  top: -10%; right: -15%; width: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--fj-c2) calc(var(--fj-wash, 0.14) * 100%), transparent), transparent 70%);
+  animation: fj-drift-b 32s var(--ease-in-out) infinite alternate;
+}
+.fj-ambient-blob--c {
+  bottom: -25%; left: 25%; width: 48%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--fj-c3) calc(var(--fj-wash, 0.14) * 100%), transparent), transparent 70%);
+  animation: fj-drift-c 29s var(--ease-in-out) infinite alternate;
+}
+
+.fj-ambient-content { position: relative; }
+
+@keyframes fj-drift-a { from { transform: translate(0, 0) scale(1); }    to { transform: translate(6%, -8%) scale(1.08); } }
+@keyframes fj-drift-b { from { transform: translate(0, 0) scale(1.05); } to { transform: translate(-7%, 6%) scale(1); } }
+@keyframes fj-drift-c { from { transform: translate(0, 0) scale(1); }    to { transform: translate(4%, 7%) scale(1.06); } }
+
+/* Reduced motion: washes remain, drift stops. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-ambient-blob { animation: none; }
+}
+</style>

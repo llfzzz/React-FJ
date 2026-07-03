@@ -20,6 +20,22 @@ describe('registry integrity', () => {
     }
   });
 
+  it('ships all four implementation formats (or a reason for missing CSS/Tailwind)', () => {
+    for (const doc of REGISTRY) {
+      const { sources, notApplicable } = doc.implementation;
+      // Every component has a real JS source (synced .jsx or generated port)
+      // and a TypeScript source.
+      expect(typeof sources.js, `${doc.id}.js`).toBe('function');
+      expect(typeof sources.ts, `${doc.id}.ts`).toBe('function');
+      // CSS and Tailwind must be present OR carry an explicit not-applicable reason.
+      for (const format of ['css', 'tailwind'] as const) {
+        const hasSource = typeof sources[format] === 'function';
+        const hasReason = Boolean(notApplicable?.[format]);
+        expect(hasSource || hasReason, `${doc.id}.${format}: needs a source or a notApplicable reason`).toBe(true);
+      }
+    }
+  });
+
   it('keeps select control defaults inside their options', () => {
     for (const doc of REGISTRY) {
       for (const control of doc.controls) {

@@ -1,0 +1,61 @@
+// Free Joy — Reveal (effect) with Tailwind CSS.
+// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// The scroll trigger is JS (IntersectionObserver); the fade + rise is utilities.
+import { Children, useEffect, useRef, useState } from "react";
+
+/**
+ * Free Joy — Reveal (effect)
+ * Fade + rise for a section entering the viewport. `cascade` staggers children.
+ */
+export function Reveal({ y = 14, duration = 640, once = true, cascade = false, stagger = 60, threshold = 0.15, className = "", children }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setShown(true);
+          if (once) io.disconnect();
+        } else if (!once) setShown(false);
+      },
+      { threshold },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [once, threshold]);
+
+  const item = (extraDelay) => ({
+    style: {
+      transitionDelay: `${extraDelay}ms`,
+      transitionDuration: `${duration}ms`,
+      "--tw-translate-y": shown ? "0px" : `${y}px`,
+    },
+    className:
+      "transition-[transform,opacity] ease-[var(--ease-emphasized)] motion-reduce:transition-none translate-y-[var(--tw-translate-y)] " +
+      (shown ? "opacity-100" : "opacity-0"),
+  });
+
+  if (cascade) {
+    return (
+      <div ref={ref} className={className}>
+        {Children.map(children, (child, i) => {
+          const p = item(i * stagger);
+          return (
+            <div style={p.style} className={p.className}>
+              {child}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  const p = item(0);
+  return (
+    <div ref={ref} style={p.style} className={`${p.className} ${className}`}>
+      {children}
+    </div>
+  );
+}

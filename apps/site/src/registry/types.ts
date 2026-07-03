@@ -135,11 +135,8 @@ export interface ComponentDoc {
   props: PropDef[];
   /** Accessibility notes (rendered as a list). */
   a11y: string[];
-  /**
-   * Full implementation code per format (JS / TS / CSS / Tailwind).
-   * Optional only while the catalog is being backfilled — see registry.test.
-   */
-  implementation?: ImplementationDoc;
+  /** Full implementation code per format (JS / TS / CSS / Tailwind). */
+  implementation: ImplementationDoc;
   /** Effects: show a Replay button that remounts the preview. */
   replayable?: boolean;
 }

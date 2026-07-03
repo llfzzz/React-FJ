@@ -1,5 +1,6 @@
 import { Badge, Table } from '@fj';
 import type { ComponentDoc } from '../types';
+import { impl } from '../impl';
 
 const COLUMNS = [
   { key: 'title', header: 'Sketch' },
@@ -30,6 +31,7 @@ export const tableDoc: ComponentDoc = {
   blurb: 'A quiet data table — hairline rows, mono headers, no drama.',
   keywords: ['data', 'rows', 'columns', 'grid'],
   importLine: "import { Table } from '@fj';",
+  implementation: impl('table'),
   controls: [
     { type: 'boolean', prop: 'zebra', defaultValue: false },
     { type: 'boolean', prop: 'hover', defaultValue: true },

@@ -1,0 +1,61 @@
+/* Free Joy — Tailwind CSS setup
+ *
+ * The FJ components ship as design tokens (CSS custom properties). The Tailwind
+ * examples reference those tokens directly with arbitrary values, e.g.
+ * `bg-[var(--accent)]`, so they stay correct in light AND dark mode with zero
+ * extra config. That already works out of the box.
+ *
+ * The optional @theme block below maps the most-used FJ tokens to Tailwind
+ * theme keys, so you can write the shorter `bg-accent` / `rounded-lg` /
+ * `duration-fast` forms instead of the arbitrary-value syntax. Add it to your
+ * main CSS file (Tailwind v4, after `@import "tailwindcss";`), and make sure
+ * the FJ token stylesheet (@fj/styles.css) is loaded so the variables resolve.
+ */
+
+@import "tailwindcss";
+@import "@fj/styles.css";
+
+@theme inline {
+  /* Colors — semantic aliases (auto-flip in dark mode) */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--text-on-accent);
+
+  /* Brand ramps (a few representative steps) */
+  --color-joy-500: var(--joy-500);
+  --color-sun-500: var(--sun-500);
+  --color-bloom-500: var(--bloom-500);
+  --color-success-500: var(--success-500);
+  --color-warn-500: var(--warn-500);
+  --color-danger-500: var(--danger-500);
+
+  /* Radii */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
+
+  /* Shadows */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  /* Motion — durations + easings */
+  --ease-out: var(--ease-out);
+  --ease-emphasized: var(--ease-emphasized);
+}
+
+/* With the mapping above you can write, for example:
+ *   <button class="bg-accent text-on-accent rounded-pill duration-[var(--dur-fast)] hover:bg-accent-hover">
+ * The component examples keep the explicit `var(--*)` form so they work even
+ * without this @theme block. */

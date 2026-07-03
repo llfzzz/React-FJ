@@ -1,0 +1,47 @@
+<!-- Free Joy — Reveal (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Fade + rise on entry. This example plays on mount; to trigger on SCROLL
+     like the React component, start without .is-in and add it via an
+     IntersectionObserver. `cascade` staggers children with --fj-i. -->
+
+<!-- Single block -->
+<div class="fj-reveal-block is-in">
+  <h3>Everything in one calm place</h3>
+  <p>Your sketches, notes, and circles — quietly organised.</p>
+</div>
+
+<!-- Cascade (staggered children) -->
+<div class="fj-reveal-cascade is-in">
+  <div class="fj-reveal-item" style="--fj-i: 0">Sketches</div>
+  <div class="fj-reveal-item" style="--fj-i: 1">Notes</div>
+  <div class="fj-reveal-item" style="--fj-i: 2">Circles</div>
+</div>
+
+<style>
+.fj-reveal-block,
+.fj-reveal-item {
+  --fj-y: 14px;
+  --fj-duration: 640ms;
+  transform: translateY(var(--fj-y));
+  opacity: 0;
+  transition:
+    transform var(--fj-duration) var(--ease-emphasized),
+    opacity calc(var(--fj-duration) * 0.7) var(--ease-out);
+}
+
+/* Cascade delay per child. */
+.fj-reveal-cascade { --fj-stagger: 60ms; }
+.fj-reveal-item { transition-delay: calc(var(--fj-i) * var(--fj-stagger)); }
+
+/* Revealed state (toggle .is-in on scroll into view). */
+.fj-reveal-block.is-in,
+.fj-reveal-cascade.is-in .fj-reveal-item {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-reveal-block,
+  .fj-reveal-item { transform: none; opacity: 1; transition: none; }
+}
+</style>

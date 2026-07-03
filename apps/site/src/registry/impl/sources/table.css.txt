@@ -1,0 +1,72 @@
+<!-- Free Joy — Table, no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Add .fj-table--zebra for alternating tints, .fj-table--dense for tighter
+     rows. Row hover is pure CSS. -->
+
+<div class="fj-table-wrap">
+  <table class="fj-table">
+    <thead>
+      <tr>
+        <th>Track</th>
+        <th>Artist</th>
+        <th style="text-align:right">Plays</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Morning Set</td><td>Nils</td><td style="text-align:right">1,204</td></tr>
+      <tr><td>Blue Hour</td><td>Sena</td><td style="text-align:right">986</td></tr>
+      <tr><td>Afterglow</td><td>Rue</td><td style="text-align:right">742</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<style>
+.fj-table-wrap {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.fj-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-text);
+}
+
+.fj-table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-subtle);
+  white-space: nowrap;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.fj-table td {
+  padding: 14px 18px;
+  font-size: var(--text-sm);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+.fj-table tbody tr:last-child td { border-bottom: none; }
+
+/* Row hover */
+.fj-table tbody tr {
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.fj-table tbody tr:hover { background: var(--surface-hover); }
+
+/* Zebra + dense modifiers */
+.fj-table--zebra tbody tr:nth-child(even) { background: var(--surface-2); }
+.fj-table--dense th, .fj-table--dense td { padding: 10px 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-table tbody tr { transition-duration: 0.01ms; }
+}
+</style>

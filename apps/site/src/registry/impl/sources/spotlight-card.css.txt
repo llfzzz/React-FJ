@@ -1,0 +1,65 @@
+<!-- Free Joy — SpotlightCard (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The glow position follows the cursor via two custom properties, --fj-mx and
+     --fj-my, which you set from a mousemove handler (~4 lines of JS, shown at
+     the bottom). Everything else — the lift, the fade, the radial paint — is CSS. -->
+
+<article class="fj-spotlight">
+  <div class="fj-spotlight-glow" aria-hidden="true"></div>
+  <div class="fj-spotlight-content">
+    <h3>Flagship card</h3>
+    <p>A soft warm highlight tracks the cursor across the surface.</p>
+  </div>
+</article>
+
+<style>
+.fj-spotlight {
+  --fj-size: 320px;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-xs);
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+.fj-spotlight:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.fj-spotlight-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  background: radial-gradient(
+    var(--fj-size) circle at var(--fj-mx, 50%) var(--fj-my, 40%),
+    var(--accent-soft),
+    transparent 70%
+  );
+}
+.fj-spotlight:hover .fj-spotlight-glow { opacity: 1; }
+
+.fj-spotlight-content { position: relative; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-spotlight { transition-duration: 0.01ms; }
+  .fj-spotlight:hover { transform: none; }
+}
+</style>
+
+<script>
+  // Cursor tracking — the only JS this effect needs.
+  document.querySelectorAll(".fj-spotlight").forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--fj-mx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--fj-my", `${e.clientY - r.top}px`);
+    });
+  });
+</script>

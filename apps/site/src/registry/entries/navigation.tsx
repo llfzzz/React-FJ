@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { SegmentedControl, Tabs, type SegmentedControlProps } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
+import { impl } from '../impl';
 
 function TabsDemo() {
   const [tab, setTab] = useState('sketches');
@@ -24,6 +25,7 @@ export const tabsDoc: ComponentDoc = {
   blurb: 'Pill tabs on a sunken track — for switching views without leaving the page.',
   keywords: ['tabs', 'views', 'switch'],
   importLine: "import { Tabs } from '@fj';",
+  implementation: impl('tabs'),
   controls: [],
   render: () => <TabsDemo />,
   code: () => `const [tab, setTab] = useState('sketches');
@@ -72,6 +74,7 @@ export const segmentedControlDoc: ComponentDoc = {
   blurb: 'An iOS-style switch with a sliding thumb — equal segments, one clear choice.',
   keywords: ['segment', 'toggle group', 'switch'],
   importLine: "import { SegmentedControl } from '@fj';",
+  implementation: impl('segmented-control'),
   controls: [
     { type: 'select', prop: 'size', options: ['sm', 'md', 'lg'], defaultValue: 'md' },
     { type: 'boolean', prop: 'full', label: 'Full width', defaultValue: false },
