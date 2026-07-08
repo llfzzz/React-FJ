@@ -1,5 +1,5 @@
 // Free Joy — Tooltip with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Reveal is driven by the group hover/focus state — no JS needed for the
 // simple top-placement case shown here.
 

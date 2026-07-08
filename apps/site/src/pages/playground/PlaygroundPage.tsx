@@ -31,7 +31,7 @@ const ACCENT_VARS: Record<Accent, Record<string, string>> = {
     '--accent-soft': 'var(--sun-100)',
     '--border-focus': 'var(--sun-500)',
     '--ring': '0 0 0 3px var(--sun-300)',
-    /* literal: sun fills need dark text in BOTH themes (var(--ink) flips) */
+    /* literal: sun fills need dark text even under a theme that flips var(--ink) */
     '--text-on-accent': '#1C1C1A',
   },
   bloom: {

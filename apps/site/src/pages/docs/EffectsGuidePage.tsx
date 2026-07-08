@@ -56,7 +56,7 @@ export function EffectsGuidePage() {
       <DocSection id="inventory" title="What exists">
         <div className="doc-prose">
           <p>
-            The <strong>fj-effects</strong> package adds {23} configurable animations on top of the
+            The <strong>fj-effects</strong> package adds 23 configurable animations on top of the
             seven original FJ animations and the built-in micro-motion already in components like
             Spinner, Progress, Skeleton, Toast, and Modal. They’re grouped into six families —
             browse them all in the <Link to="/effects">gallery</Link>.

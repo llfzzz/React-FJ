@@ -1,5 +1,24 @@
 import * as React from "react";
+import { ensureKeyframes } from "../motion/keyframes";
 import { useReducedMotion } from "../motion/useReducedMotion";
+
+// Two static keyframes instead of one per-instance definition: a shared name
+// whose body depended on props would let the last-rendered instance redefine
+// the animation for every other one on the page.
+ensureKeyframes(
+  "fj-rotate-in-slide",
+  `@keyframes fj-rotate-in-slide {
+    from { opacity: 0; transform: translateY(100%); }
+    to { opacity: 1; transform: none; }
+  }`,
+);
+ensureKeyframes(
+  "fj-rotate-in-fade",
+  `@keyframes fj-rotate-in-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }`,
+);
 
 export interface RotatingTextProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** The words to cycle through. */
@@ -59,17 +78,11 @@ export function RotatingText({
           display: "inline-block",
           animation: disabled
             ? "none"
-            : `fj-rotate-in ${duration}ms var(--ease-emphasized)`,
+            : `${travel ? "fj-rotate-in-slide" : "fj-rotate-in-fade"} ${duration}ms var(--ease-emphasized)`,
         }}
       >
         {current}
       </span>
-      <style>{`
-        @keyframes fj-rotate-in {
-          from { opacity: 0; transform: ${travel ? "translateY(100%)" : "none"}; }
-          to { opacity: 1; transform: none; }
-        }
-      `}</style>
     </span>
   );
 }

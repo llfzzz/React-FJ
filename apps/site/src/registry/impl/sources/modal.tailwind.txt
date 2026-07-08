@@ -1,5 +1,5 @@
 // Free Joy — Modal (Dialog) with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Focus-trapping, Escape-to-close and backdrop-click are behavior — kept here.
 // The two entrance keyframes need a global rule (see the block at the bottom).
 import { useEffect, useRef } from "react";

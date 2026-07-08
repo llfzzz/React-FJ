@@ -135,6 +135,12 @@ export const countUpDoc: ComponentDoc = {
       <CountUp value={Number(v.value)} duration={Number(v.duration)} suffix={String(v.suffix)} />
     </span>
   ),
+  // value is required, so the snippet must always carry it (the generic
+  // serializer would drop it for sitting at the knob default).
+  code: (v) =>
+    `<CountUp value={${Number(v.value)}}${v.duration !== 1200 ? ` duration={${Number(v.duration)}}` : ''}${
+      String(v.suffix) ? ` suffix="${String(v.suffix)}"` : ''
+    } />`,
   props: [
     { name: 'value', type: 'number', description: 'Target value.' },
     { name: 'duration', type: 'number', defaultValue: '1200', description: 'Ease duration in ms.' },

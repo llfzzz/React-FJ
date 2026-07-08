@@ -72,6 +72,6 @@ export const cardDoc: ComponentDoc = {
   ],
   a11y: [
     'Card is a plain container; give clickable cards a real link or button inside rather than a click handler on the div.',
-    'Glass surfaces keep text on --text: contrast stays AA in both themes.',
+    'Glass surfaces keep text on --text, so contrast stays AA.',
   ],
 };

@@ -54,6 +54,6 @@ export const badgeDoc: ComponentDoc = {
   ],
   a11y: [
     'Color is never the only signal — the badge text carries the meaning.',
-    'Soft tints use the 700-step foreground on the 100-step tint for AA contrast in both themes.',
+    'Soft tints use the 700-step foreground on the 100-step tint for AA contrast.',
   ],
 };

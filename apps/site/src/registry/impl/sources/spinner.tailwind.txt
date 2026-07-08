@@ -1,5 +1,5 @@
 // Free Joy — Spinner with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Uses Tailwind's built-in animate-spin; motion-reduce slows it rather than
 // freezing so it still reads as "busy".
 

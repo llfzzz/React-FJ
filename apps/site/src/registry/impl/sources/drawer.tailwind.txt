@@ -1,5 +1,5 @@
 // Free Joy — Drawer with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Focus-trapping, Escape-to-close and scrim-click are behavior — kept here.
 import { useEffect, useRef } from "react";
 

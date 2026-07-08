@@ -1,5 +1,5 @@
 // Free Joy — AnimatedUnderline (effect) with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Pure-CSS hover version — the underline is a background layer grown on hover.
 // (For the inview trigger, toggle the width class from an IntersectionObserver.)
 

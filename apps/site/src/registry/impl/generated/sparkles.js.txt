@@ -12,11 +12,13 @@ ensureKeyframes(
   }`
 );
 const MAX = 24;
+const DEFAULT_SIZE_RANGE = [2, 5];
+const DEFAULT_COLORS = ["var(--sun-400)", "var(--joy-400)", "var(--bloom-400)"];
 export function Sparkles({
   children,
   count = 14,
-  sizeRange = [2, 5],
-  colors = ["var(--sun-400)", "var(--joy-400)", "var(--bloom-400)"],
+  sizeRange = DEFAULT_SIZE_RANGE,
+  colors = DEFAULT_COLORS,
   speed = 1,
   performance = "full",
   disabled = false,

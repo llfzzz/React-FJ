@@ -13,6 +13,11 @@ ensureKeyframes(
 
 const MAX = 24; // hard cap on DOM nodes
 
+// Module-level defaults: fresh array literals as prop defaults would change
+// identity every render and re-randomize the useMemo'd particle layout.
+const DEFAULT_SIZE_RANGE: [number, number] = [2, 5];
+const DEFAULT_COLORS = ["var(--sun-400)", "var(--joy-400)", "var(--bloom-400)"];
+
 export interface SparklesProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   /** Particle count (capped at 24; "lite" halves it). @default 14 */
@@ -47,8 +52,8 @@ interface Spark {
 export function Sparkles({
   children,
   count = 14,
-  sizeRange = [2, 5],
-  colors = ["var(--sun-400)", "var(--joy-400)", "var(--bloom-400)"],
+  sizeRange = DEFAULT_SIZE_RANGE,
+  colors = DEFAULT_COLORS,
   speed = 1,
   performance = "full",
   disabled = false,

@@ -54,11 +54,11 @@ export function ColorsPage() {
       <PageHeader
         eyebrow="Design tokens"
         title="Colors"
-        description="Warm paper, soft ink, one vivid accent. Every value below is live — flip the theme and watch them follow."
+        description="Warm paper, soft ink, one vivid accent. Every value below is read live from the running stylesheet."
       />
       <DocSection id="aliases" title="Semantic aliases (use these)">
         <p className="doc-note">
-          Components read the aliases, never the raw ramps — that is what makes the dark theme and
+          Components read the aliases, never the raw ramps — that is what makes retheming and
           re-accenting possible.
         </p>
         <TokenGrid>

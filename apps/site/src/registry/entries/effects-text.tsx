@@ -88,7 +88,7 @@ export const rotatingTextDoc: ComponentDoc = {
   code: (v) => `<RotatingText
   words={['playful', 'honest', 'yours', 'lasting']}${v.mode !== 'slide' ? `\n  mode="fade"` : ''}${
     v.interval !== 2000 ? `\n  interval={${Number(v.interval)}}` : ''
-  } />`,
+  }${v.duration !== 400 ? `\n  duration={${Number(v.duration)}}` : ''} />`,
   props: [
     { name: 'words', type: 'string[]', description: 'The words to cycle through.' },
     { name: 'interval', type: 'number', defaultValue: '2000', description: 'ms each word stays visible.' },
@@ -189,7 +189,7 @@ export const highlighterDoc: ComponentDoc = {
     { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Plain text, no highlight.' },
   ],
   a11y: [
-    'The highlight is background paint behind real text — contrast holds in both themes.',
+    'The highlight is background paint behind real text — contrast holds.',
     'Reduced motion shows the highlight already filled, with no swipe.',
     'Use sparingly — one highlighted phrase per passage keeps the emphasis meaningful.',
   ],

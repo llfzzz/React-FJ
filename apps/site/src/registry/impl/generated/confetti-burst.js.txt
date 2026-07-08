@@ -22,12 +22,12 @@ export function ConfettiBurst({
   const prevActive = React.useRef(active);
   const n = Math.min(performance === "lite" ? 20 : CAP, Math.max(0, count));
   const fire = React.useCallback(() => {
-    if (reduced) {
+    if (reduced || n <= 0) {
       onDone?.();
       return;
     }
     setBurstId(Date.now());
-  }, [reduced, onDone]);
+  }, [reduced, n, onDone]);
   React.useEffect(() => {
     if (trigger === "mount") fire();
   }, []);
