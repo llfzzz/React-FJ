@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useTheme } from '../../lib/theme';
 
-/** Live computed value of a CSS custom property; tracks theme changes. */
+/** Live computed value of a CSS custom property. */
 export function useTokenValue(name: string): string {
-  const { resolved } = useTheme();
   const [value, setValue] = useState('');
   useEffect(() => {
     setValue(getComputedStyle(document.documentElement).getPropertyValue(name).trim());
-  }, [name, resolved]);
+  }, [name]);
   return value;
 }
 

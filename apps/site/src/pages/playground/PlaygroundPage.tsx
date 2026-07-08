@@ -20,7 +20,6 @@ import { usePageTitle } from '../../lib/usePageTitle';
 
 type Accent = 'coral' | 'sun' | 'bloom';
 type Radius = 'crisp' | 'default' | 'soft';
-type Theme = 'light' | 'dark';
 
 /** Token overrides per accent — everything stays inside the FJ ramps. */
 const ACCENT_VARS: Record<Accent, Record<string, string>> = {
@@ -120,7 +119,6 @@ export function PlaygroundPage() {
   usePageTitle('Theme playground');
   const [accent, setAccent] = useState<Accent>('coral');
   const [radius, setRadius] = useState<Radius>('default');
-  const [theme, setTheme] = useState<Theme>('light');
 
   const vars = { ...ACCENT_VARS[accent], ...RADIUS_VARS[radius] } as CSSProperties;
 
@@ -163,23 +161,10 @@ export function PlaygroundPage() {
                 onChange={(value) => setRadius(value as Radius)}
               />
             </div>
-            <div className="control-row">
-              <span className="control-label">theme</span>
-              <SegmentedControl
-                size="sm"
-                full
-                options={[
-                  { value: 'light', label: 'Light' },
-                  { value: 'dark', label: 'Dark' },
-                ]}
-                value={theme}
-                onChange={(value) => setTheme(value as Theme)}
-              />
-            </div>
           </div>
         </aside>
         <div className="playground-stage-wrap">
-          <div className="playground-stage" data-theme={theme} style={vars}>
+          <div className="playground-stage" style={vars}>
             <SampleApp />
           </div>
         </div>

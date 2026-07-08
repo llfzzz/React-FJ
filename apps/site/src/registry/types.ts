@@ -23,12 +23,12 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   overlay: 'Overlay',
   navigation: 'Navigation',
   data: 'Data',
-  'effects-text': 'Text effects',
+  'effects-text': 'Text animations',
   'effects-interaction': 'Interaction',
   'effects-surfaces': 'Surfaces',
   'effects-backgrounds': 'Backgrounds',
-  'effects-status': 'Status effects',
-  'effects-motion': 'Motion & transitions',
+  'effects-status': 'Status animations',
+  'effects-motion': 'Animation & transitions',
 };
 
 export const CATEGORY_ORDER: Category[] = [
@@ -47,7 +47,7 @@ export const CATEGORY_ORDER: Category[] = [
   'effects-motion',
 ];
 
-/** Categories that make up the Effects & Motion section. */
+/** Categories that make up the Animation section. */
 export const EFFECT_CATEGORIES: Category[] = [
   'effects-text',
   'effects-interaction',

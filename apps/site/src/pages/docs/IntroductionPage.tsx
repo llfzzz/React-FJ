@@ -25,7 +25,7 @@ export function IntroductionPage() {
           <p>
             The system is opinionated on purpose. One warm accent (Joy Coral) is reserved for
             interactive affordances. Type is editorial: Bricolage Grotesque for display, Hanken
-            Grotesk for reading, JetBrains Mono for code and eyebrow labels. Motion is quick and
+            Grotesk for reading, JetBrains Mono for code and eyebrow labels. Animation is quick and
             gentle — and always respects reduced-motion preferences.
           </p>
         </div>
@@ -37,7 +37,7 @@ export function IntroductionPage() {
           <li>Hairline borders before shadows; shadows stay soft and warm.</li>
           <li>Pills for interactive shapes; 12–18px radii for content surfaces.</li>
           <li>Sections breathe — the spacing scale leans on its upper end.</li>
-          <li>Decorative motion is confined to the effects family, one flagship per view.</li>
+          <li>Decorative animation is confined to the animation family, one flagship per view.</li>
           <li>Sentence case everywhere; the mono uppercase eyebrow is the only exception.</li>
         </ul>
       </DocSection>
