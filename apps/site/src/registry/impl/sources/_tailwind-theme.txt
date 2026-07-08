@@ -2,7 +2,7 @@
  *
  * The FJ components ship as design tokens (CSS custom properties). The Tailwind
  * examples reference those tokens directly with arbitrary values, e.g.
- * `bg-[var(--accent)]`, so they stay correct in light AND dark mode with zero
+ * `bg-[var(--accent)]`, so they stay correct under any retheme with zero
  * extra config. That already works out of the box.
  *
  * The optional @theme block below maps the most-used FJ tokens to Tailwind
@@ -16,7 +16,7 @@
 @import "@fj/styles.css";
 
 @theme inline {
-  /* Colors — semantic aliases (auto-flip in dark mode) */
+  /* Colors — semantic aliases (retheme-safe) */
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);

@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test.describe('effects gallery', () => {
   test('renders the grid, filters it, and links to a component page', async ({ page }) => {
     await page.goto('/effects');
-    await expect(page.getByRole('heading', { name: 'Motion gallery' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Animation gallery' })).toBeVisible();
 
     const cards = page.locator('.effect-card');
     const total = await cards.count();

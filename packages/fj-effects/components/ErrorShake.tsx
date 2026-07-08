@@ -78,7 +78,9 @@ export function ErrorShake({
         animation,
         ...style,
       } as React.CSSProperties}
-      onAnimationEnd={() => {
+      onAnimationEnd={(e) => {
+        // animationend bubbles — ignore animations finishing inside children.
+        if (e.animationName !== "fj-shake" && e.animationName !== "fj-warn-pulse") return;
         setPlaying(false);
         onDone?.();
       }}

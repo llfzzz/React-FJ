@@ -1,5 +1,5 @@
 // Free Joy — EmptyState with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Pass an inline <svg icon> (Lucide or your own) rather than a CDN mask.
 
 /**

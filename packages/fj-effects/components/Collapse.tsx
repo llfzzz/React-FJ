@@ -67,6 +67,8 @@ export function Collapse({ children, open, duration = 280, easing = "out", unmou
       }}
       onTransitionEnd={onEnd}
       aria-hidden={!open}
+      // Clipped-but-mounted content must not stay keyboard-reachable.
+      inert={!open}
       {...rest}
     >
       <div ref={innerRef}>{render ? children : null}</div>

@@ -42,6 +42,7 @@ export function Collapse({ children, open, duration = 280, easing = "out", unmou
     }}
     onTransitionEnd={onEnd}
     aria-hidden={!open}
+    inert={!open}
     {...rest}
   >
       <div ref={innerRef}>{render ? children : null}</div>

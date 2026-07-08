@@ -38,7 +38,7 @@ test.describe('component docs', () => {
   test('catalog filters by family', async ({ page }) => {
     await page.goto('/components');
     await expect(page.getByRole('heading', { name: 'Components' })).toBeVisible();
-    await page.getByRole('button', { name: 'Text effects', exact: true }).click();
+    await page.getByRole('button', { name: 'Text animations', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'TextReveal' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Button', exact: true })).toHaveCount(0);
   });

@@ -1,5 +1,5 @@
 // Free Joy — SegmentedControl with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // The thumb width/offset are dynamic (1/n), so they're set with inline style;
 // everything else is utilities.
 import { useState } from "react";

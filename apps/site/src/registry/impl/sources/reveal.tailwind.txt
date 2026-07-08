@@ -1,5 +1,5 @@
 // Free Joy — Reveal (effect) with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // The scroll trigger is JS (IntersectionObserver); the fade + rise is utilities.
 import { Children, useEffect, useRef, useState } from "react";
 

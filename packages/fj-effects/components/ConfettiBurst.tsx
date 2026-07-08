@@ -57,12 +57,13 @@ export function ConfettiBurst({
   const n = Math.min(performance === "lite" ? 20 : CAP, Math.max(0, count));
 
   const fire = React.useCallback(() => {
-    if (reduced) {
+    if (reduced || n <= 0) {
+      // No pieces will render, so no animationend would ever clean up.
       onDone?.();
       return;
     }
     setBurstId(Date.now());
-  }, [reduced, onDone]);
+  }, [reduced, n, onDone]);
 
   // mount trigger
   React.useEffect(() => {

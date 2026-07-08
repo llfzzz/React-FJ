@@ -165,6 +165,9 @@ export const themeTransitionDoc: ComponentDoc = {
   render: (v) => (
     <ThemeTransition
       duration={Number(v.duration)}
+      // The site is light-only; this class scopes a tiny ink/paper "dark" look
+      // to the demo box (site.css) so the crossfade is actually visible.
+      className="theme-transition-demo"
       style={{ padding: 'var(--space-6)', border: '1px solid var(--border)', minWidth: 240, textAlign: 'center' }}
     >
       <Stack gap={6} align="center">

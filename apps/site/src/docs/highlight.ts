@@ -2,9 +2,9 @@ import type { HighlighterCore } from 'shiki/core';
 
 /**
  * Lazy, fine-grained shiki: only the languages the docs actually use and the
- * JS regex engine (no wasm). The code block is always a dark, warm panel (in
- * both site themes) — FJ's docs convention — so one dark theme is enough; the
- * panel background itself comes from FJ tokens (see .codeblock CSS).
+ * JS regex engine (no wasm). The code block is always a dark, warm panel —
+ * FJ's docs convention — so one dark syntax theme is enough; the panel
+ * background itself comes from FJ tokens (see .codeblock CSS).
  */
 let highlighterPromise: Promise<HighlighterCore> | null = null;
 
