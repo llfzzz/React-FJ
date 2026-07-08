@@ -44,18 +44,6 @@ test.describe('component docs', () => {
   });
 });
 
-test.describe('theme', () => {
-  test('toggle persists across reloads', async ({ page }) => {
-    await page.goto('/');
-    const toggle = page.getByRole('button', { name: /^Theme:/ });
-    // light → dark (two-state toggle; system preference resolves to light here)
-    await toggle.click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await page.reload();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  });
-});
-
 test.describe('search', () => {
   test('⌘K opens, filters, and navigates on Enter', async ({ page }) => {
     await page.goto('/');

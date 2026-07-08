@@ -147,7 +147,7 @@ export function presentCategories(): Category[] {
   return CATEGORY_ORDER.filter((category) => present.has(category));
 }
 
-/** Every documented effect, in sidebar order — powers the /effects gallery. */
+/** Every documented animation, in sidebar order — powers the /effects gallery. */
 export function effectDocs(): ComponentDoc[] {
   return REGISTRY.filter((doc) => isEffectCategory(doc.category));
 }

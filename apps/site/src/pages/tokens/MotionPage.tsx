@@ -22,14 +22,14 @@ const EASINGS = [
 ];
 
 export function MotionPage() {
-  usePageTitle('Motion tokens');
+  usePageTitle('Animation tokens');
   const [run, setRun] = useState(0);
   return (
     <article>
       <PageHeader
         eyebrow="Design tokens"
-        title="Motion"
-        description="Quick and gentle: fades and small translates, no bounce, no parallax. Decorative loops live only in the effects family."
+        title="Animation"
+        description="Quick and gentle: fades and small translates, no bounce, no parallax. Decorative loops live only in the animation family."
         actions={
           <Button variant="secondary" size="sm" iconLeft={<RotateCcw size={14} aria-hidden />} onClick={() => setRun((r) => r + 1)}>
             Replay all

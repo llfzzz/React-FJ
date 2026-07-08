@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { MoonStar, MousePointerClick, SwatchBook, Wind } from 'lucide-react';
+import { Layers, MousePointerClick, SwatchBook, Wind } from 'lucide-react';
 import {
   AmbientBackground,
   AnimatedBorder,
@@ -22,12 +22,12 @@ import {
 } from '@fj';
 import { GradientText, GridPattern, Magnetic } from '@fj-effects';
 import { usePageTitle } from '../../lib/usePageTitle';
-import { presentCategories, REGISTRY } from '../../registry';
+import { effectDocs, presentCategories, REGISTRY } from '../../registry';
 
 const STATS = [
   { value: REGISTRY.length, label: 'documented components' },
   { value: presentCategories().length, label: 'component families' },
-  { value: 2, label: 'themes, one voice' },
+  { value: effectDocs().length, label: 'animations' },
 ];
 
 const PRINCIPLES = [
@@ -42,13 +42,13 @@ const PRINCIPLES = [
     body: 'Every color, radius, shadow, and duration is a CSS custom property. Theme once, everywhere.',
   },
   {
-    icon: MoonStar,
-    title: 'Both themes, same calm',
-    body: 'Light and dark share one restrained voice. Glass stays quiet; surfaces never glare.',
+    icon: Layers,
+    title: 'Frosted glass, quiet depth',
+    body: 'Bars and panels rest on translucent glass and hairline borders — depth without heavy shadows or glare.',
   },
   {
     icon: Wind,
-    title: 'Motion that respects you',
+    title: 'Animation that respects you',
     body: '80–640 ms, gentle easings, reduced-motion aware. No bounce, no parallax, no theatre.',
   },
 ];

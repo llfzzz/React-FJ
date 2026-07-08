@@ -9,8 +9,7 @@
   --font-text: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', monospace;
 
-  /* Sidebar active state — readable in both themes (accent-press is too dark
-     to sit on the translucent coral wash used in dark mode). */
+  /* Sidebar active state. */
   --nav-active-fg: var(--accent-press);
 
   /* Site-level layout scale — overrides the fj-ui defaults (1180/720) so the
@@ -23,10 +22,6 @@
   /* Shared fixed-width rail for docs/playground sidebars and showcase side
      panels, so all three scale together from one token. */
   --rail-width: 264px;
-}
-
-[data-theme='dark'] {
-  --nav-active-fg: var(--joy-300);
 }
 
 html {
@@ -609,10 +604,6 @@ html {
   color: var(--accent);
 }
 
-[data-theme='dark'] .principle-icon {
-  color: var(--joy-300);
-}
-
 .peek-link {
   display: block;
   height: 100%;
@@ -652,15 +643,10 @@ html {
   border: 0;
 }
 
-/* Code block — a dark, warm panel in both themes (FJ docs convention). */
+/* Code block — a dark, warm panel (FJ docs convention). */
 :root {
   --code-bg: #211f1c;
   --code-border: #38352f;
-}
-
-[data-theme='dark'] {
-  --code-bg: #1a1a1e;
-  --code-border: var(--line);
 }
 
 .codeblock {
@@ -1103,6 +1089,49 @@ html {
   }
 }
 
+.github-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  flex: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.github-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.github-btn-count {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 719px) {
+  .github-btn {
+    padding: 0;
+    width: 38px;
+    justify-content: center;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .github-btn-count {
+    display: none;
+  }
+}
+
 /* ---------- Token pages ---------- */
 
 .token-grid {
@@ -1344,18 +1373,6 @@ html {
   background: var(--bg);
   color: var(--text);
   padding: clamp(var(--space-4), 3vw, var(--space-6));
-
-  /* Semantic aliases compute at :root, so a nested data-theme scope inherits
-     the page's values. Re-declare them here so they re-resolve against the
-     stage's own (possibly dark) primitives. */
-  --bg: var(--paper);
-  --bg-sunken: var(--paper-2);
-  --text: var(--ink);
-  --text-muted: var(--ink-2);
-  --text-subtle: var(--ink-3);
-  --text-disabled: var(--ink-4);
-  --border: var(--line);
-  --border-strong: var(--line-strong);
 }
 
 @media (max-width: 899px) {

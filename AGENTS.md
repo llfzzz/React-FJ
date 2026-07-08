@@ -155,6 +155,14 @@ shiki + JS regex engine, PropsTable, DocSection, CopyIconButton). Code-style sto
   comment (fonts self-hosted via `@fontsource-variable/*` in `apps/site/src/main.tsx`, family
   names mapped to `--font-*` tokens in `apps/site/src/styles/site.css`). Same approach the
   upstream consumers use; marked `FJ-LOCAL-PATCH` in the file.
+- `packages/fj-ui/tokens/colors.css` — upstream `[data-theme="dark"]` token block removed. Dark
+  mode was ripped out of the site entirely at the owner's request (2026-07-04): the topbar theme
+  toggle, `src/lib/theme.tsx` (+ its test), the pre-paint theme script in `index.html`, the
+  playground light/dark knob, the Installation "Dark mode" section, and the theme e2e test are all
+  gone; the landing "2 themes" stat became "motion effects". Site is light-only (no `data-theme`
+  attribute; `:root` is light). The `@fj-effects` `ThemeTransition` effect is kept as a library
+  primitive but its on-site demo no longer changes color (nothing dark to cross-fade to). Marked
+  `FJ-LOCAL-PATCH` in the file; do NOT re-add the dark block on a DesignSync pull.
 
 ## Verification results
 

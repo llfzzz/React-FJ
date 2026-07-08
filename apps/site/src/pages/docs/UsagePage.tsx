@@ -67,11 +67,11 @@ export function UsagePage() {
         <CodeBlock code={TOKENS_SNIPPET} lang="css" />
       </DocSection>
 
-      <DocSection id="motion" title="Motion etiquette">
+      <DocSection id="motion" title="Animation etiquette">
         <ul className="doc-list">
-          <li>UI transitions use the motion tokens: instant/fast for controls, base for surfaces.</li>
-          <li>Decorative motion comes only from the effects family — one flagship per view.</li>
-          <li>Reduced motion is handled globally; JS-driven effects also check matchMedia.</li>
+          <li>UI transitions use the animation tokens: instant/fast for controls, base for surfaces.</li>
+          <li>Decorative animation comes only from the animation family — one flagship per view.</li>
+          <li>Reduced motion is handled globally; JS-driven animations also check matchMedia.</li>
           <li>Never animate layout — transform and opacity only.</li>
         </ul>
       </DocSection>

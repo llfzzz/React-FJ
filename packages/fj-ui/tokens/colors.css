@@ -2,7 +2,12 @@
    iOS-18-inspired light system: low-saturation neutral surfaces, soft frosted
    glass, and ONE vivid brand accent reserved for interactive affordances
    (buttons, links, selection) so taps are obvious. The brand "Joy" ramp is now
-   a warm coral — blue is no longer the primary. */
+   a warm coral — blue is no longer the primary.
+
+   FJ-LOCAL-PATCH: the upstream mirror ships a `[data-theme="dark"]` token block
+   after :root. This site is intentionally light-only, so that block was removed
+   here (dark mode ripped out of the site entirely at the owner's request). Do
+   NOT re-add it on a DesignSync pull unless dark mode is being reinstated. */
 :root {
   /* --- Base neutrals: soft, near-white, faintly warm (low saturation) --- */
   --paper:       #F6F6F4; /* page background, soft off-white */
@@ -89,52 +94,4 @@
   --chart-6: var(--ink-3);
 
   color-scheme: light;
-}
-
-/* ============================================================
-   DARK THEME — low-saturation, elegant, restrained.
-   Glass stays calm (never glossy): a quiet translucent panel
-   with a faint top-light border, same as light mode in spirit.
-   The Joy ramp, white-on-accent text, and semantics are unchanged.
-   ============================================================ */
-:root[data-theme="dark"],
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  /* Neutrals invert: soft warm-charcoal paper, near-white ink */
-  --paper:       #161618; /* page background */
-  --paper-2:     #1F1F22; /* sunken / subtle fill */
-  --paper-3:     #292930; /* hovered surface */
-  --ink:         #F3F3F0; /* primary text */
-  --ink-2:       #B3B3AD; /* secondary text */
-  --ink-3:       #7E7E78; /* muted / placeholder */
-  --ink-4:       #54545B; /* faint, disabled */
-  --line:        #2C2C31; /* hairline border */
-  --line-strong: #3A3A41; /* emphasized border */
-
-  /* Surfaces sit just above the page, never pure black */
-  --surface:       #1C1C20;
-  --surface-2:     #232328;
-  --surface-hover: #2A2A30;
-
-  /* Accent soft becomes a quiet translucent coral wash */
-  --accent-soft:  rgba(242, 96, 60, 0.15);
-
-  /* Frosted glass — dark, restrained (low alpha, hairline highlight) */
-  --glass-bg:        rgba(34, 34, 38, 0.55);
-  --glass-bg-strong: rgba(22, 22, 25, 0.70);
-  --glass-bg-tint:   rgba(28, 28, 32, 0.45);
-  --glass-border:    rgba(255, 255, 255, 0.08);
-
-  --ring: 0 0 0 3px rgba(242, 96, 60, 0.30);
-
-  /* Overlays deepen on dark */
-  --overlay:       rgba(0, 0, 0, 0.55);
-  --overlay-heavy: rgba(0, 0, 0, 0.90);
-
-  /* Deeper, softer shadows on dark */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.45);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.50);
-  --shadow-lg: 0 18px 46px rgba(0, 0, 0, 0.55);
 }

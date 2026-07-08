@@ -22,7 +22,7 @@ const PAGES: Array<{ label: string; to: string; icon: string; hint: string }> = 
   { label: 'Color tokens', to: '/docs/tokens/colors', icon: 'palette', hint: 'Tokens' },
   { label: 'Typography tokens', to: '/docs/tokens/typography', icon: 'type', hint: 'Tokens' },
   { label: 'Spacing tokens', to: '/docs/tokens/spacing', icon: 'ruler', hint: 'Tokens' },
-  { label: 'Motion tokens', to: '/docs/tokens/motion', icon: 'wind', hint: 'Tokens' },
+  { label: 'Animation tokens', to: '/docs/tokens/motion', icon: 'wind', hint: 'Tokens' },
   { label: 'Component catalog', to: '/components', icon: 'layout-grid', hint: 'Page' },
   { label: 'Theme playground', to: '/playground', icon: 'sliders-horizontal', hint: 'Page' },
 ];

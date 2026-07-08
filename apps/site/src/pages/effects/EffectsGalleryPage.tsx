@@ -8,12 +8,12 @@ import { defaultValues } from '../../registry/snippet';
 import { usePageTitle } from '../../lib/usePageTitle';
 
 /**
- * The Effects & Motion gallery: a filterable grid of live mini-previews. Each
- * card renders the effect at its default settings and links to the full
+ * The animation gallery: a filterable grid of live mini-previews. Each card
+ * renders the animation at its default settings and links to the full
  * component page (playground, props, 4-format code, a11y notes).
  */
 export function EffectsGalleryPage() {
-  usePageTitle('Effects & Motion');
+  usePageTitle('Animation');
   const docs = useMemo(() => effectDocs(), []);
   const categories = useMemo(() => {
     const present = new Set(docs.map((d) => d.category));
@@ -26,12 +26,12 @@ export function EffectsGalleryPage() {
   return (
     <article>
       <PageHeader
-        eyebrow="Effects & Motion"
-        title="Motion gallery"
-        description="Reusable, token-driven effects for hero and showcase surfaces. Preview them live, then open any one for its playground, props, code, and accessibility notes."
+        eyebrow="Animation"
+        title="Animation gallery"
+        description="Reusable, token-driven animations for hero and showcase surfaces. Preview them live, then open any one for its playground, props, code, and accessibility notes."
       />
 
-      <div className="control-chips catalog-filter" role="group" aria-label="Filter by effect family">
+      <div className="control-chips catalog-filter" role="group" aria-label="Filter by animation family">
         <button
           type="button"
           className="control-chip"

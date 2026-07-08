@@ -85,23 +85,12 @@ export function InstallationPage() {
         <CodeBlock code={FONT_TOKENS_SNIPPET} lang="css" />
       </DocSection>
 
-      <DocSection id="dark" title="5. Dark mode">
-        <div className="doc-prose">
-          <p>
-            Set <code>data-theme="dark"</code> on the root element and every token flips. Do it
-            before first paint (an inline script reading your stored preference) to avoid a flash
-            of the wrong theme.
-          </p>
-        </div>
-        <CodeBlock code={`document.documentElement.dataset.theme = 'dark';`} lang="ts" />
-      </DocSection>
-
       <DocSection id="tailwind" title="Using FJ with Tailwind">
         <div className="doc-prose">
           <p>
             Every component’s <strong>Implementation</strong> section offers a Tailwind version. Those
             examples reference FJ tokens directly with arbitrary values (e.g.{' '}
-            <code>bg-[var(--accent)]</code>), so they stay theme- and dark-mode-correct with no extra
+            <code>bg-[var(--accent)]</code>), so they stay token- and theme-correct with no extra
             setup. If you’d rather write the shorter <code>bg-accent</code> / <code>rounded-lg</code>{' '}
             forms, add the optional <code>@theme</code> mapping below to your main CSS.
           </p>

@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { ThemeProvider } from '../lib/theme';
 import { CodeStyleProvider } from '../lib/codeStyle';
 import { SiteLayout, DocsLayout } from './layouts';
 import { LandingPage } from '../pages/landing/LandingPage';
@@ -28,9 +27,8 @@ function ScrollToTop() {
 
 export function App() {
   return (
-    <ThemeProvider>
-      <CodeStyleProvider>
-        <BrowserRouter>
+    <CodeStyleProvider>
+      <BrowserRouter>
         <ScrollToTop />
         <Routes>
           <Route element={<SiteLayout />}>
@@ -53,8 +51,7 @@ export function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
-        </BrowserRouter>
-      </CodeStyleProvider>
-    </ThemeProvider>
+      </BrowserRouter>
+    </CodeStyleProvider>
   );
 }
