@@ -1,0 +1,32 @@
+// Free Joy — ImageZoom (effect) with Tailwind CSS.
+// Hover mode is pure utilities (group-hover scale inside an overflow-hidden
+// frame). The drift (ken-burns) keyframes can't be utilities — add the CSS
+// block below to your global stylesheet once. Keep scale ≤ 1.15.
+
+/**
+ * Free Joy — ImageZoom (effect)
+ * A gentle zoom inside a cropped frame — hover zoom or slow ken-burns drift.
+ */
+export function ImageZoom({ children, mode = "hover", className = "" }) {
+  return (
+    <div className={`group overflow-hidden rounded-[var(--radius-lg)] ${className}`}>
+      <div
+        className={
+          mode === "drift"
+            ? "animate-[fj-kenburns_16s_var(--ease-in-out)_infinite_alternate] motion-reduce:animate-none"
+            : "transition-transform duration-[600ms] ease-[var(--ease-out)] group-hover:scale-[1.06] " +
+              "motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        }
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS (drift mode only):
+@keyframes fj-kenburns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.06) translate(-1.5%, 1%); }
+}
+*/

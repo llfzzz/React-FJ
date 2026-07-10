@@ -1,0 +1,50 @@
+// Free Joy — Orbs (effect) with Tailwind CSS.
+// The drift keyframes can't be utilities — add the CSS block below to your
+// global stylesheet once. Three orbs are placed by hand here; the React
+// version scatters a variable count at random positions.
+
+const ORBS = [
+  { top: "25%", left: "20%", color: "var(--joy-300)", dur: 24, delay: 0 },
+  { top: "65%", left: "55%", color: "var(--bloom-300)", dur: 30, delay: -8 },
+  { top: "35%", left: "80%", color: "var(--sun-300)", dur: 27, delay: -16 },
+];
+
+/**
+ * Free Joy — Orbs (effect)
+ * Soft gradient blobs drifting slowly behind hero content.
+ */
+export function Orbs({ children, size = 240, opacity = 0.5, blur = 40, className = "" }) {
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      {ORBS.map((o, i) => (
+        <div
+          key={i}
+          aria-hidden="true"
+          style={{
+            top: o.top,
+            left: o.left,
+            width: size,
+            height: size,
+            margin: `${-size / 2}px 0 0 ${-size / 2}px`,
+            opacity,
+            filter: `blur(${blur}px)`,
+            background: `radial-gradient(closest-side, ${o.color}, transparent)`,
+            animationDuration: `${o.dur}s`,
+            animationDelay: `${o.delay}s`,
+          }}
+          className="pointer-events-none absolute rounded-full will-change-transform animate-[fj-orb_var(--ease-in-out)_infinite] motion-reduce:animate-none"
+        />
+      ))}
+      <div className="relative">{children}</div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-orb {
+  0% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(6%, -8%, 0); }
+  66% { transform: translate3d(-5%, 6%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+*/

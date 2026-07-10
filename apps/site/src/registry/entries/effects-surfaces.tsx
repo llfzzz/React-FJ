@@ -1,5 +1,5 @@
-import { Float, Shimmer, type ShimmerProps } from '@fj-effects';
-import { Badge, Card, Text } from '@fj';
+import { Float, ImageZoom, Marquee, Shimmer, type ImageZoomProps, type MarqueeProps, type ShimmerProps } from '@fj-effects';
+import { Badge, Card, Tag, Text } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
 
@@ -93,5 +93,113 @@ export const floatDoc: ComponentDoc = {
     'Purely decorative — wrap ornaments, never interactive controls or reading content.',
     'Reduced motion holds the element still.',
     'Travel is capped small so it never causes overlap or reading distraction.',
+  ],
+};
+
+const STRIP = ['Design tokens', 'Motion', 'A11y', 'Effects', 'Playground', 'Type scale'];
+
+export const marqueeDoc: ComponentDoc = {
+  id: 'marquee',
+  name: 'Marquee',
+  category: 'effects-surfaces',
+  blurb: 'An infinite, seamless ticker for decorative streams — logo walls, tag clouds.',
+  keywords: ['marquee', 'ticker', 'scroll', 'loop', 'logos', 'animation'],
+  importLine: "import { Marquee } from '@fj-effects';",
+  implementation: impl('marquee'),
+  replayable: true,
+  controls: [
+    { type: 'number', prop: 'duration', label: 'Seconds / loop', defaultValue: 24, min: 8, max: 40, step: 2 },
+    { type: 'select', prop: 'direction', options: ['left', 'right'], defaultValue: 'left' },
+    { type: 'boolean', prop: 'pauseOnHover', defaultValue: true },
+    { type: 'boolean', prop: 'fade', defaultValue: true },
+  ],
+  render: (v) => (
+    <div key={replayKey(v)} style={{ width: '100%', maxWidth: 480 }}>
+      <Marquee
+        duration={Number(v.duration)}
+        direction={v.direction as MarqueeProps['direction']}
+        pauseOnHover={Boolean(v.pauseOnHover)}
+        fade={Boolean(v.fade)}
+      >
+        {STRIP.map((t) => (
+          <Tag key={t}>{t}</Tag>
+        ))}
+      </Marquee>
+    </div>
+  ),
+  code: (v) => `<Marquee${v.duration !== 24 ? ` duration={${Number(v.duration)}}` : ''}${
+    v.direction !== 'left' ? ` direction="right"` : ''
+  }${v.pauseOnHover === false ? ' pauseOnHover={false}' : ''}${v.fade === false ? ' fade={false}' : ''}>
+  {logos.map((logo) => <img key={logo.alt} {...logo} />)}
+</Marquee>`,
+  props: [
+    { name: 'duration', type: 'number', defaultValue: '24', description: 'Seconds per loop.' },
+    { name: 'direction', type: '"left" | "right"', defaultValue: '"left"', description: 'Scroll direction.' },
+    { name: 'pauseOnHover', type: 'boolean', defaultValue: 'true', description: 'Pause while hovered.' },
+    { name: 'gap', type: 'number', defaultValue: '24', description: 'Gap between items in px.' },
+    { name: 'fade', type: 'boolean', defaultValue: 'true', description: 'Fade the strip out at both edges.' },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Static row, no scrolling.' },
+  ],
+  a11y: [
+    'The duplicated strip is aria-hidden and inert — assistive tech and the tab order see each item once.',
+    'Reduced motion renders a single static, readable row with no clone.',
+    'Decorative streams only (logos, tags) — never content users must read to completion.',
+  ],
+};
+
+export const imageZoomDoc: ComponentDoc = {
+  id: 'image-zoom',
+  name: 'ImageZoom',
+  category: 'effects-surfaces',
+  blurb: 'A gentle zoom inside a cropped frame — hover zoom for gallery cards, slow drift for heroes.',
+  keywords: ['image', 'zoom', 'ken burns', 'hover', 'photo', 'animation'],
+  importLine: "import { ImageZoom } from '@fj-effects';",
+  implementation: impl('image-zoom'),
+  replayable: true,
+  controls: [
+    { type: 'select', prop: 'mode', options: ['hover', 'drift'], defaultValue: 'hover' },
+    { type: 'number', prop: 'scale', defaultValue: 1.06, min: 1.02, max: 1.15, step: 0.01 },
+    { type: 'number', prop: 'duration', defaultValue: 600, min: 200, max: 640, step: 40 },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)}>
+      <ImageZoom
+        mode={v.mode as ImageZoomProps['mode']}
+        scale={Number(v.scale)}
+        duration={Number(v.duration)}
+        style={{ borderRadius: 'var(--radius-lg)', width: 280 }}
+      >
+        <div
+          role="img"
+          aria-label="A soft gradient landscape"
+          style={{
+            height: 170,
+            background: [
+              'radial-gradient(120px 70px at 30% 88%, var(--joy-300), transparent)',
+              'radial-gradient(180px 90px at 78% 94%, var(--bloom-300), transparent)',
+              'radial-gradient(44px 44px at 76% 24%, var(--sun-300), transparent)',
+              'linear-gradient(180deg, var(--sun-100), var(--joy-100))',
+            ].join(', '),
+          }}
+        />
+      </ImageZoom>
+    </span>
+  ),
+  code: (v) => `<ImageZoom${v.mode !== 'hover' ? ` mode="drift"` : ''}${
+    v.scale !== 1.06 ? ` scale={${Number(v.scale)}}` : ''
+  }${v.duration !== 600 ? ` duration={${Number(v.duration)}}` : ''}>
+  <img src="/studio.jpg" alt="The studio at golden hour" />
+</ImageZoom>`,
+  props: [
+    { name: 'mode', type: '"hover" | "drift"', defaultValue: '"hover"', description: 'Hover zoom or slow ken-burns loop.' },
+    { name: 'scale', type: 'number', defaultValue: '1.06', description: 'Zoom scale (capped at 1.15).' },
+    { name: 'duration', type: 'number', defaultValue: '600', description: 'Hover transition in ms.' },
+    { name: 'speed', type: 'number', defaultValue: '1', description: 'Drift-loop speed multiplier.' },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Still image, no zoom.' },
+  ],
+  a11y: [
+    'The child stays real content — keep the image’s alt text; the motion is purely decorative.',
+    'Still under reduced motion: no hover response, no drift.',
+    'The frame clips overflow, so the zoom never shifts surrounding layout.',
   ],
 };

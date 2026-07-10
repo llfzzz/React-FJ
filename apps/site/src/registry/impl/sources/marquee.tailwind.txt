@@ -1,0 +1,39 @@
+// Free Joy — Marquee (effect) with Tailwind CSS.
+// The loop keyframes can't be utilities — add the CSS block below to your
+// global stylesheet once. The clone is aria-hidden + inert and hidden under
+// reduced motion, so assistive tech and still viewers see each item once.
+
+/**
+ * Free Joy — Marquee (effect)
+ * An infinite, seamless ticker for decorative streams — logo walls, tag clouds.
+ */
+export function Marquee({ children, duration = 24, direction = "left", gap = 24, className = "" }) {
+  const group = (clone) => (
+    <div
+      aria-hidden={clone || undefined}
+      inert={clone || undefined}
+      style={{ gap, paddingRight: gap }}
+      className={"flex shrink-0 items-center " + (clone ? "motion-reduce:hidden" : "")}
+    >
+      {children}
+    </div>
+  );
+  return (
+    <div className={`overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] ${className}`}>
+      <div
+        style={{ animationDuration: `${duration}s`, animationDirection: direction === "right" ? "reverse" : undefined }}
+        className="flex w-max will-change-transform animate-[fj-marquee_linear_infinite] hover:[animation-play-state:paused] motion-reduce:animate-none"
+      >
+        {group(false)}
+        {group(true)}
+      </div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+*/

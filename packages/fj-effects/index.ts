@@ -52,6 +52,10 @@ export { Shimmer } from "./components/Shimmer";
 export type { ShimmerProps } from "./components/Shimmer";
 export { Float } from "./components/Float";
 export type { FloatProps } from "./components/Float";
+export { Marquee } from "./components/Marquee";
+export type { MarqueeProps } from "./components/Marquee";
+export { ImageZoom } from "./components/ImageZoom";
+export type { ImageZoomProps } from "./components/ImageZoom";
 
 // Interaction effects
 export { Magnetic } from "./components/Magnetic";
@@ -72,6 +76,10 @@ export { ErrorShake } from "./components/ErrorShake";
 export type { ErrorShakeProps } from "./components/ErrorShake";
 export { LoaderDots } from "./components/LoaderDots";
 export type { LoaderDotsProps } from "./components/LoaderDots";
+export { ProgressRing } from "./components/ProgressRing";
+export type { ProgressRingProps } from "./components/ProgressRing";
+export { PingDot } from "./components/PingDot";
+export type { PingDotProps } from "./components/PingDot";
 
 // Background effects
 export { Aurora } from "./components/Aurora";
@@ -84,6 +92,10 @@ export { Sparkles } from "./components/Sparkles";
 export type { SparklesProps } from "./components/Sparkles";
 export { ConfettiBurst } from "./components/ConfettiBurst";
 export type { ConfettiBurstProps } from "./components/ConfettiBurst";
+export { Orbs } from "./components/Orbs";
+export type { OrbsProps } from "./components/Orbs";
+export { Waves } from "./components/Waves";
+export type { WavesProps } from "./components/Waves";
 
 // Motion & transitions
 export { StaggerList } from "./components/StaggerList";

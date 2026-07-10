@@ -1,0 +1,54 @@
+<!-- Free Joy — PingDot (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     A solid dot with an aria-hidden echo that scales up and fades on a loop.
+     Pin it to an anchor's corner with the .fj-ping-anchor wrapper, or use the
+     dot inline on its own. Reduced motion hides the echo; the solid dot keeps
+     the meaning. -->
+
+<span class="fj-ping-anchor">
+  <button type="button">Inbox</button>
+  <span class="fj-ping" role="status" aria-label="New activity">
+    <span class="fj-ping-echo" aria-hidden="true"></span>
+  </span>
+</span>
+
+<style>
+.fj-ping-anchor {
+  position: relative;
+  display: inline-block;
+}
+
+.fj-ping {
+  --fj-size: 10px;
+  --fj-color: var(--accent);
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(35%, -35%);
+  display: inline-block;
+  width: var(--fj-size);
+  height: var(--fj-size);
+  border-radius: 50%;
+  background: var(--fj-color);
+}
+/* Inline (no anchor): drop the wrapper and use
+   .fj-ping { position: relative; transform: none; vertical-align: middle; } */
+
+.fj-ping-echo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--fj-color);
+  animation: fj-ping 1800ms var(--ease-out) infinite;
+}
+
+@keyframes fj-ping {
+  from { transform: scale(1); opacity: 0.55; }
+  to { transform: scale(2.6); opacity: 0; }
+}
+
+/* Reduced motion: no echo — the solid dot keeps the meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-ping-echo { display: none; }
+}
+</style>

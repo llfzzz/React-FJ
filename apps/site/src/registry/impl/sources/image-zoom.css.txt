@@ -1,0 +1,48 @@
+<!-- Free Joy — ImageZoom (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The frame clips overflow; only the inner transform animates, so nothing
+     shifts layout. Default is hover zoom; add the fj-image-zoom--drift
+     modifier for the slow ken-burns loop. Keep scale ≤ 1.15. -->
+
+<figure class="fj-image-zoom">
+  <img src="/studio.jpg" alt="The studio at golden hour" />
+</figure>
+
+<!-- Drift (ken-burns) variant:
+<figure class="fj-image-zoom fj-image-zoom--drift"> … </figure> -->
+
+<style>
+.fj-image-zoom {
+  --fj-scale: 1.06;   /* keep ≤ 1.15 */
+  --fj-duration: 600ms;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  margin: 0;
+}
+.fj-image-zoom > * {
+  display: block;
+  width: 100%;
+  transition: transform var(--fj-duration) var(--ease-out);
+}
+.fj-image-zoom:hover > * {
+  transform: scale(var(--fj-scale));
+}
+
+/* Slow ken-burns loop instead of hover. */
+.fj-image-zoom--drift > * {
+  transition: none;
+  animation: fj-kenburns 16s var(--ease-in-out) infinite alternate;
+}
+.fj-image-zoom--drift:hover > * { transform: none; }
+
+@keyframes fj-kenburns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.06) translate(-1.5%, 1%); }
+}
+
+/* Reduced motion: still image. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-image-zoom > * { transition: none; animation: none; }
+  .fj-image-zoom:hover > * { transform: none; }
+}
+</style>

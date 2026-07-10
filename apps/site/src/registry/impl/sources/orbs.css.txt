@@ -1,0 +1,54 @@
+<!-- Free Joy — Orbs (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Soft gradient blobs drifting slowly behind the content. The React version
+     scatters a variable count at random positions; here three orbs are placed
+     by hand — add more by adding elements. Only transform animates; blur is
+     static. Static (but still present) under reduced motion. -->
+
+<section class="fj-orbs">
+  <div class="fj-orb fj-orb--1" aria-hidden="true"></div>
+  <div class="fj-orb fj-orb--2" aria-hidden="true"></div>
+  <div class="fj-orb fj-orb--3" aria-hidden="true"></div>
+  <div class="fj-orbs-content">
+    <h1>Ambient by default</h1>
+  </div>
+</section>
+
+<style>
+.fj-orbs {
+  --fj-blur: 40px;
+  --fj-opacity: 0.5;
+  position: relative;
+  overflow: hidden;
+}
+
+.fj-orb {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  margin: -120px 0 0 -120px;
+  border-radius: 50%;
+  filter: blur(var(--fj-blur));
+  opacity: var(--fj-opacity);
+  pointer-events: none;
+  will-change: transform;
+  animation: fj-orb 24s var(--ease-in-out) infinite;
+}
+.fj-orb--1 { top: 25%; left: 20%; background: radial-gradient(closest-side, var(--joy-300), transparent); }
+.fj-orb--2 { top: 65%; left: 55%; background: radial-gradient(closest-side, var(--bloom-300), transparent); animation-duration: 30s; animation-delay: -8s; }
+.fj-orb--3 { top: 35%; left: 80%; background: radial-gradient(closest-side, var(--sun-300), transparent); animation-duration: 27s; animation-delay: -16s; }
+
+.fj-orbs-content { position: relative; }
+
+@keyframes fj-orb {
+  0% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(6%, -8%, 0); }
+  66% { transform: translate3d(-5%, 6%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* Reduced motion: the wash stays, the drift stops. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-orb { animation: none; }
+}
+</style>
