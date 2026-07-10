@@ -1,0 +1,53 @@
+<!-- Free Joy — BlurReveal (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     Words sharpen out of a soft blur with a small lift, staggered by --fj-i.
+     This reproduces the reveal on mount. To trigger it on SCROLL like the
+     React component, add the .is-in class with an IntersectionObserver (a few
+     lines of JS) — the animation itself is pure CSS below.
+     Blur stays hard-capped at 12px per the FJ motion policy. -->
+
+<span class="fj-blur-reveal" aria-label="Softness is a feature, not a flaw.">
+  <span class="fj-blur-reveal-w" style="--fj-i: 0" aria-hidden="true">Softness</span>
+  <span class="fj-blur-reveal-w" style="--fj-i: 1" aria-hidden="true">is</span>
+  <span class="fj-blur-reveal-w" style="--fj-i: 2" aria-hidden="true">a</span>
+  <span class="fj-blur-reveal-w" style="--fj-i: 3" aria-hidden="true">feature,</span>
+  <span class="fj-blur-reveal-w" style="--fj-i: 4" aria-hidden="true">not</span>
+  <span class="fj-blur-reveal-w" style="--fj-i: 5" aria-hidden="true">a</span>
+  <span class="fj-blur-reveal-w" style="--fj-i: 6" aria-hidden="true">flaw.</span>
+</span>
+
+<style>
+.fj-blur-reveal {
+  --fj-stagger: 60ms;
+  --fj-duration: 480ms;
+  --fj-blur: 8px;   /* keep ≤ 12px */
+  --fj-lift: 6px;
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.fj-blur-reveal-w {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(var(--fj-lift));
+  filter: blur(var(--fj-blur));
+  transition:
+    opacity var(--fj-duration) var(--ease-out),
+    transform var(--fj-duration) var(--ease-out),
+    filter var(--fj-duration) var(--ease-out);
+  transition-delay: calc(var(--fj-i) * var(--fj-stagger));
+}
+
+/* Reveal on mount (swap for .is-in + IntersectionObserver to trigger on scroll). */
+.fj-blur-reveal .fj-blur-reveal-w {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Reduced motion: no lift, no blur — text simply present. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-blur-reveal-w { opacity: 1; transform: none; filter: none; transition: none; }
+}
+</style>

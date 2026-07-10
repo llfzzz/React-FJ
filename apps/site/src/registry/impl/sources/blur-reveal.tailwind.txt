@@ -1,0 +1,52 @@
+// Free Joy — BlurReveal (effect) with Tailwind CSS.
+// Words sharpen out of a soft blur with a small lift, staggered per word. The
+// scroll trigger stays JS (IntersectionObserver flipping `shown`); the motion
+// itself is transition utilities. Blur stays hard-capped at 12px.
+import { useEffect, useRef, useState } from "react";
+
+/**
+ * Free Joy — BlurReveal (effect)
+ * Words sharpen out of a soft blur with a small lift, staggered left to right.
+ */
+export function BlurReveal({ text = "", stagger = 60, duration = 480, once = true, className = "" }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setShown(true);
+          if (once) io.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [once]);
+
+  const units = text.split(/(\s+)/).filter(Boolean);
+  return (
+    <span ref={ref} aria-label={text} className={`inline-block whitespace-pre-wrap ${className}`}>
+      {units.map((u, i) => (
+        <span
+          key={i}
+          aria-hidden="true"
+          style={{
+            transitionDelay: `${i * stagger}ms`,
+            transitionDuration: `${duration}ms`,
+          }}
+          className={
+            "inline-block whitespace-pre " +
+            "transition-[opacity,transform,filter] ease-[var(--ease-out)] motion-reduce:transition-none " +
+            (shown ? "translate-y-0 opacity-100 blur-0" : "translate-y-[6px] opacity-0 blur-[8px]")
+          }
+        >
+          {u}
+        </span>
+      ))}
+    </span>
+  );
+}

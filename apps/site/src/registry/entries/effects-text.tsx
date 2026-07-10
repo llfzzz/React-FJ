@@ -1,11 +1,17 @@
 import {
   AnimatedUnderline,
+  BlurReveal,
   GradientText,
   Highlighter,
   RotatingText,
+  ScrambleText,
+  Typewriter,
   type AnimatedUnderlineProps,
+  type BlurRevealProps,
   type HighlighterProps,
   type RotatingTextProps,
+  type ScrambleTextProps,
+  type TypewriterProps,
 } from '@fj-effects';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
@@ -192,5 +198,141 @@ export const highlighterDoc: ComponentDoc = {
     'The highlight is background paint behind real text — contrast holds.',
     'Reduced motion shows the highlight already filled, with no swipe.',
     'Use sparingly — one highlighted phrase per passage keeps the emphasis meaningful.',
+  ],
+};
+
+export const typewriterDoc: ComponentDoc = {
+  id: 'typewriter',
+  name: 'Typewriter',
+  category: 'effects-text',
+  blurb: 'Types a line character by character with a blinking caret — hero taglines, playful one-liners.',
+  keywords: ['typewriter', 'typing', 'caret', 'terminal', 'text', 'animation'],
+  importLine: "import { Typewriter } from '@fj-effects';",
+  implementation: impl('typewriter', {
+    notApplicable: {
+      css: 'A CSS-only typewriter (width + steps()) only works for single-line monospace text; typing FJ’s proportional type means slicing the string in JavaScript. Use the JavaScript or TypeScript implementation.',
+      tailwind: 'Typing is JavaScript state advancing a character index; utilities can style the caret but can’t type. Use the JavaScript or TypeScript implementation.',
+    },
+  }),
+  replayable: true,
+  controls: [
+    { type: 'text', prop: 'text', label: 'Text', defaultValue: 'Made with joy, typed live.' },
+    { type: 'number', prop: 'interval', label: 'ms / char', defaultValue: 45, min: 20, max: 120, step: 5 },
+    { type: 'boolean', prop: 'caret', defaultValue: true },
+    { type: 'select', prop: 'trigger', options: ['mount', 'inview'], defaultValue: 'mount' },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)} style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-semibold)' }}>
+      <Typewriter
+        text={String(v.text)}
+        interval={Number(v.interval)}
+        caret={Boolean(v.caret)}
+        trigger={v.trigger as TypewriterProps['trigger']}
+      />
+    </span>
+  ),
+  code: (v) => `<Typewriter text="${String(v.text)}"${v.interval !== 45 ? ` interval={${Number(v.interval)}}` : ''}${
+    v.caret === false ? ' caret={false}' : ''
+  }${v.trigger !== 'mount' ? ` trigger="${String(v.trigger)}"` : ''} />`,
+  props: [
+    { name: 'text', type: 'string', description: 'The string to type.' },
+    { name: 'interval', type: 'number', defaultValue: '45', description: 'ms per character.' },
+    { name: 'delay', type: 'number', defaultValue: '0', description: 'Lead-in delay in ms.' },
+    { name: 'caret', type: 'boolean', defaultValue: 'true', description: 'Blinking caret while typing.' },
+    { name: 'trigger', type: '"mount" | "inview" | "manual"', defaultValue: '"mount"', description: 'When to play.' },
+    { name: 'onDone', type: '() => void', description: 'Called when the last character lands.' },
+  ],
+  a11y: [
+    'The full line is exposed as an aria-label from the first frame — assistive tech never hears half a word.',
+    'Reduced motion renders the finished line instantly; onDone still fires.',
+    'Never gate meaning behind the animation finishing — taglines, not instructions.',
+  ],
+};
+
+export const scrambleTextDoc: ComponentDoc = {
+  id: 'scramble-text',
+  name: 'ScrambleText',
+  category: 'effects-text',
+  blurb: 'Reveals a short display string left to right out of a churn of random characters.',
+  keywords: ['scramble', 'decrypt', 'shuffle', 'glitch', 'text', 'animation'],
+  importLine: "import { ScrambleText } from '@fj-effects';",
+  implementation: impl('scramble-text', {
+    notApplicable: {
+      css: 'Each frame substitutes random characters generated in JavaScript — CSS can’t generate characters. Use the JavaScript or TypeScript implementation.',
+      tailwind: 'The per-frame character churn is JavaScript state; utilities can style the text but can’t scramble it. Use the JavaScript or TypeScript implementation.',
+    },
+  }),
+  replayable: true,
+  controls: [
+    { type: 'text', prop: 'text', label: 'Text', defaultValue: 'FREE JOY' },
+    { type: 'number', prop: 'duration', defaultValue: 800, min: 300, max: 2000, step: 100 },
+    { type: 'select', prop: 'trigger', options: ['mount', 'hover', 'inview'], defaultValue: 'mount' },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)} style={{ fontSize: 'var(--text-3xl)', fontWeight: 'var(--weight-bold)', letterSpacing: '0.02em' }}>
+      <ScrambleText
+        text={String(v.text)}
+        duration={Number(v.duration)}
+        trigger={v.trigger as ScrambleTextProps['trigger']}
+      />
+    </span>
+  ),
+  code: (v) => `<ScrambleText text="${String(v.text)}"${v.duration !== 800 ? ` duration={${Number(v.duration)}}` : ''}${
+    v.trigger !== 'mount' ? ` trigger="${String(v.trigger)}"` : ''
+  } />`,
+  props: [
+    { name: 'text', type: 'string', description: 'The string to reveal.' },
+    { name: 'duration', type: 'number', defaultValue: '800', description: 'Full-reveal duration in ms.' },
+    { name: 'charset', type: 'string', defaultValue: 'A–Z a–z 0–9 #%&', description: 'Characters the scramble draws from.' },
+    { name: 'trigger', type: '"mount" | "hover" | "inview" | "manual"', defaultValue: '"mount"', description: 'When to play.' },
+    { name: 'onDone', type: '() => void', description: 'Called when the reveal finishes.' },
+  ],
+  a11y: [
+    'The churning glyphs are aria-hidden; the root exposes the real text as an aria-label throughout.',
+    'Reduced motion shows the plain text — no churn at all.',
+    'Short display strings only — scrambled body copy is unreadable noise.',
+  ],
+};
+
+export const blurRevealDoc: ComponentDoc = {
+  id: 'blur-reveal',
+  name: 'BlurReveal',
+  category: 'effects-text',
+  blurb: 'Words sharpen out of a soft blur with a small lift — an editorial entrance for titles.',
+  keywords: ['blur', 'reveal', 'focus', 'stagger', 'text', 'animation'],
+  importLine: "import { BlurReveal } from '@fj-effects';",
+  implementation: impl('blur-reveal'),
+  replayable: true,
+  controls: [
+    { type: 'text', prop: 'text', label: 'Text', defaultValue: 'Softness is a feature, not a flaw.' },
+    { type: 'number', prop: 'stagger', defaultValue: 60, min: 0, max: 150, step: 10 },
+    { type: 'number', prop: 'blur', label: 'Blur (px)', defaultValue: 8, min: 2, max: 12, step: 1 },
+    { type: 'select', prop: 'trigger', options: ['mount', 'inview'], defaultValue: 'mount' },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)} style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-semibold)' }}>
+      <BlurReveal
+        text={String(v.text)}
+        stagger={Number(v.stagger)}
+        blur={Number(v.blur)}
+        trigger={v.trigger as BlurRevealProps['trigger']}
+      />
+    </span>
+  ),
+  code: (v) => `<BlurReveal text="${String(v.text)}"${v.stagger !== 60 ? ` stagger={${Number(v.stagger)}}` : ''}${
+    v.blur !== 8 ? ` blur={${Number(v.blur)}}` : ''
+  }${v.trigger !== 'mount' ? ` trigger="${String(v.trigger)}"` : ''} />`,
+  props: [
+    { name: 'text', type: 'string', description: 'The text to reveal, split per word.' },
+    { name: 'trigger', type: '"inview" | "mount" | "manual"', defaultValue: '"inview"', description: 'When to play.' },
+    { name: 'duration', type: 'number', defaultValue: '480', description: 'ms per word.' },
+    { name: 'stagger', type: 'number', defaultValue: '60', description: 'ms between words.' },
+    { name: 'blur', type: 'number', defaultValue: '8', description: 'Initial blur in px (capped at 12).' },
+    { name: 'lift', type: 'number', defaultValue: '6', description: 'Vertical travel in px.' },
+  ],
+  a11y: [
+    'Words are aria-hidden fragments under a root that carries the full text as an aria-label.',
+    'Reduced motion renders one plain span of text — no fragments, no filter.',
+    'The animated blur is hard-capped at 12px — the sanctioned capped-blur exception to transform/opacity-only motion.',
   ],
 };

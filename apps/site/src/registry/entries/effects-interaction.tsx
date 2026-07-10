@@ -1,4 +1,4 @@
-import { CursorSpotlight, Magnetic, TiltCard, Tactile } from '@fj-effects';
+import { CursorSpotlight, Magnetic, Ripple, TiltCard, Tactile } from '@fj-effects';
 import { Button, Card, Grid, Stack, Text } from '@fj';
 import type { ComponentDoc } from '../types';
 import { impl } from '../impl';
@@ -169,5 +169,45 @@ export const cursorSpotlightDoc: ComponentDoc = {
     'The light is a single aria-hidden, pointer-transparent layer — content stays fully interactive.',
     'No light under reduced motion or when disabled.',
     'Purely atmospheric; never encode meaning in the spotlight alone.',
+  ],
+};
+
+export const rippleDoc: ComponentDoc = {
+  id: 'ripple',
+  name: 'Ripple',
+  category: 'effects-interaction',
+  blurb: 'A soft ripple expands from the pointer-down point — tactile press feedback for controls.',
+  keywords: ['ripple', 'press', 'click', 'feedback', 'interaction'],
+  importLine: "import { Ripple } from '@fj-effects';",
+  implementation: impl('ripple', {
+    notApplicable: {
+      css: 'The ripple expands from the pointer-down coordinates, which CSS can’t read — a CSS-only :active ripple can only grow from the center. Use the JavaScript or TypeScript implementation.',
+      tailwind: 'Ripple origin and lifecycle are JavaScript state driven by pointer position; utilities can’t express them. Use the JavaScript or TypeScript implementation.',
+    },
+  }),
+  controls: [
+    { type: 'number', prop: 'duration', defaultValue: 500, min: 300, max: 800, step: 50 },
+    { type: 'number', prop: 'intensity', defaultValue: 0.25, min: 0.1, max: 0.5, step: 0.05 },
+  ],
+  render: (v) => (
+    <Ripple duration={Number(v.duration)} intensity={Number(v.intensity)} style={{ borderRadius: 'var(--radius-md)' }}>
+      <Button size="lg">Click me</Button>
+    </Ripple>
+  ),
+  code: (v) => `<Ripple${v.duration !== 500 ? ` duration={${Number(v.duration)}}` : ''}${
+    v.intensity !== 0.25 ? ` intensity={${Number(v.intensity)}}` : ''
+  }>
+  <Button size="lg">Click me</Button>
+</Ripple>`,
+  props: [
+    { name: 'color', type: 'string', defaultValue: '"currentColor"', description: 'Ripple color.' },
+    { name: 'intensity', type: 'number', defaultValue: '0.25', description: 'Peak ripple opacity 0–1.' },
+    { name: 'duration', type: 'number', defaultValue: '500', description: 'Expand-and-fade duration in ms.' },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Children unchanged, no ripple.' },
+  ],
+  a11y: [
+    'Wraps a real control without touching its semantics — every ripple node is aria-hidden and pointer-transparent.',
+    'No ripple ever spawns under reduced motion; the child’s own press state carries the feedback.',
+    'Match the wrapper’s borderRadius to the control (via style) so the ripple clips to its shape.',
   ],
 };

@@ -1,0 +1,60 @@
+<!-- Free Joy — ProgressRing (effect), no-framework version.
+     Requires the FJ tokens (tokens/*.css).
+     The value arc is a stroke-dashoffset sweep: dasharray = circumference
+     (2πr; r = (48 - 4) / 2 = 22 → C ≈ 138.23), offset = C × (1 - value/100).
+     Set the value via the --fj-value custom property (0–100). Reduced motion
+     jumps straight to the value. -->
+
+<span class="fj-progress-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+      aria-valuenow="72" aria-label="Progress" style="--fj-value: 72">
+  <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
+    <circle class="fj-progress-ring-track" cx="24" cy="24" r="22" />
+    <circle class="fj-progress-ring-value" cx="24" cy="24" r="22" />
+  </svg>
+  <span class="fj-progress-ring-label" aria-hidden="true">72%</span>
+</span>
+
+<style>
+.fj-progress-ring {
+  --fj-value: 72;
+  --fj-c: 138.23; /* 2π × 22 */
+  position: relative;
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.fj-progress-ring-track,
+.fj-progress-ring-value {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+}
+.fj-progress-ring-track { stroke-opacity: 0.15; }
+
+.fj-progress-ring-value {
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  stroke-dasharray: var(--fj-c);
+  stroke-dashoffset: calc(var(--fj-c) * (1 - var(--fj-value) / 100));
+  transition: stroke-dashoffset 600ms var(--ease-out);
+}
+
+/* Sweep in from zero on load by starting pages with --fj-value: 0 and setting
+   the real value from JS (or a checked state); the transition does the rest. */
+
+.fj-progress-ring-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-progress-ring-value { transition: none; }
+}
+</style>

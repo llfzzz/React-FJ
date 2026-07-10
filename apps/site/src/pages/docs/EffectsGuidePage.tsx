@@ -6,8 +6,8 @@ import { usePageTitle } from '../../lib/usePageTitle';
 const PERF_RULES = [
   'Animate only transform and opacity — never width/height/top/left — so animations never trigger layout or reflow.',
   'No parallax, no flashing, no bounce outside a tiny spring on toggles.',
-  'Blur radii and particle counts are hard-capped (Sparkles ≤ 24 DOM nodes; ConfettiBurst ≤ 40 pieces).',
-  'A performance="lite" prop trims cost where it counts: Sparkles halves its count, Aurora lowers blur, TiltCard drops its glare layer, ConfettiBurst caps at 20.',
+  'Blur radii and particle counts are hard-capped (Sparkles ≤ 24 DOM nodes; ConfettiBurst ≤ 40 pieces; Ripple ≤ 6 live ripples; Orbs ≤ 6; Waves ≤ 4 layers).',
+  'A performance="lite" prop trims cost where it counts: Sparkles halves its count, Aurora lowers blur, TiltCard drops its glare layer, ConfettiBurst caps at 20, Orbs caps count and blur, Waves drops to two layers.',
   'Decorative loops live only in the animation family — never in dense product UI.',
 ];
 
@@ -56,7 +56,7 @@ export function EffectsGuidePage() {
       <DocSection id="inventory" title="What exists">
         <div className="doc-prose">
           <p>
-            The <strong>fj-effects</strong> package adds 23 configurable animations on top of the
+            The <strong>fj-effects</strong> package adds {33} configurable animations on top of the
             seven original FJ animations and the built-in micro-motion already in components like
             Spinner, Progress, Skeleton, Toast, and Modal. They’re grouped into six families —
             browse them all in the <Link to="/effects">gallery</Link>.

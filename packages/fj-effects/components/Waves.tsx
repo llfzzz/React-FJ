@@ -1,0 +1,108 @@
+import * as React from "react";
+import { ensureKeyframes } from "../motion/keyframes";
+import { useReducedMotion } from "../motion/useReducedMotion";
+import type { PerformanceMode } from "../motion/types";
+
+// One period of the wave in viewBox units. The path spans TWO periods and the
+// keyframe slides exactly ONE, so the loop is seamless. These two constants
+// must stay in sync: the keyframe translates by -PERIOD.
+const PERIOD = 1440;
+const VIEW_H = 120;
+
+ensureKeyframes(
+  "fj-wave",
+  `@keyframes fj-wave {
+    from { transform: translateX(0); }
+    to { transform: translateX(-${PERIOD}px); }
+  }`,
+);
+
+const MAX_LAYERS = 4;
+const MAX_AMPLITUDE = 24;
+const OPACITIES = [0.38, 0.3, 0.22, 0.14];
+
+/** A smooth two-period sine-ish stroke path (Q + reflected T segments). */
+function wavePath(amplitude: number): string {
+  const y = VIEW_H / 2;
+  const half = PERIOD / 4; // half a bump
+  let d = `M 0 ${y} Q ${half / 2} ${y - amplitude} ${half} ${y}`;
+  for (let x = half * 2; x <= PERIOD * 2; x += half) {
+    d += ` T ${x} ${y}`;
+  }
+  return d;
+}
+
+export interface WavesProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Wave-line count (capped at 4; "lite" caps at 2). @default 3 */
+  layers?: number;
+  /** Line color. @default var(--joy-300) */
+  color?: string;
+  /** Wave height in viewBox units (capped at 24). @default 14 */
+  amplitude?: number;
+  /** Band height in px, anchored to the container bottom. @default 120 */
+  height?: number;
+  /** Speed multiplier (1 = default). @default 1 */
+  speed?: number;
+  /** "lite" caps the layer count at 2. @default "full" */
+  performance?: PerformanceMode;
+  /** Static lines, no drift. @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Waves (effect)
+ * Slow wave lines drifting across a band at the container's bottom edge — a
+ * quiet texture for heroes and footers. The geometry is drawn once; only
+ * transform animates (never the path). Static under reduced motion.
+ */
+export function Waves({
+  children,
+  layers = 3,
+  color = "var(--joy-300)",
+  amplitude = 14,
+  height = 120,
+  speed = 1,
+  performance = "full",
+  disabled = false,
+  style,
+  ...rest
+}: WavesProps) {
+  const reduced = useReducedMotion();
+  const n = Math.min(performance === "lite" ? 2 : MAX_LAYERS, Math.max(1, layers));
+  const d = React.useMemo(() => wavePath(Math.min(amplitude, MAX_AMPLITUDE)), [amplitude]);
+  const animate = !disabled && !reduced;
+
+  return (
+    <div style={{ position: "relative", overflow: "hidden", ...style }} {...rest}>
+      <svg
+        aria-hidden="true"
+        viewBox={`0 0 ${PERIOD} ${VIEW_H}`}
+        preserveAspectRatio="none"
+        style={{ position: "absolute", left: 0, right: 0, bottom: 0, width: "100%", height, display: "block", pointerEvents: "none" }}
+      >
+        {Array.from({ length: n }, (_, i) => (
+          <g
+            key={i}
+            style={{
+              animation: animate ? `fj-wave ${(12 + i * 5) / speed}s linear infinite` : "none",
+              animationDirection: i % 2 === 1 ? "reverse" : undefined,
+              willChange: animate ? "transform" : undefined,
+            }}
+          >
+            <path
+              d={d}
+              transform={`translate(0 ${(i - (n - 1) / 2) * 14})`}
+              fill="none"
+              stroke={color}
+              strokeWidth={2}
+              strokeOpacity={OPACITIES[i]}
+              vectorEffect="non-scaling-stroke"
+            />
+          </g>
+        ))}
+      </svg>
+      <div style={{ position: "relative" }}>{children}</div>
+    </div>
+  );
+}

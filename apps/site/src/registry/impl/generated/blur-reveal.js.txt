@@ -1,0 +1,52 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import { useReducedMotion } from "../motion/useReducedMotion";
+import { useTrigger } from "../motion/useTrigger";
+const MAX_BLUR = 12;
+export function BlurReveal({
+  text,
+  trigger = "inview",
+  active,
+  duration = 480,
+  stagger = 60,
+  blur = 8,
+  lift = 6,
+  once = true,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const { ref, active: shown } = useTrigger(trigger, { once, active, disabled });
+  const effBlur = Math.min(blur, MAX_BLUR);
+  if (disabled || reduced) {
+    return <span style={style} {...rest}>
+        {text}
+      </span>;
+  }
+  const units = text.split(/(\s+)/).filter(Boolean);
+  return <span
+    ref={ref}
+    role="text"
+    aria-label={text}
+    style={{ display: "inline-block", whiteSpace: "pre-wrap", ...style }}
+    {...rest}
+  >
+      {units.map((u, i) => <span
+    key={i}
+    aria-hidden="true"
+    style={{
+      display: "inline-block",
+      whiteSpace: "pre",
+      opacity: shown ? 1 : 0,
+      transform: shown ? "none" : `translateY(${lift}px)`,
+      filter: shown ? "none" : `blur(${effBlur}px)`,
+      transition: `opacity ${duration}ms var(--ease-out), transform ${duration}ms var(--ease-out), filter ${duration}ms var(--ease-out)`,
+      transitionDelay: `${i * stagger}ms`
+    }}
+  >
+          {u}
+        </span>)}
+    </span>;
+}
