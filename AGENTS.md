@@ -113,6 +113,10 @@ pnpm workspace
   23 new effects with playground + 4-format code; JS-variant generator (`pnpm gen:impl`, esbuild);
   `/effects` gallery + `/docs/effects-guide`; restrained landing motion; theme-toggle crossfade;
   expanded unit + e2e suites; this file
+- [x] Phase B5 (B5a–B5c) — 10 more effects (fj-effects 23 → 33): Typewriter, ScrambleText,
+  BlurReveal (text); Ripple (interaction); Marquee, ImageZoom (surfaces); Orbs, Waves
+  (backgrounds); ProgressRing, PingDot (status) — with registry docs, css/tailwind ports or
+  notApplicable reasons, behavior tests, and reduced-motion e2e for Typewriter/Marquee
 
 ## Component inventory
 
@@ -131,16 +135,17 @@ Synced components (29):
 - effects (7, synced fj-ui): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
 Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
 
-fj-effects (23, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`):
-- effects-text (4): GradientText, RotatingText, AnimatedUnderline, Highlighter
-- effects-interaction (4): Magnetic, TiltCard, Tactile, CursorSpotlight
-- effects-surfaces (2): Shimmer, Float
-- effects-backgrounds (5): Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst
-- effects-status (3): SuccessCheck, ErrorShake, LoaderDots
+fj-effects (33, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`):
+- effects-text (7): GradientText, RotatingText, AnimatedUnderline, Highlighter, Typewriter,
+  ScrambleText, BlurReveal
+- effects-interaction (5): Magnetic, TiltCard, Tactile, CursorSpotlight, Ripple
+- effects-surfaces (4): Shimmer, Float, Marquee, ImageZoom
+- effects-backgrounds (7): Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst, Orbs, Waves
+- effects-status (5): SuccessCheck, ErrorShake, LoaderDots, ProgressRing, PingDot
 - effects-motion (5): StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition (+ runThemeTransition)
 Motion primitives: `packages/fj-effects/motion/{useReducedMotion,useInView,useTrigger,keyframes,types}.ts`.
 
-Documented on site (55): all 32 synced interactive components + 23 fj-effects — registry entries with
+Documented on site (65): all 32 synced interactive components + 33 fj-effects — registry entries with
 playground controls, generated/custom snippets, examples, props, a11y notes, and a 4-format
 implementation switcher (JS/TS/CSS/Tailwind), grouped in `src/registry/entries/{button,card,badge,
 core-more,forms,navigation,feedback,overlay,data,effects,effects-text,effects-interaction,
@@ -285,18 +290,20 @@ AnimatedBorder, Glow, AmbientBackground; plus built-in micro-motion in Spinner, 
 Drawer (slide), card lifts, button/press scales, the site's CopyIconButton copy-feedback, and the
 theme toggle.
 
-Additions (23, in six IA sub-categories — see `EFFECT_CATEGORIES` in `registry/types.ts`):
-- **effects-text**: GradientText, RotatingText, AnimatedUnderline, Highlighter
-- **effects-interaction**: Magnetic, TiltCard, Tactile, CursorSpotlight
-- **effects-surfaces**: Shimmer, Float
-- **effects-backgrounds**: Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst
-- **effects-status**: SuccessCheck, ErrorShake, LoaderDots
+Additions (33, in six IA sub-categories — see `EFFECT_CATEGORIES` in `registry/types.ts`):
+- **effects-text**: GradientText, RotatingText, AnimatedUnderline, Highlighter, Typewriter,
+  ScrambleText, BlurReveal
+- **effects-interaction**: Magnetic, TiltCard, Tactile, CursorSpotlight, Ripple
+- **effects-surfaces**: Shimmer, Float, Marquee, ImageZoom
+- **effects-backgrounds**: Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst, Orbs, Waves
+- **effects-status**: SuccessCheck, ErrorShake, LoaderDots, ProgressRing, PingDot
 - **effects-motion**: StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition
 
 **Performance rules**: animate `transform`/`opacity` only (no layout-shifting properties); no
 parallax, no flashing; blur radii and particle counts are hard-capped; `performance="lite"` has a
 documented per-effect meaning (Sparkles: half the particles; Aurora: lower blur; TiltCard: no glare
-layer; ConfettiBurst: cap 20). Decorative loops stay in effects only — never dense product UI.
+layer; ConfettiBurst: cap 20; Orbs: ≤3 orbs + blur ≤24; Waves: 2 layers). Decorative loops stay in
+effects only — never dense product UI.
 Richer motion is reserved for the landing page, hero sections, the effects gallery, empty states,
 and selected featured cards; docs prose, props tables, search, and dense content stay restrained.
 
@@ -324,7 +331,7 @@ no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
 
 Landing `/` · Get started `/docs/{introduction,installation,usage}` · Tokens
 `/docs/tokens/{colors,typography,spacing,motion}` · Effects gallery `/effects` · Motion & effects
-guide `/docs/effects-guide` · Catalog `/components` (+ 55 component pages) · `/playground` · styled
+guide `/docs/effects-guide` · Catalog `/components` (+ 65 component pages) · `/playground` · styled
 404 · app-level ErrorBoundary · skip link · light/dark/system theme with no-flash boot script
 (the toggle crossfades via `runThemeTransition` / View Transitions).
 
