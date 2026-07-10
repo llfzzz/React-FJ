@@ -45,7 +45,7 @@ export const auroraDoc: ComponentDoc = {
   ),
   code: (v) => `<Aurora${v.variant !== 'warm' ? ` variant="${String(v.variant)}"` : ''}${
     v.speed !== 1 ? ` speed={${Number(v.speed)}}` : ''
-  }>
+  }${v.performance !== 'full' ? ` performance="lite"` : ''}>
   <h1>Made with joy</h1>
 </Aurora>`,
   props: [
@@ -180,8 +180,8 @@ export const sparklesDoc: ComponentDoc = {
     </span>
   ),
   code: (v) => `<Sparkles${v.count !== 14 ? ` count={${Number(v.count)}}` : ''}${
-    v.performance !== 'full' ? ` performance="lite"` : ''
-  }>
+    v.speed !== 1 ? ` speed={${Number(v.speed)}}` : ''
+  }${v.performance !== 'full' ? ` performance="lite"` : ''}>
   <h2>Featured</h2>
 </Sparkles>`,
   props: [

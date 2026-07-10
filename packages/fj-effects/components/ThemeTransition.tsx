@@ -64,7 +64,12 @@ export function ThemeTransition({ children, duration = 320, disabled = false, st
       onClick={flip}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && flip()}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); // Space must not scroll the page
+          flip();
+        }
+      }}
       style={{
         cursor: "pointer",
         borderRadius: "var(--radius-lg)",

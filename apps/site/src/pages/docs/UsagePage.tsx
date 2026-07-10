@@ -60,8 +60,8 @@ export function UsagePage() {
         <div className="doc-prose">
           <p>
             Anything custom should read from the same custom properties the library uses — never
-            hard-code a hex value or a magic duration. That is what keeps new surfaces on-brand in
-            both themes.
+            hard-code a hex value or a magic duration. That is what keeps new surfaces on-brand
+            under any retheme.
           </p>
         </div>
         <CodeBlock code={TOKENS_SNIPPET} lang="css" />

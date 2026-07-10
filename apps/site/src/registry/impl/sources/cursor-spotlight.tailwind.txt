@@ -1,5 +1,5 @@
 // Free Joy — CursorSpotlight (effect) with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // The light follows the cursor via --fj-mx / --fj-my set in a mousemove handler;
 // the radial paint itself is an arbitrary background value.
 import { useRef } from "react";

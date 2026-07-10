@@ -1,5 +1,5 @@
 // Free Joy — Tabs with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // Active styling keys off aria-selected via the aria-selected: variant.
 import { useState } from "react";
 

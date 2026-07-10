@@ -1,7 +1,8 @@
 # FJ — Free Joy design system website
 
-Last updated: 2026-07-03 (all 9 phases complete + wide layout pass, all suites green)
-Workspace: `/Users/llfzzz/Desktop/FJ`
+Last updated: 2026-07-08 (post-launch audit pass: bug fixes, doc sync, deploy files committed)
+Repo: `github.com/llfzzz/React-FJ` · Live: `https://reactfreejoy.top` (served from the
+`/var/www/React-FJ` deploy clone — see "Deployment" below)
 
 This repository is the **official private website, documentation site, playground, and showcase**
 for the **Free Joy (FJ)** component library. This file is the living record of architecture
@@ -54,6 +55,7 @@ docs). Local mirror lives in `packages/fj-ui/`.
 pnpm workspace
 ├── packages/fj-ui/        synced FJ mirror (jsx + d.ts, tokens, assets) + local barrel index.ts
 ├── packages/fj-effects/   LOCAL effects package (tsx): motion primitives + effect components
+├── deploy/                nginx vhost + update.sh for the reactfreejoy.top deployment
 └── apps/site/             Vite + React + TS strict website
     ├── src/app/           router, providers (theme + code-style), error boundary, 404
     ├── src/chrome/        top bar, sidebar, footer, ⌘K
@@ -122,7 +124,7 @@ pnpm workspace
 
 Synced foundations: `styles.css`, `tokens/{colors,typography,spacing,motion,fonts,base}.css`,
 `assets/{logo-mark,logo-wordmark}.svg`, `readme.md`.
-Synced components (29):
+Synced components (49 .jsx files):
 - core (14): Button, IconButton, Card, Icon, Badge, Tag, Avatar, Divider, Kbd, StatusDot,
   CopyButton, SplitButton, Fab, BackToTop
 - layout (7): Stack, Container, Grid, Text, AppShell, PageHeader, Toolbar
@@ -231,6 +233,22 @@ shiki + JS regex engine, PropsTable, DocSection, CopyIconButton). Code-style sto
   didn't reach `matchMedia`); the Collapse unit test caught a real bug (content unmounted when
   closed with unmountOnExit off) which was fixed. Nothing under `packages/fj-ui/` was edited.
 
+- Audit pass (2026-07-08): full end-to-end review of every source file. Fixed: (1) Showcase knob
+  state leaked between component pages (`/components/:id` keeps the page mounted — Showcase is now
+  keyed by doc id); (2) RotatingText defined a shared `@keyframes` name per instance with
+  prop-dependent body — instances fought; now two static keyframes via `ensureKeyframes`;
+  (3) Sparkles re-randomized on every parent re-render (default array props in useMemo deps —
+  hoisted to module constants); (4) the e2e suite was red: three assertions still used pre-rename
+  copy ("Motion gallery" ×2, "Text effects"); (5) the ThemeTransition demo visibly did nothing
+  since the dark tokens were removed — the demo box now carries a scoped ink/paper "dark" alias
+  block in site.css (site stays light-only); (6) ErrorShake ended on bubbled child `animationend`;
+  (7) Collapse kept collapsed content keyboard-reachable (now `inert`); (8) ThemeTransition Space
+  key scrolled the page; (9) ConfettiBurst with `count={0}` never fired `onDone`; (10) CountUp's
+  default snippet omitted its required `value`; missing knob→snippet mappings added (RotatingText
+  duration, Aurora performance, Sparkles speed); (11) leftover "both themes"/dark-mode copy swept
+  from pages, registry notes, and the 30+ Tailwind impl headers. `pnpm gen:impl` re-run (6 generated
+  variants updated). Verified: typecheck ✓ · 38/38 unit ✓ · build ✓ · 15/15 e2e ✓ (results below).
+
 ## React Bits influence (patterns, never pixels)
 
 React Bits informed the product experience only — nothing was copied:
@@ -330,27 +348,30 @@ no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
 ## Site pages
 
 Landing `/` · Get started `/docs/{introduction,installation,usage}` · Tokens
-`/docs/tokens/{colors,typography,spacing,motion}` · Effects gallery `/effects` · Motion & effects
+`/docs/tokens/{colors,typography,spacing,motion}` · Animation gallery `/effects` · Animation
 guide `/docs/effects-guide` · Catalog `/components` (+ 65 component pages) · `/playground` · styled
-404 · app-level ErrorBoundary · skip link · light/dark/system theme with no-flash boot script
-(the toggle crossfades via `runThemeTransition` / View Transitions).
+404 · app-level ErrorBoundary · skip link. The site is **light-only** (dark mode removed
+2026-07-04); the topbar has a GitHub button with a live star count (localStorage-cached, refetched
+daily). User-facing naming is "Animation" (renamed from "Effects"/"Motion" 2026-07-08); package
+names, routes, and file names intentionally kept.
 
 ## Test topology
 
 - Vitest (jsdom): `src/registry/snippet.test.ts` (serializer), `src/registry/registry.test.ts`
   (catalog integrity + 4-format completeness), `src/registry/impl/impl.test.ts` (Button source
-  markers + drift canary; fj-effects generated-JS staleness canary + TS source names), `src/lib/
-  theme.test.tsx`, `src/lib/codeStyle.test.tsx` (default/persist/restore), `src/docs/Showcase.test.tsx`,
+  markers + drift canary; fj-effects generated-JS staleness canary + TS source names),
+  `src/lib/codeStyle.test.tsx` (default/persist/restore), `src/docs/Showcase.test.tsx`,
   `src/test/effects/primitives.test.tsx` (useReducedMotion / useTrigger / ensureKeyframes / easeVar),
   `src/test/effects/behaviors.test.tsx` (Collapse open/close, FadeSwitch swap, SuccessCheck +
   Sparkles reduced-motion fallbacks, particle cap). Setup installs in-memory localStorage and mocks
-  matchMedia (per-test override for reduced motion) + IntersectionObserver. **42 tests.**
+  matchMedia (per-test override for reduced motion) + IntersectionObserver. **38 tests**
+  (`theme.test.tsx` left with dark mode).
 - Playwright (chromium, against `vite preview` of the production build): `site.spec.ts` (landing nav,
-  playground → code tab, clipboard copy, catalog filter by "Text effects", theme persistence, ⌘K,
+  playground → code tab, clipboard copy, catalog filter by "Text animations", ⌘K,
   404, 375px drawer), `implementation.spec.ts` (default TS, format switch, copy + cross-page
   persistence, n/a panel), `effects.spec.ts` (gallery render/filter/link, Replay remount),
   `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` — TextReveal plain text,
-  Sparkles zero particles, gallery still renders). **16 tests.**
+  Sparkles zero particles, gallery still renders). **15 tests** (theme e2e left with dark mode).
   Note: `page.emulateMedia({ reducedMotion })` (in a beforeEach) drives the JS `matchMedia` hook;
   the context-level `test.use({ reducedMotion })` did NOT reach `matchMedia` in this setup.
 
@@ -359,13 +380,25 @@ guide `/docs/effects-guide` · Catalog `/components` (+ 65 component pages) · `
 - FJ `Icon`, `CommandMenu`, `Toast`, `EmptyState`, `SegmentedControl` render Lucide glyphs from
   the unpkg CDN (upstream convention) — offline dev shows missing glyphs there; site chrome uses
   bundled `lucide-react`. Self-hosting the FJ glyph pipeline is a future upstream change.
-- 44 of 89 upstream components are synced; the long tail (pickers, DataGrid family,
+- 49 of 89 upstream components are synced; the long tail (pickers, DataGrid family,
   RichTextEditor, Tree/Transfer, Lightbox/Tour…) syncs on demand via the same DesignSync flow.
 - The playground has no density knob on purpose: FJ component paddings are design decisions,
   not tokens.
 - Upstream `Button accent="sun"` uses `var(--ink)` for text-on-accent, which flips near-white in
   dark mode (contrast fail on yellow); the playground pins literal ink. Worth an upstream fix.
-- No deployment target configured (private site); `pnpm build` emits a static `dist/`.
+- FJ `Icon` and friends still CDN-load lucide-static glyphs (see first bullet) — the only runtime
+  third-party request besides the GitHub star-count API (which fails soft).
+
+## Deployment
+
+- Live at `https://reactfreejoy.top`, served by nginx straight from
+  `/var/www/React-FJ/apps/site/dist` (static SPA; `try_files … /index.html` fallback;
+  `/assets/` immutable-cached, `index.html` no-store). Vhost: `deploy/nginx/reactfreejoy.top.conf`
+  (TLS via Certbot; the live copy lives in `/etc/nginx/`, the repo copy is the record).
+- To ship: merge to `main` on GitHub, then run `deploy/update.sh` in the deploy clone — it
+  `git reset --hard origin/main`, `pnpm install --frozen-lockfile`, `pnpm build`. **The deploy clone
+  is reset to origin/main, so never leave unpushed commits or uncommitted work there.**
+- No server-side services, env vars, or secrets; the repo contains none.
 
 ## Next steps
 

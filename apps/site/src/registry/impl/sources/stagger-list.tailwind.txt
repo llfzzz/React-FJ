@@ -1,5 +1,5 @@
 // Free Joy — StaggerList (effect) with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 // The scroll trigger is JS (IntersectionObserver); the per-item rise is
 // utilities with an inline transition-delay.
 import { Children, useEffect, useRef, useState } from "react";

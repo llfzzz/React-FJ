@@ -1,5 +1,5 @@
 // Free Joy — Input with Tailwind CSS.
-// Utilities reference the FJ tokens (arbitrary values) so both themes work.
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
 import { useId } from "react";
 
 const SIZES = { sm: "h-9", md: "h-11", lg: "h-13" };

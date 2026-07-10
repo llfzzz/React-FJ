@@ -40,7 +40,9 @@ export function ComponentPage() {
         actions={<Badge tone="accent">{CATEGORY_LABELS[doc.category]}</Badge>}
       />
 
-      <Showcase doc={doc} />
+      {/* Keyed by id: /components/:id keeps this page mounted across
+          navigations, and knob state must not leak between components. */}
+      <Showcase key={doc.id} doc={doc} />
 
       <DocSection id="usage" title="Usage">
         <CodeBlock code={doc.importLine} lang="tsx" />

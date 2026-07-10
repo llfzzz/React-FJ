@@ -56,7 +56,7 @@ export const alertDoc: ComponentDoc = {
   ],
   a11y: [
     'Renders role="status" so content changes are announced politely.',
-    'Tone colors pair 700-step text on 100-step tint — readable in both themes.',
+    'Tone colors pair 700-step text on 100-step tint — readable on every fill.',
     'The meaning lives in the words, never only in the color.',
   ],
 };

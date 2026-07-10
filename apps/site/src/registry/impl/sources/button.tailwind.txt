@@ -1,6 +1,6 @@
 // Free Joy — Button with Tailwind CSS.
 // Utilities reference the FJ tokens directly (arbitrary values), so this stays
-// theme- and dark-mode-correct. See Installation → "Using FJ with Tailwind"
+// token- and retheme-correct. See Installation → "Using FJ with Tailwind"
 // for the optional @theme mapping that shortens these class names.
 
 const ACC = {
