@@ -1,0 +1,60 @@
+// Free Joy — auto-generated JavaScript variant (from the .tsx source).
+// Do not edit by hand — run `pnpm gen:impl`.
+
+import * as React from "react";
+import { ensureKeyframes } from "../motion/keyframes";
+import { useReducedMotion } from "../motion/useReducedMotion";
+ensureKeyframes(
+  "fj-ripple",
+  `@keyframes fj-ripple {
+    from { transform: scale(0); opacity: var(--fj-ripple-o, 0.25); }
+    to { transform: scale(1); opacity: 0; }
+  }`
+);
+const CAP = 6;
+export function Ripple({
+  children,
+  color = "currentColor",
+  intensity = 0.25,
+  duration = 500,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const [ripples, setRipples] = React.useState([]);
+  const nextId = React.useRef(0);
+  const onPointerDown = (e) => {
+    if (disabled || reduced) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const size = Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y)) * 2;
+    setRipples((rs) => [...rs.slice(-(CAP - 1)), { id: nextId.current++, x, y, size }]);
+  };
+  return <span
+    onPointerDown={onPointerDown}
+    style={{ position: "relative", display: "inline-block", overflow: "hidden", borderRadius: "inherit", ...style }}
+    {...rest}
+  >
+      {children}
+      {ripples.map((r) => <span
+    key={r.id}
+    aria-hidden="true"
+    style={{
+      position: "absolute",
+      left: r.x - r.size / 2,
+      top: r.y - r.size / 2,
+      width: r.size,
+      height: r.size,
+      borderRadius: "50%",
+      background: color,
+      transform: "scale(0)",
+      ["--fj-ripple-o"]: String(intensity),
+      animation: `fj-ripple ${duration}ms var(--ease-out) forwards`,
+      pointerEvents: "none"
+    }}
+    onAnimationEnd={() => setRipples((rs) => rs.filter((p) => p.id !== r.id))}
+  />)}
+    </span>;
+}

@@ -40,6 +40,12 @@ export { AnimatedUnderline } from "./components/AnimatedUnderline";
 export type { AnimatedUnderlineProps } from "./components/AnimatedUnderline";
 export { Highlighter } from "./components/Highlighter";
 export type { HighlighterProps } from "./components/Highlighter";
+export { Typewriter } from "./components/Typewriter";
+export type { TypewriterProps } from "./components/Typewriter";
+export { ScrambleText } from "./components/ScrambleText";
+export type { ScrambleTextProps } from "./components/ScrambleText";
+export { BlurReveal } from "./components/BlurReveal";
+export type { BlurRevealProps } from "./components/BlurReveal";
 
 // Surface effects
 export { Shimmer } from "./components/Shimmer";
@@ -56,6 +62,8 @@ export { Tactile } from "./components/Tactile";
 export type { TactileProps } from "./components/Tactile";
 export { CursorSpotlight } from "./components/CursorSpotlight";
 export type { CursorSpotlightProps } from "./components/CursorSpotlight";
+export { Ripple } from "./components/Ripple";
+export type { RippleProps } from "./components/Ripple";
 
 // Status effects
 export { SuccessCheck } from "./components/SuccessCheck";

@@ -36,14 +36,18 @@ import {
 } from './entries/effects';
 import {
   animatedUnderlineDoc,
+  blurRevealDoc,
   gradientTextDoc,
   highlighterDoc,
   rotatingTextDoc,
+  scrambleTextDoc,
+  typewriterDoc,
 } from './entries/effects-text';
 import { floatDoc, shimmerDoc } from './entries/effects-surfaces';
 import {
   cursorSpotlightDoc,
   magneticDoc,
+  rippleDoc,
   tactileDoc,
   tiltCardDoc,
 } from './entries/effects-interaction';
@@ -101,12 +105,16 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   rotatingTextDoc,
   animatedUnderlineDoc,
   highlighterDoc,
+  typewriterDoc,
+  scrambleTextDoc,
+  blurRevealDoc,
   shimmerDoc,
   floatDoc,
   magneticDoc,
   tiltCardDoc,
   tactileDoc,
   cursorSpotlightDoc,
+  rippleDoc,
   successCheckDoc,
   errorShakeDoc,
   loaderDotsDoc,
