@@ -15,8 +15,9 @@ test.describe('effects gallery', () => {
     expect(filtered).toBeLessThan(total);
     await expect(page.locator('.effect-card-name', { hasText: 'Aurora' })).toBeVisible();
 
-    // Clicking a card opens its component page.
-    await page.locator('.effect-card', { hasText: 'Aurora' }).click();
+    // Clicking a card opens its component page. (Pin by id: Orbs' blurb also
+    // mentions Aurora, so a hasText filter would be ambiguous.)
+    await page.locator('.effect-card[data-effect="aurora"]').click();
     await expect(page).toHaveURL(/\/components\/aurora/);
     await expect(page.getByRole('heading', { name: 'Aurora', exact: true })).toBeVisible();
   });
