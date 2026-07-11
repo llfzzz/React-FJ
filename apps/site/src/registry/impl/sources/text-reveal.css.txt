@@ -1,19 +1,11 @@
-<!-- Free Joy — TextReveal (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     This reproduces the rise-in stagger on mount. To trigger it on SCROLL like
-     the React component, add the .is-in class with an IntersectionObserver (a
-     few lines of JS) — the animation itself is pure CSS below.
-     Each word sets its own --fj-i (index) for the stagger delay. -->
+/* Free Joy — TextReveal.css
+   Pairs with TextReveal.tsx / TextReveal.jsx. Requires the FJ tokens (tokens/*.css).
+   The component adds .is-in when the text scrolls into view; each word carries
+   its own --fj-i (index) for the stagger delay. --fj-delay / --fj-stagger /
+   --fj-duration arrive from props. */
 
-<span class="fj-reveal" aria-label="Make something you love">
-  <span class="fj-reveal-w" style="--fj-i: 0"><span>Make</span></span>
-  <span class="fj-reveal-w" style="--fj-i: 1"><span>something</span></span>
-  <span class="fj-reveal-w" style="--fj-i: 2"><span>you</span></span>
-  <span class="fj-reveal-w" style="--fj-i: 3"><span>love</span></span>
-</span>
-
-<style>
 .fj-reveal {
+  --fj-delay: 0ms;
   --fj-stagger: 45ms;
   --fj-duration: 640ms;
   display: inline-block;
@@ -29,17 +21,16 @@
 .fj-reveal-w > span {
   display: inline-block;
   white-space: pre;
-  padding: 0 0.12em;
   transform: translateY(105%);
   opacity: 0;
   transition:
     transform var(--fj-duration) var(--ease-emphasized),
     opacity calc(var(--fj-duration) * 0.6) var(--ease-out);
-  transition-delay: calc(var(--fj-i) * var(--fj-stagger));
+  transition-delay: calc(var(--fj-delay) + var(--fj-i, 0) * var(--fj-stagger));
 }
 
-/* Reveal on mount (swap for .is-in + IntersectionObserver to trigger on scroll). */
-.fj-reveal > .fj-reveal-w > span {
+/* In view: everything rises to rest. */
+.fj-reveal.is-in .fj-reveal-w > span {
   transform: translateY(0);
   opacity: 1;
 }
@@ -48,4 +39,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-reveal-w > span { transform: none; opacity: 1; transition: none; }
 }
-</style>

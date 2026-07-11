@@ -1,16 +1,10 @@
-<!-- Free Joy — AnimatedBorder (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Fully CSS: an animated @property angle drives a conic-gradient border that
-     sweeps around the panel. Reserve for ONE flagship element per view. -->
+/* Free Joy — AnimatedBorder.css
+   Pairs with AnimatedBorder.tsx / AnimatedBorder.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   Fully CSS: an animated @property angle drives a conic-gradient border that
+   sweeps around the panel. The component feeds --fj-speed, --fj-width, and
+   --fj-aborder-colors. Reserve for ONE flagship element per view. */
 
-<div class="fj-aborder">
-  <div class="fj-aborder-inner">
-    <h3>Featured plan</h3>
-    <p>A hairline of colour drifts around the edge to draw the eye.</p>
-  </div>
-</div>
-
-<style>
 /* Registering the angle as an animatable custom property is what lets the
    conic gradient rotate smoothly. Unsupported browsers show it static. */
 @property --fj-angle {
@@ -21,27 +15,23 @@
 @keyframes fj-angle-spin { to { --fj-angle: 360deg; } }
 
 .fj-aborder {
-  --fj-speed: 8s;
-  --fj-width: 1px;
   position: relative;
-  padding: var(--fj-width);
+  padding: var(--fj-width, 1px);
   border-radius: var(--radius-lg);
   background: conic-gradient(
     from var(--fj-angle, 0deg),
     var(--border) 0%,
-    var(--joy-400),
-    var(--bloom-300),
-    var(--sun-300),
+    var(--fj-aborder-colors, var(--joy-400), var(--bloom-300), var(--sun-300)),
     var(--border) 100%
   );
-  animation: fj-angle-spin var(--fj-speed) linear infinite;
+  animation: fj-angle-spin var(--fj-speed, 8s) linear infinite;
 }
 
 .fj-aborder-inner {
   position: relative;
   background: var(--surface);
   /* Inner radius = outer radius minus the border width. */
-  border-radius: calc(var(--radius-lg) - var(--fj-width));
+  border-radius: calc(var(--radius-lg) - var(--fj-width, 1px));
   padding: var(--space-5);
 }
 
@@ -49,4 +39,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-aborder { animation: none; }
 }
-</style>

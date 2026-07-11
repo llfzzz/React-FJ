@@ -1,0 +1,111 @@
+// Free Joy — Radio / RadioGroup (TypeScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// Native radios are visually hidden; the sibling ring scales in the inner dot.
+"use client";
+
+import * as React from "react";
+
+export interface RadioProps {
+  checked?: boolean;
+  onChange?: (value: string, e: React.ChangeEvent) => void;
+  disabled?: boolean;
+  label?: string;
+  name?: string;
+  value?: string;
+  id?: string;
+  className?: string;
+}
+
+export interface RadioOption {
+  label: string;
+  value: string;
+}
+
+export interface RadioGroupProps {
+  value?: string;
+  onChange?: (value: string, e: React.ChangeEvent) => void;
+  options?: Array<string | RadioOption>;
+  name?: string;
+  className?: string;
+}
+
+/**
+ * Free Joy — Radio / RadioGroup
+ * Single-choice control. Use RadioGroup for a set; Radio for one option.
+ */
+export function Radio({
+  checked = false,
+  onChange,
+  disabled = false,
+  label,
+  name,
+  value,
+  id,
+  className = "",
+  ...rest
+}: RadioProps) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+  return (
+    <label
+      htmlFor={fid}
+      className={
+        "inline-flex items-center gap-2.5 " +
+        `${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${className}`
+      }
+    >
+      <input
+        id={fid}
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange && onChange(value ?? "", e)}
+        className="peer absolute size-px opacity-0"
+        {...rest}
+      />
+      <span
+        className={
+          "inline-flex size-5 flex-none items-center justify-center rounded-full border-[1.5px] " +
+          "bg-[var(--surface)] transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+          "peer-focus-visible:outline peer-focus-visible:outline-[3px] " +
+          "peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--accent)] " +
+          (checked ? "border-[var(--accent)]" : "border-[var(--border-strong)]")
+        }
+        aria-hidden="true"
+      >
+        <span
+          className={
+            "size-2.5 rounded-full bg-[var(--accent)] " +
+            "transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+            (checked ? "scale-100" : "scale-0")
+          }
+        />
+      </span>
+      {label && <span className="text-[length:var(--text-base)] text-[var(--text)]">{label}</span>}
+    </label>
+  );
+}
+
+export function RadioGroup({ value, onChange, options = [], name, className = "", ...rest }: RadioGroupProps) {
+  const autoName = React.useId();
+  const gname = name || autoName;
+  return (
+    <div role="radiogroup" className={`flex flex-col gap-3 ${className}`} {...rest}>
+      {options.map((o) => {
+        const opt = typeof o === "string" ? { label: o, value: o } : o;
+        return (
+          <Radio
+            key={opt.value}
+            name={gname}
+            value={opt.value}
+            label={opt.label}
+            checked={value === opt.value}
+            onChange={onChange}
+          />
+        );
+      })}
+    </div>
+  );
+}

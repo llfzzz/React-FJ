@@ -1,0 +1,36 @@
+// Free Joy — Float (effect) (JavaScript + CSS)
+// Pairs with Float.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Gentle levitation loop; travel is capped small. Static under reduced motion
+// (media query) or when disabled.
+import "./Float.css";
+
+/**
+ * Free Joy — Float (effect)
+ * Gentle levitation loop for illustrations, empty-state art, and hero props.
+ */
+export function Float({
+  children,
+  distance = 8,
+  duration = 4,
+  delay = 0,
+  rotate = 0,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const vars = {
+    "--fj-distance": `${distance}px`,
+    "--fj-duration": `${duration}s`,
+    "--fj-delay": `${delay}s`,
+    "--fj-rotate": `${rotate}deg`,
+  };
+
+  const classes = ["fj-float", disabled && "fj-float--off", className].filter(Boolean).join(" ");
+
+  return (
+    <div className={classes} style={{ ...vars, ...style }} {...rest}>
+      {children}
+    </div>
+  );
+}

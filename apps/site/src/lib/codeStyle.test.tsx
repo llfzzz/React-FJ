@@ -7,27 +7,50 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('code style store', () => {
-  it('defaults to TypeScript', () => {
+  it('defaults to TypeScript + CSS', () => {
     const { result } = renderHook(() => useCodeStyle(), { wrapper });
-    expect(result.current.style).toBe('ts');
+    expect(result.current.language).toBe('ts');
+    expect(result.current.styling).toBe('css');
   });
 
-  it('persists the selection to localStorage', () => {
+  it('persists both axes to localStorage independently', () => {
     const { result } = renderHook(() => useCodeStyle(), { wrapper });
-    act(() => result.current.setStyle('tailwind'));
-    expect(result.current.style).toBe('tailwind');
-    expect(localStorage.getItem('fj-code-style')).toBe('tailwind');
+    act(() => result.current.setLanguage('js'));
+    act(() => result.current.setStyling('tailwind'));
+    expect(result.current.language).toBe('js');
+    expect(result.current.styling).toBe('tailwind');
+    expect(localStorage.getItem('fj-code-lang')).toBe('js');
+    expect(localStorage.getItem('fj-code-styling')).toBe('tailwind');
   });
 
-  it('restores a stored selection on mount', () => {
-    localStorage.setItem('fj-code-style', 'css');
+  it('restores stored selections on mount', () => {
+    localStorage.setItem('fj-code-lang', 'js');
+    localStorage.setItem('fj-code-styling', 'tailwind');
     const { result } = renderHook(() => useCodeStyle(), { wrapper });
-    expect(result.current.style).toBe('css');
+    expect(result.current.language).toBe('js');
+    expect(result.current.styling).toBe('tailwind');
   });
 
-  it('ignores an invalid stored value', () => {
+  it('migrates the pre-2D single key onto the matching axis', () => {
+    // A stored language keeps the default styling…
+    localStorage.setItem('fj-code-style', 'js');
+    const { result } = renderHook(() => useCodeStyle(), { wrapper });
+    expect(result.current.language).toBe('js');
+    expect(result.current.styling).toBe('css');
+    // …and a stored styling keeps the default language.
+    localStorage.clear();
+    localStorage.setItem('fj-code-style', 'tailwind');
+    const { result: second } = renderHook(() => useCodeStyle(), { wrapper });
+    expect(second.current.language).toBe('ts');
+    expect(second.current.styling).toBe('tailwind');
+  });
+
+  it('ignores invalid stored values', () => {
+    localStorage.setItem('fj-code-lang', 'ruby');
+    localStorage.setItem('fj-code-styling', 'sass');
     localStorage.setItem('fj-code-style', 'ruby');
     const { result } = renderHook(() => useCodeStyle(), { wrapper });
-    expect(result.current.style).toBe('ts');
+    expect(result.current.language).toBe('ts');
+    expect(result.current.styling).toBe('css');
   });
 });

@@ -12,8 +12,7 @@ export const buttonDoc: ComponentDoc = {
   importLine: "import { Button } from '@fj';",
   implementation: impl('button', {
     notes: {
-      js: 'The exact source that ships in @fj — inline styles over FJ tokens, no build step needed.',
-      css: 'Same look and states without React: hover, press scale, focus ring, disabled and loading.',
+      css: 'Hover, press scale, focus ring, disabled and loading all live in Button.css — the component only composes class names.',
       tailwind: 'Utilities point at FJ token variables, so a retheme keeps working unchanged.',
     },
   }),

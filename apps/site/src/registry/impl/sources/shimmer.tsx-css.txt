@@ -1,0 +1,60 @@
+// Free Joy — Shimmer (effect) (TypeScript + CSS)
+// Pairs with Shimmer.css (imported below). Requires the FJ tokens (tokens/*.css).
+// A sheen overlay sweeps across the wrapped content; the wrapper clips it and
+// stays the size of its child. Loop / hover / mount triggers are pure CSS.
+// Reduced motion suppresses the sweep (media query).
+import * as React from "react";
+import "./Shimmer.css";
+
+export interface ShimmerProps extends React.HTMLAttributes<HTMLSpanElement> {
+  children?: React.ReactNode;
+  /** When the sheen plays. @default "loop" */
+  trigger?: "loop" | "hover" | "mount";
+  /** Sheen travel duration in ms. @default 1400 */
+  duration?: number;
+  /** Sweep angle in degrees. @default 20 */
+  angle?: number;
+  /** Sheen opacity 0–1. @default 0.35 */
+  intensity?: number;
+  /** Disable (children unchanged). @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Shimmer (effect)
+ * A soft light sheen sweeps across a surface — badges, skeleton chips, freshly
+ * loaded cards. Wraps its children; the sheen is a pointer-transparent overlay.
+ */
+export function Shimmer({
+  children,
+  trigger = "loop",
+  duration = 1400,
+  angle = 20,
+  intensity = 0.35,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: ShimmerProps) {
+  const vars = {
+    "--fj-duration": `${duration}ms`,
+    "--fj-angle": `${90 + angle}deg`,
+    "--fj-intensity": intensity,
+  } as React.CSSProperties;
+
+  const classes = [
+    "fj-shimmer",
+    trigger === "hover" && "fj-shimmer--hover",
+    trigger === "mount" && "fj-shimmer--once",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span className={classes} style={{ ...vars, ...style }} {...rest}>
+      {children}
+      {!disabled && <span className="fj-shimmer-sheen" aria-hidden="true" />}
+    </span>
+  );
+}

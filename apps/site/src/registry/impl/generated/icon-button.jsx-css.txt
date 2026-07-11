@@ -1,0 +1,51 @@
+// Free Joy — IconButton (JavaScript + CSS)
+// Pairs with IconButton.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Pass an icon as the child and always provide an aria-label — there is no visible text.
+import "./IconButton.css";
+
+/** [base fill, hover fill, icon color] per named accent. */
+const ACC = {
+  coral: ["var(--joy-500)", "var(--joy-600)", "var(--white)"],
+  sun:   ["var(--sun-500)", "var(--sun-700)", "var(--ink)"],
+  bloom: ["var(--bloom-500)", "var(--bloom-700)", "var(--white)"],
+};
+
+/**
+ * Free Joy — IconButton
+ * Square/round icon-only button. Variants ghost | solid | outline.
+ * `accent` recolors the solid fill per-instance.
+ */
+export function IconButton({
+  variant = "ghost",
+  size = "md",
+  accent = "coral",
+  round = true,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const [base, hover, on] = ACC[accent] || [accent, accent, "var(--white)"];
+  // The stylesheet reads these three custom properties for the solid fill.
+  const accentVars = {
+    "--fj-iconbtn-accent": base,
+    "--fj-iconbtn-accent-hover": hover,
+    "--fj-iconbtn-on-accent": on,
+  };
+
+  const classes = [
+    "fj-iconbtn",
+    `fj-iconbtn--${variant}`,
+    `fj-iconbtn--${size}`,
+    !round && "fj-iconbtn--square",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <button className={classes} style={{ ...accentVars, ...style }} {...rest}>
+      {children}
+    </button>
+  );
+}

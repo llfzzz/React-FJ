@@ -1,18 +1,12 @@
-<!-- Free Joy — Highlighter (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     A marker swipe grows from 0 to 100% width behind the text. This example
-     plays on load (.is-lit); to trigger on SCROLL, start without .is-lit and add
-     it via an IntersectionObserver. Tone modifiers: default sun | --coral | --bloom. -->
+/* Free Joy — Highlighter.css
+   Pairs with Highlighter.tsx / Highlighter.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   A marker swipe grows from 0 to 100% width behind the text when the
+   component adds .is-lit. Tone modifiers: default sun | --coral | --bloom
+   (custom colors arrive via --fj-tone). --fj-delay / --fj-duration from props. */
 
-<p style="font-size: var(--text-lg); line-height: 1.8">
-  Free Joy keeps the interface calm so the
-  <mark class="fj-highlight fj-highlight--sun is-lit">work stays loud</mark>.
-</p>
-
-<style>
 .fj-highlight {
   --fj-tone: var(--sun-200);
-  --fj-duration: 480ms;
 
   display: inline;
   padding: 0.05em 0.15em;
@@ -25,7 +19,7 @@
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 0% 100%;
-  transition: background-size var(--fj-duration) var(--ease-out);
+  transition: background-size var(--fj-duration, 480ms) var(--ease-out) var(--fj-delay, 0ms);
 }
 
 .fj-highlight--sun   { --fj-tone: var(--sun-200); }
@@ -37,4 +31,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-highlight { transition: none; background-size: 100% 100%; }
 }
-</style>

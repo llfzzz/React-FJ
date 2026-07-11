@@ -1,0 +1,92 @@
+// Free Joy — Reveal (effect) (TypeScript + CSS)
+// Pairs with Reveal.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Fade + rise on scroll into view; the trigger toggles .is-in via
+// IntersectionObserver. No layout shift: only transform/opacity animate.
+"use client";
+
+import * as React from "react";
+import "./Reveal.css";
+
+export interface RevealProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Lead-in delay in ms. @default 0 */
+  delay?: number;
+  /** Rise distance in px. @default 14 */
+  y?: number;
+  /** @default 640 */
+  duration?: number;
+  /** Animate only on first entry. @default true */
+  once?: boolean;
+  /** Stagger direct children instead of moving as one block. @default false */
+  cascade?: boolean;
+  /** Per-child stagger in ms (with cascade). @default 60 */
+  stagger?: number;
+  /** IntersectionObserver threshold. @default 0.15 */
+  threshold?: number;
+}
+
+/**
+ * Free Joy — Reveal (effect)
+ * Fade + rise for a section entering the viewport. `cascade` staggers direct
+ * children. Reduced motion renders everything simply present (media query).
+ */
+export function Reveal({
+  delay = 0,
+  y = 14,
+  duration = 640,
+  once = true,
+  cascade = false,
+  stagger = 60,
+  threshold = 0.15,
+  className = "",
+  style,
+  children,
+  ...rest
+}: RevealProps) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [shown, setShown] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setShown(true);
+            if (once) io.disconnect();
+          } else if (!once) setShown(false);
+        });
+      },
+      { threshold },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [once, threshold]);
+
+  const vars = {
+    "--fj-delay": `${delay}ms`,
+    "--fj-y": `${y}px`,
+    "--fj-duration": `${duration}ms`,
+    "--fj-stagger": `${stagger}ms`,
+  } as React.CSSProperties;
+
+  if (cascade) {
+    const classes = [`fj-reveal-cascade`, shown && "is-in", className].filter(Boolean).join(" ");
+    return (
+      <div ref={ref} className={classes} style={{ ...vars, ...style }} {...rest}>
+        {React.Children.map(children, (child, i) => (
+          <div className="fj-reveal-item" style={{ "--fj-i": i } as React.CSSProperties}>
+            {child}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const classes = [`fj-reveal-block`, shown && "is-in", className].filter(Boolean).join(" ");
+  return (
+    <div ref={ref} className={classes} style={{ ...vars, ...style }} {...rest}>
+      {children}
+    </div>
+  );
+}

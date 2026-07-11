@@ -1,0 +1,37 @@
+// Free Joy — Spinner (JavaScript + CSS)
+// Pairs with Spinner.css (imported below). Requires the FJ tokens (tokens/*.css).
+import "./Spinner.css";
+
+/**
+ * Free Joy — Spinner
+ * Minimal loading indicator. Inherits color; size in px — the component feeds
+ * the ring's size, color, and stroke width through custom properties.
+ */
+export function Spinner({
+  size = 22,
+  color = "var(--accent)",
+  thickness = 2.5,
+  label,
+  className = "",
+  style,
+  ...rest
+}) {
+  const vars = {
+    "--fj-spinner-size": `${size}px`,
+    "--fj-spinner-color": color,
+    "--fj-spinner-thickness": `${thickness}px`,
+  };
+
+  return (
+    <span
+      className={`fj-spinner ${className}`.trim()}
+      role="status"
+      aria-label={label || "Loading"}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      <span className="fj-spinner-ring" />
+      {label && <span className="fj-spinner-label">{label}</span>}
+    </span>
+  );
+}

@@ -1,16 +1,8 @@
-<!-- Free Joy — Glow (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Static, single blur layer behind the child. Tune with the custom
-     properties: --fj-blur, --fj-intensity, --fj-spread. No animation. -->
+/* Free Joy — Glow.css
+   Pairs with Glow.tsx / Glow.jsx. Requires the FJ tokens (tokens/*.css).
+   Static, single blur layer behind the child. The component feeds
+   --fj-glow-colors, --fj-blur, --fj-intensity, and --fj-spread. No animation. */
 
-<div class="fj-glow" style="--fj-blur: 48px; --fj-intensity: 0.35; --fj-spread: 8px">
-  <div class="fj-glow-aura" aria-hidden="true"></div>
-  <div class="fj-glow-content">
-    <button class="fj-btn fj-btn--primary fj-btn--lg">Start free</button>
-  </div>
-</div>
-
-<style>
 .fj-glow {
   position: relative;
   display: inline-block;
@@ -19,7 +11,7 @@
 .fj-glow-aura {
   position: absolute;
   inset: calc(-1 * var(--fj-spread, 8px));
-  background: linear-gradient(120deg, var(--joy-300), var(--bloom-300));
+  background: linear-gradient(120deg, var(--fj-glow-colors, var(--joy-300), var(--bloom-300)));
   filter: blur(var(--fj-blur, 48px));
   opacity: var(--fj-intensity, 0.35);
   border-radius: var(--radius-xl);
@@ -27,4 +19,3 @@
 }
 
 .fj-glow-content { position: relative; }
-</style>

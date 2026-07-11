@@ -1,0 +1,36 @@
+// Free Joy — Tooltip (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// Reveal is driven by the group hover/focus state — no JS state needed.
+
+const PLACEMENT = {
+  top: "bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 translate-y-0.5 group-hover:translate-y-0 group-focus-within:translate-y-0",
+  bottom: "top-[calc(100%+8px)] left-1/2 -translate-x-1/2 -translate-y-0.5 group-hover:translate-y-0 group-focus-within:translate-y-0",
+  left: "right-[calc(100%+8px)] top-1/2 -translate-y-1/2",
+  right: "left-[calc(100%+8px)] top-1/2 -translate-y-1/2",
+};
+
+/**
+ * Free Joy — Tooltip
+ * Hover/focus label bubble. Wraps a single trigger child.
+ * Restrained dark bubble; placement: top | bottom | left | right.
+ */
+export function Tooltip({ label, placement = "top", children, className = "" }) {
+  return (
+    <span className={`group relative inline-flex ${className}`} tabIndex={0}>
+      {children}
+      <span
+        role="tooltip"
+        className={
+          "pointer-events-none absolute z-[var(--z-tooltip)] whitespace-nowrap rounded-[var(--radius-sm)] " +
+          "bg-[var(--ink)] px-2.5 py-1.5 text-[length:var(--text-xs)] font-medium text-[var(--paper)] " +
+          "shadow-[var(--shadow-md)] opacity-0 invisible " +
+          "transition-[opacity,transform] duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+          "group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 " +
+          `${PLACEMENT[placement] ?? PLACEMENT.top}`
+        }
+      >
+        {label}
+      </span>
+    </span>
+  );
+}

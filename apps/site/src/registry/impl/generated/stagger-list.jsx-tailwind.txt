@@ -1,0 +1,65 @@
+// Free Joy — StaggerList (effect) (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// The scroll trigger is JS (IntersectionObserver); the per-item rise is
+// utilities with an inline transition-delay.
+"use client";
+
+import * as React from "react";
+
+/**
+ * Free Joy — StaggerList (effect)
+ * Reveals its direct children one after another when the list scrolls into
+ * view. Great for feature grids and lists. Only transform/opacity animate.
+ */
+export function StaggerList({
+  children,
+  stagger = 60,
+  duration = 480,
+  from = "up",
+  initialDelay = 0,
+  as: Tag = "div",
+  disabled = false,
+  className = "",
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [inView, setInView] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const active = disabled || inView;
+  const hidden =
+    from === "scale" ? "opacity-0 scale-[0.96]" : from === "fade" ? "opacity-0" : "opacity-0 translate-y-3.5";
+
+  return (
+    <Tag ref={ref} className={className} {...rest}>
+      {React.Children.toArray(children).map((child, i) => (
+        <div
+          key={i}
+          style={{ transitionDelay: `${initialDelay + i * stagger}ms`, transitionDuration: `${duration}ms` }}
+          className={
+            "transition-[opacity,transform] ease-[var(--ease-emphasized)] " +
+            "motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:transform-none " +
+            (active ? "opacity-100 translate-y-0 scale-100" : hidden)
+          }
+        >
+          {child}
+        </div>
+      ))}
+    </Tag>
+  );
+}

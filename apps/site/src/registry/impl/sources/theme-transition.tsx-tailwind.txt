@@ -1,0 +1,103 @@
+// Free Joy — ThemeTransition (effect) (TypeScript + Tailwind CSS)
+// The crossfade is the browser View Transitions API driven from JS; the
+// ::view-transition pseudo-elements are tuned in global CSS (Tailwind can't
+// target them). Add the CSS block below to your stylesheet. Instant under
+// reduced motion.
+"use client";
+
+import * as React from "react";
+
+/**
+ * Runs a DOM update (e.g. flipping `data-theme` on <html>) inside a
+ * View-Transitions crossfade when the browser supports it and the user hasn't
+ * asked for reduced motion. Always applies the update; the transition is
+ * progressive enhancement. Wire this into your theme toggle.
+ */
+export function runThemeTransition(update: () => void): void {
+  const start = (document as Document & {
+    startViewTransition?: (cb: () => void) => unknown;
+  }).startViewTransition;
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReduced || typeof start !== "function") {
+    update();
+    return;
+  }
+  start.call(document, update);
+}
+
+export interface ThemeTransitionProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Crossfade duration in ms. @default 320 */
+  duration?: number;
+  /** Disable the crossfade (instant swap). @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — ThemeTransition (effect)
+ * A self-contained demo of the theme-switch crossfade: it toggles `data-theme`
+ * on a scoped preview surface and crossfades the old/new looks.
+ */
+export function ThemeTransition({
+  children,
+  duration = 320,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: ThemeTransitionProps) {
+  const [theme, setTheme] = React.useState<"light" | "dark">("light");
+  const [fading, setFading] = React.useState(false);
+
+  const flip = () => {
+    const next = theme === "light" ? "dark" : "light";
+    if (disabled) {
+      setTheme(next);
+      return;
+    }
+    setFading(true);
+    // Brief fade-out, swap, fade back in — a scoped stand-in for the API.
+    setTimeout(() => {
+      setTheme(next);
+      setFading(false);
+    }, duration / 2);
+  };
+
+  return (
+    <div
+      data-theme={theme}
+      onClick={flip}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); // Space must not scroll the page
+          flip();
+        }
+      }}
+      style={{ transitionDuration: `${duration / 2}ms`, ...style }}
+      className={
+        "cursor-pointer rounded-[var(--radius-lg)] bg-[var(--bg)] text-[var(--text)] " +
+        "transition-opacity ease-[var(--ease-in-out)] motion-reduce:transition-none " +
+        `${fading ? "opacity-0" : "opacity-100"} ${disabled ? "transition-none" : ""} ${className}`
+      }
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* Add once to your global CSS (tunes the real full-page crossfade):
+::view-transition-old(root), ::view-transition-new(root) {
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-in-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}
+*/

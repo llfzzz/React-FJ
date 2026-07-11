@@ -1,0 +1,43 @@
+// Free Joy — Card (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+
+const BASE =
+  "rounded-[var(--radius-lg)] p-[var(--space-5)] shadow-[var(--shadow-xs)] " +
+  "transition-[box-shadow,transform] duration-[var(--dur-base)] ease-[var(--ease-out)]";
+
+const SOLID = "bg-[var(--surface)] border border-[var(--border)]";
+
+const GLASS =
+  "bg-[var(--glass-bg)] border border-[var(--glass-border)] " +
+  "backdrop-blur-[var(--glass-blur)] backdrop-saturate-[1.6]";
+
+const INTERACTIVE =
+  "cursor-pointer hover:shadow-[var(--shadow-md)] hover:-translate-y-0.5 " +
+  "motion-reduce:hover:translate-y-0 " +
+  "focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 " +
+  "focus-visible:outline-[var(--accent)]";
+
+/**
+ * Free Joy — Card
+ * Editorial surface: hairline border, generous padding, soft shadow on hover
+ * (optional). `glass` renders a frosted translucent panel instead.
+ */
+export function Card({
+  interactive = false,
+  glass = false,
+  padding,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  return (
+    <div
+      className={`${BASE} ${glass ? GLASS : SOLID} ${interactive ? INTERACTIVE : ""} ${className}`}
+      style={padding !== undefined ? { padding, ...style } : style}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

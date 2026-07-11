@@ -1,17 +1,8 @@
-<!-- Free Joy — Tag / Chip, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Accents: neutral (default) | coral | sun | bloom -->
+/* Free Joy — Tag.css
+   Pairs with Tag.tsx / Tag.jsx. Requires the FJ tokens (tokens/*.css).
+   Accents: neutral (default) | coral | sun | bloom | any CSS color
+   (custom colors arrive via the --fj-tag-* custom properties, set inline). */
 
-<span class="fj-tag">Neutral</span>
-<span class="fj-tag fj-tag--coral"><span class="fj-tag-dot"></span>Coral</span>
-<span class="fj-tag fj-tag--sun">Sun</span>
-<span class="fj-tag fj-tag--bloom fj-tag--selected">Selected</span>
-<span class="fj-tag fj-tag--coral fj-tag--removable">
-  Removable
-  <button class="fj-tag-remove" aria-label="Remove">×</button>
-</span>
-
-<style>
 .fj-tag {
   --fj-tag-bg: var(--paper-2);
   --fj-tag-fg: var(--text-muted);
@@ -69,4 +60,3 @@
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
-</style>

@@ -1,0 +1,45 @@
+// Free Joy — Input (TypeScript + CSS)
+// Pairs with Input.css (imported below). Requires the FJ tokens (tokens/*.css),
+// including --ring for the focus glow.
+import * as React from "react";
+import "./Input.css";
+
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+  /** Field label rendered above the input. */
+  label?: string;
+  /** Helper text below the field. */
+  hint?: string;
+  /** Error message — turns the field red and overrides hint. */
+  error?: string;
+  /** Icon node rendered inside, before the text. */
+  iconLeft?: React.ReactNode;
+  /** @default "md" */
+  size?: "sm" | "md" | "lg";
+}
+
+/**
+ * Free Joy — Input
+ * Text field with optional label, hint, error, and leading icon.
+ * Focus styling uses :focus-within so a leading icon sits inside the glow.
+ */
+export function Input({ label, hint, error, iconLeft, size = "md", id, className = "", ...rest }: InputProps) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+
+  const classes = ["fj-field", error && "fj-field--error", className].filter(Boolean).join(" ");
+
+  return (
+    <div className={classes}>
+      {label && (
+        <label className="fj-field-label" htmlFor={fid}>
+          {label}
+        </label>
+      )}
+      <div className={`fj-field-box fj-field-box--${size}`}>
+        {iconLeft && <span className="fj-field-icon">{iconLeft}</span>}
+        <input className="fj-field-input" id={fid} {...rest} />
+      </div>
+      {(hint || error) && <span className="fj-field-note">{error || hint}</span>}
+    </div>
+  );
+}

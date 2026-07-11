@@ -1,0 +1,48 @@
+// Free Joy — Card (TypeScript + CSS)
+// Pairs with Card.css (imported below). Requires the FJ tokens (tokens/*.css),
+// including the glass tokens.
+import * as React from "react";
+import "./Card.css";
+
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Lift + shadow on hover, pointer cursor. @default false */
+  interactive?: boolean;
+  /** Render a frosted iOS-18-style translucent panel instead of solid white. @default false */
+  glass?: boolean;
+  /** CSS padding value. @default var(--space-5) */
+  padding?: string;
+}
+
+/**
+ * Free Joy — Card
+ * Editorial surface: white, hairline border, generous padding, soft shadow on hover (optional).
+ * Set glass to render a frosted iOS-18-style translucent panel instead of solid white.
+ */
+export function Card({
+  interactive = false,
+  glass = false,
+  padding,
+  className = "",
+  style,
+  children,
+  ...rest
+}: CardProps) {
+  const classes = [
+    "fj-card",
+    interactive && "fj-card--interactive",
+    glass && "fj-card--glass",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      style={padding !== undefined ? { padding, ...style } : style}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

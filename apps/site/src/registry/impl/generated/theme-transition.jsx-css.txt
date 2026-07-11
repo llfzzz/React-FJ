@@ -1,0 +1,93 @@
+// Free Joy — ThemeTransition (effect) (JavaScript + CSS)
+// Pairs with ThemeTransition.css (imported below). Requires the FJ tokens
+// (tokens/*.css). In production call runThemeTransition() from your real theme
+// toggle for a full-page View-Transitions crossfade (tuned in the stylesheet);
+// the component is a scoped demo surface. Instant under reduced motion.
+"use client";
+
+import * as React from "react";
+import "./ThemeTransition.css";
+
+/**
+ * Runs a DOM update (e.g. flipping `data-theme` on <html>) inside a
+ * View-Transitions crossfade when the browser supports it and the user hasn't
+ * asked for reduced motion. Always applies the update; the transition is
+ * progressive enhancement. Wire this into your theme toggle.
+ */
+export function runThemeTransition(update) {
+  const start = (document
+
+   ).startViewTransition;
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReduced || typeof start !== "function") {
+    update();
+    return;
+  }
+  start.call(document, update);
+}
+
+;
+
+/**
+ * Free Joy — ThemeTransition (effect)
+ * A self-contained demo of the theme-switch crossfade: it toggles `data-theme`
+ * on a scoped preview surface and crossfades the old/new looks.
+ */
+export function ThemeTransition({
+  children,
+  duration = 320,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const [theme, setTheme] = React.useState("light");
+  const [fading, setFading] = React.useState(false);
+
+  const flip = () => {
+    const next = theme === "light" ? "dark" : "light";
+    if (disabled) {
+      setTheme(next);
+      return;
+    }
+    setFading(true);
+    // Brief fade-out, swap, fade back in — a scoped stand-in for the API.
+    setTimeout(() => {
+      setTheme(next);
+      setFading(false);
+    }, duration / 2);
+  };
+
+  const classes = [
+    "fj-theme-flip",
+    fading && "is-fading",
+    disabled && "fj-theme-flip--instant",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      data-theme={theme}
+      onClick={flip}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); // Space must not scroll the page
+          flip();
+        }
+      }}
+      style={{ "--fj-fade": `${duration / 2}ms`, ...style }}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

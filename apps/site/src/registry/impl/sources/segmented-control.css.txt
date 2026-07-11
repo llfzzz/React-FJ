@@ -1,16 +1,9 @@
-<!-- Free Joy — SegmentedControl, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Equal-width grid columns; the thumb is a 1/n slice moved with --fj-idx.
-     Set --fj-n (segment count) and --fj-idx (active index) from JS on click. -->
+/* Free Joy — SegmentedControl.css
+   Pairs with SegmentedControl.tsx / SegmentedControl.jsx. Requires the FJ
+   tokens (tokens/*.css).
+   Equal-width grid columns; the thumb is a 1/n slice moved with --fj-idx.
+   The component sets --fj-n (segment count) and --fj-idx (active index). */
 
-<div class="fj-seg" style="--fj-n: 3; --fj-idx: 0" role="tablist">
-  <div class="fj-seg-thumb" aria-hidden="true"></div>
-  <button class="fj-seg-btn is-active" aria-selected="true">Day</button>
-  <button class="fj-seg-btn" aria-selected="false">Week</button>
-  <button class="fj-seg-btn" aria-selected="false">Month</button>
-</div>
-
-<style>
 .fj-seg {
   position: relative;
   display: inline-grid;
@@ -70,4 +63,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-seg-thumb, .fj-seg-btn { transition-duration: 0.01ms; }
 }
-</style>

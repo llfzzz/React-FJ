@@ -1,22 +1,7 @@
-<!-- Free Joy — Card, no-framework version.
-     Requires the FJ tokens (tokens/*.css), including the glass tokens. -->
+/* Free Joy — Card.css
+   Pairs with Card.tsx / Card.jsx. Requires the FJ tokens (tokens/*.css),
+   including the glass tokens. */
 
-<div class="fj-card">
-  <h3>Quiet surface</h3>
-  <p>White, hairline border, generous padding.</p>
-</div>
-
-<div class="fj-card fj-card--interactive" tabindex="0">
-  <h3>Interactive</h3>
-  <p>Lifts 2px with a soft shadow on hover.</p>
-</div>
-
-<div class="fj-card fj-card--glass">
-  <h3>Glass</h3>
-  <p>Frosted iOS-18-style translucent panel.</p>
-</div>
-
-<style>
 .fj-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -49,4 +34,3 @@
   .fj-card { transition-duration: 0.01ms; }
   .fj-card--interactive:hover { transform: none; }
 }
-</style>

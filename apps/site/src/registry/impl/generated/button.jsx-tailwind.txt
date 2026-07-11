@@ -1,0 +1,91 @@
+// Free Joy — Button (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens directly (arbitrary values), so this stays
+// token- and retheme-correct. See Installation → "Using FJ with Tailwind"
+// for the optional @theme mapping that shortens these class names.
+
+/** [base fill, hover fill, text-on-fill] per named accent. */
+const ACC = {
+  coral: ["var(--accent)", "var(--accent-hover)", "var(--text-on-accent)"],
+  sun:   ["var(--sun-500)", "var(--sun-700)", "var(--ink)"],
+  bloom: ["var(--bloom-500)", "var(--bloom-700)", "var(--white)"],
+};
+
+const BASE =
+  "inline-flex items-center justify-center whitespace-nowrap leading-none " +
+  "rounded-full border border-transparent font-[family-name:var(--font-text)] font-semibold " +
+  "transition-[background-color,transform] duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+  "enabled:active:scale-[0.97] motion-reduce:enabled:active:scale-100 " +
+  "focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 " +
+  "focus-visible:outline-[var(--accent)] " +
+  "disabled:cursor-not-allowed disabled:opacity-[var(--opacity-disabled)] " +
+  "aria-busy:cursor-progress aria-busy:opacity-100";
+
+const SIZES = {
+  sm: { classes: "h-9 gap-1.5 px-3.5 text-[length:var(--text-sm)]", spin: "size-3.5" },
+  md: { classes: "h-11 gap-2 px-5 text-[length:var(--text-base)]", spin: "size-4" },
+  lg: { classes: "h-[54px] gap-2.5 px-7 text-[length:var(--text-md)]", spin: "size-[18px]" },
+};
+
+// The primary fill reads the three --fj-btn-* custom properties the component
+// sets inline, so any accent (named or custom CSS color) recolors it.
+const VARIANTS = {
+  primary:
+    "bg-[var(--fj-btn-accent)] text-[var(--fj-btn-on-accent)] " +
+    "hover:enabled:bg-[var(--fj-btn-accent-hover)]",
+  secondary:
+    "bg-[var(--surface)] text-[var(--text)] border-[var(--border-strong)] " +
+    "hover:enabled:bg-[var(--surface-hover)]",
+  ghost: "bg-transparent text-[var(--text)] hover:enabled:bg-[var(--surface-hover)]",
+  danger: "bg-[var(--danger-500)] text-[var(--white)] hover:enabled:bg-[var(--danger-700)]",
+};
+
+/**
+ * Free Joy — Button
+ * Variants: primary | secondary | ghost | danger · Sizes: sm | md | lg
+ * `accent` recolors the primary fill; `loading` shows a spinner and blocks
+ * interaction (aria-busy).
+ */
+export function Button({
+  variant = "primary",
+  size = "md",
+  accent = "coral",
+  iconLeft,
+  iconRight,
+  disabled = false,
+  loading = false,
+  full = false,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const s = SIZES[size] ?? SIZES.md;
+  const v = VARIANTS[variant] ?? VARIANTS.primary;
+  const [accBase, accHover, accOn] = ACC[accent] ?? [accent, accent, "var(--white)"];
+  const accentVars = {
+    "--fj-btn-accent": accBase,
+    "--fj-btn-accent-hover": accHover,
+    "--fj-btn-on-accent": accOn,
+  };
+
+  return (
+    <button
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={`${BASE} ${s.classes} ${v} ${full ? "flex w-full" : ""} ${className}`}
+      style={{ ...accentVars, ...style }}
+      {...rest}
+    >
+      {loading ? (
+        <span
+          aria-hidden="true"
+          className={`${s.spin} flex-none animate-spin rounded-full border-2 border-current border-t-transparent opacity-90 motion-reduce:animate-[spin_1.4s_linear_infinite]`}
+        />
+      ) : (
+        iconLeft
+      )}
+      {children}
+      {iconRight}
+    </button>
+  );
+}

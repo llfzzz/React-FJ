@@ -1,46 +1,57 @@
 import { useEffect, useState } from 'react';
 import { SegmentedControl } from '@fj';
-import type { ComponentDoc, ImplFormat } from '../registry/types';
-import { IMPL_FORMAT_LABELS, IMPL_FORMAT_ORDER } from '../registry/types';
+import type { ComponentDoc, ImplLanguage, ImplStyling } from '../registry/types';
+import {
+  IMPL_LANGUAGE_LABELS,
+  IMPL_LANGUAGE_ORDER,
+  IMPL_STYLING_LABELS,
+  IMPL_STYLING_ORDER,
+} from '../registry/types';
 import { useCodeStyle } from '../lib/codeStyle';
 import { CodeBlock } from './CodeBlock';
-
-const DEFAULT_LANGS: Record<ImplFormat, string> = {
-  js: 'tsx',
-  ts: 'tsx',
-  css: 'html',
-  tailwind: 'tsx',
-};
 
 /** Loaded sources, cached for the session (each loader resolves once). */
 const sourceCache = new Map<() => Promise<string>, string>();
 
-type LoadState = { status: 'loading' } | { status: 'ready'; code: string } | { status: 'error' };
+type LoadState =
+  | { status: 'loading' }
+  | { status: 'ready'; codes: string[] }
+  | { status: 'error' };
 
 /**
- * The 4-format implementation viewer: JavaScript / TypeScript / CSS / Tailwind.
- * The selected style is global (useCodeStyle) and persists across pages; a
- * format a component can't support renders its notApplicable reason instead.
+ * The language × styling implementation viewer. Two independent pickers —
+ * JavaScript/TypeScript and CSS/Tailwind — combine into one complete,
+ * copy-ready variant: the component file, plus the shared stylesheet when the
+ * styling method is plain CSS. Both selections are global (useCodeStyle) and
+ * persist across pages. Styling-neutral components (visuals computed in JS)
+ * render the same source for either styling; the Style picker goes inert with
+ * the reason alongside.
  */
 export function ImplementationBlock({ doc }: { doc: ComponentDoc }) {
-  const { style, setStyle } = useCodeStyle();
+  const { language, styling, setLanguage, setStyling } = useCodeStyle();
   const implementation = doc.implementation;
-  const loader = implementation?.sources[style];
+  const variant = implementation?.variants[`${language}-${styling}`];
   const [state, setState] = useState<LoadState>({ status: 'loading' });
 
   useEffect(() => {
-    if (!loader) return;
-    const cached = sourceCache.get(loader);
-    if (cached !== undefined) {
-      setState({ status: 'ready', code: cached });
+    if (!variant) return;
+    const loaders = variant.files.map((f) => f.load);
+    if (loaders.every((loader) => sourceCache.has(loader))) {
+      setState({ status: 'ready', codes: loaders.map((loader) => sourceCache.get(loader) ?? '') });
       return;
     }
     let alive = true;
     setState({ status: 'loading' });
-    loader().then(
-      (code) => {
-        sourceCache.set(loader, code);
-        if (alive) setState({ status: 'ready', code });
+    Promise.all(
+      loaders.map((loader) =>
+        loader().then((code) => {
+          sourceCache.set(loader, code);
+          return code;
+        }),
+      ),
+    ).then(
+      (codes) => {
+        if (alive) setState({ status: 'ready', codes });
       },
       () => {
         if (alive) setState({ status: 'error' });
@@ -49,34 +60,61 @@ export function ImplementationBlock({ doc }: { doc: ComponentDoc }) {
     return () => {
       alive = false;
     };
-  }, [loader]);
+  }, [variant]);
 
   if (!implementation) return null;
 
-  const note = implementation.notes?.[style];
-  const lang = implementation.langs?.[style] ?? DEFAULT_LANGS[style];
-  const notApplicable =
-    !loader && (style === 'css' || style === 'tailwind')
-      ? implementation.notApplicable?.[style]
-      : undefined;
+  const stylingNeutral = implementation.stylingNeutral;
+  const note = stylingNeutral ? undefined : implementation.notes?.[styling];
+  const ready = state.status === 'ready' && variant && state.codes.length === variant.files.length;
 
   return (
     <div className="impl-block">
       <div className="impl-bar">
-        <SegmentedControl
-          size="sm"
-          options={IMPL_FORMAT_ORDER.map((format) => ({
-            value: format,
-            label: IMPL_FORMAT_LABELS[format],
-          }))}
-          value={style}
-          onChange={(next) => setStyle(next as ImplFormat)}
-        />
+        <div className="impl-picker">
+          <span className="impl-picker-label" id={`impl-language-${doc.id}`}>
+            Language
+          </span>
+          <SegmentedControl
+            size="sm"
+            options={IMPL_LANGUAGE_ORDER.map((option) => ({
+              value: option,
+              label: IMPL_LANGUAGE_LABELS[option],
+            }))}
+            value={language}
+            onChange={(next) => setLanguage(next as ImplLanguage)}
+          />
+        </div>
+        <div
+          className={stylingNeutral ? 'impl-picker impl-picker--inert' : 'impl-picker'}
+          inert={Boolean(stylingNeutral)}
+        >
+          <span className="impl-picker-label" id={`impl-styling-${doc.id}`}>
+            Style
+          </span>
+          <SegmentedControl
+            size="sm"
+            options={IMPL_STYLING_ORDER.map((option) => ({
+              value: option,
+              label: IMPL_STYLING_LABELS[option],
+            }))}
+            value={styling}
+            onChange={(next) => setStyling(next as ImplStyling)}
+          />
+        </div>
       </div>
-      {note && loader && <p className="doc-note impl-note">{note}</p>}
-      {loader ? (
-        state.status === 'ready' ? (
-          <CodeBlock code={state.code} lang={lang} maxHeight={480} />
+      {stylingNeutral && <p className="doc-note impl-note">{stylingNeutral}</p>}
+      {note && variant && <p className="doc-note impl-note">{note}</p>}
+      {variant ? (
+        ready ? (
+          variant.files.map((file, index) => (
+            <div className="impl-file" key={file.name}>
+              <div className="impl-file-head">
+                <span className="impl-file-name">{file.name}</span>
+              </div>
+              <CodeBlock code={state.codes[index]} lang={file.lang} maxHeight={480} />
+            </div>
+          ))
         ) : state.status === 'error' ? (
           <p className="impl-unavailable">Couldn’t load this source. Reload to try again.</p>
         ) : (
@@ -84,8 +122,7 @@ export function ImplementationBlock({ doc }: { doc: ComponentDoc }) {
         )
       ) : (
         <p className="impl-unavailable">
-          {notApplicable ??
-            `No ${IMPL_FORMAT_LABELS[style]} implementation is published for ${doc.name} yet.`}
+          {`No ${IMPL_LANGUAGE_LABELS[language]} + ${IMPL_STYLING_LABELS[styling]} implementation is published for ${doc.name} yet.`}
         </p>
       )}
     </div>

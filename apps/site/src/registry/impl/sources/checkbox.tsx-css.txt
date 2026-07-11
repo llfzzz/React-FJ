@@ -1,0 +1,50 @@
+// Free Joy — Checkbox (TypeScript + CSS)
+// Pairs with Checkbox.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The native input is visually hidden; the sibling box is the styled surface,
+// and :checked drives its fill + tick (the label wraps both for a wide hit target).
+"use client";
+
+import * as React from "react";
+import "./Checkbox.css";
+
+export interface CheckboxProps {
+  checked?: boolean;
+  onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  disabled?: boolean;
+  id?: string;
+  className?: string;
+}
+
+/** Free Joy — Checkbox */
+export function Checkbox({
+  checked = false,
+  onChange,
+  disabled = false,
+  label,
+  id,
+  className = "",
+  ...rest
+}: CheckboxProps) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+  return (
+    <label className={`fj-check ${className}`.trim()} htmlFor={fid}>
+      <input
+        className="fj-check-input"
+        id={fid}
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange && onChange(e.target.checked, e)}
+        {...rest}
+      />
+      <span className="fj-check-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </span>
+      {label && <span className="fj-check-label">{label}</span>}
+    </label>
+  );
+}

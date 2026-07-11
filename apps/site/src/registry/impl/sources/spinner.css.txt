@@ -1,18 +1,7 @@
-<!-- Free Joy — Spinner, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Size + color are controlled with custom properties. -->
+/* Free Joy — Spinner.css
+   Pairs with Spinner.tsx / Spinner.jsx. Requires the FJ tokens (tokens/*.css).
+   Size, color, and stroke width arrive via custom properties set inline. */
 
-<span class="fj-spinner" role="status" aria-label="Loading" style="--fj-spinner-size: 22px; --fj-spinner-color: var(--accent)">
-  <span class="fj-spinner-ring"></span>
-</span>
-
-<!-- With label -->
-<span class="fj-spinner" role="status" style="--fj-spinner-size: 18px">
-  <span class="fj-spinner-ring"></span>
-  <span class="fj-spinner-label">Loading mixes…</span>
-</span>
-
-<style>
 .fj-spinner {
   display: inline-flex;
   align-items: center;
@@ -25,7 +14,7 @@
   height: var(--fj-spinner-size, 22px);
   flex: none;
   border-radius: 50%;
-  border: 2.5px solid currentColor;
+  border: var(--fj-spinner-thickness, 2.5px) solid currentColor;
   border-top-color: transparent;
   opacity: 0.9;
   animation: fj-spin 0.7s linear infinite;
@@ -42,4 +31,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-spinner-ring { animation-duration: 2.4s; }
 }
-</style>

@@ -1,0 +1,50 @@
+// Free Joy — AnimatedBorder (effect) (JavaScript + Tailwind CSS)
+// The animated @property angle + keyframes can't be expressed as utilities, so
+// add the CSS block below to your global stylesheet once. The wrapper markup
+// then uses utilities + the fj-angle-spin animation.
+
+/**
+ * Free Joy — AnimatedBorder (effect)
+ * Hairline conic-gradient border that slowly sweeps around the panel.
+ * Reserve for ONE flagship element per view.
+ */
+export function AnimatedBorder({
+  speed = 8,
+  width = 1,
+  radius = "var(--radius-lg)",
+  colors = ["var(--joy-400)", "var(--bloom-300)", "var(--sun-300)"],
+  padding = "var(--space-5)",
+  className = "",
+  style,
+  contentStyle,
+  children,
+  ...rest
+}) {
+  const r = typeof radius === "number" ? `${radius}px` : radius;
+  const stops = colors.join(", ");
+  return (
+    <div
+      style={{
+        padding: width,
+        borderRadius: r,
+        background: `conic-gradient(from var(--fj-angle,0deg), var(--border) 0%, ${stops}, var(--border) 100%)`,
+        animationDuration: `${speed}s`,
+        ...style,
+      }}
+      className={`relative animate-[fj-angle-spin_linear_infinite] motion-reduce:animate-none ${className}`}
+      {...rest}
+    >
+      <div
+        style={{ borderRadius: `calc(${r} - ${width}px)`, padding, ...contentStyle }}
+        className="relative bg-[var(--surface)]"
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@property --fj-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes fj-angle-spin { to { --fj-angle: 360deg; } }
+*/

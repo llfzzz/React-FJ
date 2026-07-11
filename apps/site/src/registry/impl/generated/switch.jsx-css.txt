@@ -1,0 +1,38 @@
+// Free Joy — Switch (JavaScript + CSS)
+// Pairs with Switch.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Native checkbox is visually hidden; :checked slides the thumb + tints the track.
+"use client";
+
+import * as React from "react";
+import "./Switch.css";
+
+/** Free Joy — Switch (toggle) */
+export function Switch({
+  checked = false,
+  onChange,
+  disabled = false,
+  label,
+  id,
+  className = "",
+  ...rest
+}) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+  return (
+    <label className={`fj-switch ${className}`.trim()} htmlFor={fid}>
+      <input
+        className="fj-switch-input"
+        id={fid}
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange && onChange(e.target.checked, e)}
+        {...rest}
+      />
+      <span className="fj-switch-track" aria-hidden="true">
+        <span className="fj-switch-thumb" />
+      </span>
+      {label && <span className="fj-switch-label">{label}</span>}
+    </label>
+  );
+}

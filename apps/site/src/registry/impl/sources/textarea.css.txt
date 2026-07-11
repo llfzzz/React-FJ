@@ -1,20 +1,8 @@
-<!-- Free Joy — Textarea, no-framework version.
-     Requires the FJ tokens (tokens/*.css), including --ring.
-     Matches the Input field styling; error state via .fj-field--error. -->
+/* Free Joy — Textarea.css
+   Pairs with Textarea.tsx / Textarea.jsx. Requires the FJ tokens (tokens/*.css),
+   including --ring for the focus glow.
+   Matches the Input field styling; error state via .fj-field--error. */
 
-<div class="fj-field">
-  <label class="fj-field-label" for="notes">Liner notes</label>
-  <textarea class="fj-textarea" id="notes" rows="4" placeholder="A word about this mix…"></textarea>
-  <span class="fj-field-note">Markdown is fine.</span>
-</div>
-
-<div class="fj-field fj-field--error">
-  <label class="fj-field-label" for="bio">Bio</label>
-  <textarea class="fj-textarea" id="bio" rows="3">…</textarea>
-  <span class="fj-field-note">Bio must be under 240 characters.</span>
-</div>
-
-<style>
 .fj-field {
   display: flex;
   flex-direction: column;
@@ -63,4 +51,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-textarea { transition-duration: 0.01ms; }
 }
-</style>

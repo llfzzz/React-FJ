@@ -1,0 +1,35 @@
+// Free Joy — EmptyState (JavaScript + CSS)
+// Pairs with EmptyState.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Pass an inline <svg> (Lucide or your own) as `icon`.
+import "./EmptyState.css";
+
+/**
+ * Free Joy — EmptyState
+ * Centered placeholder for empty lists, no-results, and zero-data screens.
+ */
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  compact = false,
+  className = "",
+  ...rest
+}) {
+  const classes = ["fj-empty", compact && "fj-empty--compact", className].filter(Boolean).join(" ");
+
+  return (
+    <div className={classes} {...rest}>
+      {icon && (
+        <div className="fj-empty-badge">
+          <span className="fj-empty-icon" aria-hidden="true">
+            {icon}
+          </span>
+        </div>
+      )}
+      {title && <div className="fj-empty-title">{title}</div>}
+      {description && <div className="fj-empty-text">{description}</div>}
+      {action && <div className="fj-empty-action">{action}</div>}
+    </div>
+  );
+}

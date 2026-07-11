@@ -1,22 +1,8 @@
-<!-- Free Joy — Toast, no-framework version.
-     Requires the FJ tokens (tokens/*.css), including the glass tokens.
-     This is the standalone toast card + its fixed stacking region. Queueing
-     and auto-dismiss are app logic — add/remove .fj-toast nodes in the region. -->
+/* Free Joy — Toast.css
+   Pairs with Toast.tsx / Toast.jsx. Requires the FJ tokens (tokens/*.css),
+   including the glass tokens. The provider renders the fixed stacking region;
+   the card animates in from below (or above in top regions via --fj-from). */
 
-<div class="fj-toast-region fj-toast-region--bottom-right">
-  <div class="fj-toast" role="status">
-    <span class="fj-toast-icon fj-toast-icon--success" aria-hidden="true">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-    </span>
-    <div class="fj-toast-body">
-      <div class="fj-toast-title">Mix published</div>
-      <div class="fj-toast-text">Your set is live and shareable.</div>
-    </div>
-    <button class="fj-toast-close" aria-label="Dismiss">×</button>
-  </div>
-</div>
-
-<style>
 .fj-toast-region {
   position: fixed;
   display: flex;
@@ -97,4 +83,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-toast { animation-duration: 0.01ms; }
 }
-</style>

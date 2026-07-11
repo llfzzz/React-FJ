@@ -1,0 +1,73 @@
+// Free Joy — StaggerList (effect) (JavaScript + CSS)
+// Pairs with StaggerList.css (imported below). Requires the FJ tokens
+// (tokens/*.css). Children rise + fade in with a per-item delay set from
+// --fj-i; the scroll trigger toggles .is-in via IntersectionObserver. Under
+// reduced motion (or disabled) all children appear at once.
+"use client";
+
+import * as React from "react";
+import "./StaggerList.css";
+
+/**
+ * Free Joy — StaggerList (effect)
+ * Reveals its direct children one after another when the list scrolls into
+ * view. Great for feature grids and lists. Only transform/opacity animate.
+ */
+export function StaggerList({
+  children,
+  stagger = 60,
+  duration = 480,
+  from = "up",
+  initialDelay = 0,
+  as: Tag = "div",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [inView, setInView] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const classes = [
+    "fj-stagger",
+    from !== "up" && `fj-stagger--${from}`,
+    (disabled || inView) && "is-in",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const vars = {
+    "--fj-stagger": `${stagger}ms`,
+    "--fj-duration": `${duration}ms`,
+    "--fj-delay": `${initialDelay}ms`,
+  };
+
+  const items = React.Children.toArray(children);
+
+  return (
+    <Tag ref={ref} className={classes} style={{ ...vars, ...style }} {...rest}>
+      {items.map((child, i) => (
+        <div key={i} className="fj-stagger-item" style={{ "--fj-i": i }}>
+          {child}
+        </div>
+      ))}
+    </Tag>
+  );
+}

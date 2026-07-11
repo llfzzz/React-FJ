@@ -1,0 +1,68 @@
+// Free Joy — AnimatedUnderline (effect) (JavaScript + CSS)
+// Pairs with AnimatedUnderline.css (imported below). Requires the FJ tokens
+// (tokens/*.css). The underline is a background layer grown from 0 to 100%
+// width when .is-drawn lands; hover / inview / mount decide when that happens.
+// Reduced motion shows a static underline immediately (media query).
+"use client";
+
+import * as React from "react";
+import "./AnimatedUnderline.css";
+
+/**
+ * Free Joy — AnimatedUnderline (effect)
+ * A restrained underline that draws in from the left on hover or scroll.
+ * Safe for docs links and inline emphasis.
+ */
+export function AnimatedUnderline({
+  children,
+  trigger = "hover",
+  color = "var(--accent)",
+  thickness = 2,
+  offset = 2,
+  duration = 320,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [active, setActive] = React.useState(trigger === "mount");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setActive(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger]);
+
+  const drawn = disabled || active;
+  const vars = {
+    "--fj-color": color,
+    "--fj-thickness": `${thickness}px`,
+    "--fj-offset": `${offset}px`,
+    "--fj-duration": `${duration}ms`,
+  };
+
+  return (
+    <span
+      ref={ref}
+      className={`fj-underline ${drawn ? "is-drawn " : ""}${className}`.trim()}
+      onMouseEnter={trigger === "hover" ? () => setActive(true) : undefined}
+      onFocus={trigger === "hover" ? () => setActive(true) : undefined}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+}

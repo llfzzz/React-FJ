@@ -1,47 +1,26 @@
-<!-- Free Joy — ScrollProgress (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Two ways to build it:
-       1. Modern CSS scroll-driven animation (no JS) — shown below.
-       2. A tiny scroll listener setting scaleX (see the script fallback). -->
+/* Free Joy — ScrollProgress.css
+   Pairs with ScrollProgress.tsx / ScrollProgress.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   The component drives the fill by setting scaleX from the live scroll
+   position and feeds --fj-height, --fj-color, and --fj-z. Pinned to the top
+   by default; --bottom pins low, --sticky tracks a scrollable container.
+   (Prefer a scroll listener over animation-timeline while browser support
+   is partial — the JS is ~10 lines and works everywhere.) */
 
-<div class="fj-scrollbar" role="progressbar" aria-label="Reading progress"></div>
-
-<style>
 .fj-scrollbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  z-index: var(--z-sticky);
-  background: var(--accent);
+  height: var(--fj-height, 3px);
+  z-index: var(--fj-z, var(--z-sticky));
+  background: var(--fj-color, var(--accent));
   transform-origin: left;
   transform: scaleX(0);
   pointer-events: none;
 }
 
-/* Modern browsers: drive the fill from the document scroll, no JS. */
-@supports (animation-timeline: scroll()) {
-  .fj-scrollbar {
-    animation: fj-scroll-fill linear;
-    animation-timeline: scroll(root block);
-  }
-  @keyframes fj-scroll-fill {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-  }
-}
-</style>
+.fj-scrollbar--bottom { top: auto; bottom: 0; }
 
-<!-- Fallback for browsers without scroll-driven animations: -->
-<script>
-  if (!CSS.supports("animation-timeline: scroll()")) {
-    const bar = document.querySelector(".fj-scrollbar");
-    const update = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-  }
-</script>
+/* Tracking a scrollable container instead of the window. */
+.fj-scrollbar--sticky { position: sticky; }

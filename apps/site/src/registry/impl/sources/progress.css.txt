@@ -1,24 +1,8 @@
-<!-- Free Joy — Progress, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Determinate: set --fj-pct. Indeterminate: add .fj-progress--indeterminate.
-     Sizes: sm | md (default) | lg. -->
+/* Free Joy — Progress.css
+   Pairs with Progress.tsx / Progress.jsx. Requires the FJ tokens (tokens/*.css).
+   Determinate: the component sets --fj-pct. Indeterminate: .fj-progress--indeterminate.
+   Sizes: sm | md (default) | lg. */
 
-<!-- Determinate -->
-<div class="fj-progress" style="--fj-pct: 68%; --fj-fill: var(--joy-500)">
-  <div class="fj-progress-track" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100">
-    <div class="fj-progress-bar"></div>
-  </div>
-  <span class="fj-progress-label">68%</span>
-</div>
-
-<!-- Indeterminate -->
-<div class="fj-progress fj-progress--indeterminate" style="--fj-fill: var(--joy-500)">
-  <div class="fj-progress-track" role="progressbar">
-    <div class="fj-progress-bar"></div>
-  </div>
-</div>
-
-<style>
 .fj-progress {
   display: flex;
   align-items: center;
@@ -72,4 +56,3 @@
   .fj-progress-bar { transition-duration: 0.01ms; }
   .fj-progress--indeterminate .fj-progress-bar { animation: none; left: 0; width: 100%; opacity: 0.5; }
 }
-</style>

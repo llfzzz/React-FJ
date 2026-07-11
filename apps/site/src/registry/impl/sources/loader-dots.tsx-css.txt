@@ -1,0 +1,56 @@
+// Free Joy — LoaderDots (effect) (TypeScript + CSS)
+// Pairs with LoaderDots.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Three dots pulse in sequence via staggered animation-delay. Reduced motion
+// holds them at a steady mid-opacity (media query).
+import * as React from "react";
+import "./LoaderDots.css";
+
+export interface LoaderDotsProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Dot diameter in px. @default 8 */
+  size?: number;
+  /** Gap between dots in px. @default 6 */
+  gap?: number;
+  /** Dot color. @default var(--accent) */
+  color?: string;
+  /** Speed multiplier (1 = default). Higher is faster. @default 1 */
+  speed?: number;
+  /** Accessible label. @default "Loading" */
+  label?: string;
+}
+
+/**
+ * Free Joy — LoaderDots (effect)
+ * Three dots that pulse in sequence — a calmer, more playful loader than the
+ * spinner for inline "working…" states.
+ */
+export function LoaderDots({
+  size = 8,
+  gap = 6,
+  color = "var(--accent)",
+  speed = 1,
+  label = "Loading",
+  className = "",
+  style,
+  ...rest
+}: LoaderDotsProps) {
+  const vars = {
+    "--fj-size": `${size}px`,
+    "--fj-gap": `${gap}px`,
+    "--fj-color": color,
+    "--fj-duration": `${1400 / speed}ms`,
+  } as React.CSSProperties;
+
+  return (
+    <span
+      className={`fj-dots ${className}`.trim()}
+      role="status"
+      aria-label={label}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      <span className="fj-dots-dot" aria-hidden="true" />
+      <span className="fj-dots-dot" aria-hidden="true" />
+      <span className="fj-dots-dot" aria-hidden="true" />
+    </span>
+  );
+}

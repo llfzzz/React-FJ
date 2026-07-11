@@ -1,19 +1,9 @@
-<!-- Free Joy — Slider (range), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     The fill width is driven by a --fj-pct custom property; set it (0–100)
-     from JS on input, or inline as shown. `accent` = --fj-thumb color. -->
+/* Free Joy — Slider.css
+   Pairs with Slider.tsx / Slider.jsx. Requires the FJ tokens (tokens/*.css).
+   The component sets --fj-pct (fill width, 0–100%) and --fj-thumb (accent
+   color) inline; the transparent native range sits on top so the thumb
+   stays draggable. */
 
-<div class="fj-slider" style="--fj-pct: 62%; --fj-thumb: var(--joy-500)">
-  <div class="fj-slider-rail">
-    <div class="fj-slider-track"></div>
-    <div class="fj-slider-fill"></div>
-    <input class="fj-slider-input" type="range" min="0" max="100" step="1" value="62"
-           oninput="this.closest('.fj-slider').style.setProperty('--fj-pct', this.value + '%')" />
-  </div>
-  <span class="fj-slider-value">62</span>
-</div>
-
-<style>
 .fj-slider {
   display: flex;
   align-items: center;
@@ -41,8 +31,8 @@
   position: absolute;
   left: 0;
   height: 6px;
-  width: var(--fj-pct, 50%);
   border-radius: 999px;
+  width: var(--fj-pct, 50%);
   background: var(--fj-thumb, var(--joy-500));
 }
 
@@ -57,6 +47,7 @@
   background: transparent;
   cursor: pointer;
 }
+.fj-slider-input:disabled { cursor: not-allowed; }
 
 .fj-slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -92,4 +83,3 @@
 }
 
 .fj-slider:has(.fj-slider-input:disabled) { opacity: 0.5; }
-</style>

@@ -1,0 +1,88 @@
+// Free Joy — Table (TypeScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+import * as React from "react";
+
+export interface TableColumn<Row = Record<string, unknown>> {
+  key: string;
+  header: React.ReactNode;
+  align?: "left" | "center" | "right";
+  width?: number | string;
+  /** Custom cell renderer. */
+  render?: (value: unknown, row: Row) => React.ReactNode;
+}
+
+export interface TableProps<Row = Record<string, unknown>> {
+  columns: TableColumn<Row>[];
+  rows: Row[];
+  /** Alternating row tint. @default false */
+  zebra?: boolean;
+  /** Row hover highlight. @default true */
+  hover?: boolean;
+  /** Tighter cell padding. @default false */
+  dense?: boolean;
+  className?: string;
+}
+
+/**
+ * Free Joy — Table
+ * Simple data table. columns: [{ key, header, align, width, render }]; rows: object[].
+ * Optional row hover and a quiet zebra option.
+ */
+export function Table<Row extends Record<string, unknown>>({
+  columns = [],
+  rows = [],
+  zebra = false,
+  hover = true,
+  dense = false,
+  className = "",
+}: TableProps<Row>) {
+  const cellPad = dense ? "px-3.5 py-2.5" : "px-[18px] py-3.5";
+  return (
+    <div
+      className={`w-full overflow-auto rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] ${className}`}
+    >
+      <table className="w-full border-collapse font-[family-name:var(--font-text)]">
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th
+                key={c.key}
+                style={{ textAlign: c.align || "left", width: c.width }}
+                className={
+                  `${cellPad} whitespace-nowrap border-b border-[var(--border)] bg-[var(--surface-2)] ` +
+                  "text-[length:var(--text-xs)] font-semibold uppercase tracking-[0.04em] text-[var(--text-subtle)]"
+                }
+              >
+                {c.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr
+              key={ri}
+              className={
+                "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] motion-reduce:transition-none " +
+                `${zebra && ri % 2 ? "bg-[var(--surface-2)]" : "bg-transparent"} ` +
+                `${hover ? "hover:bg-[var(--surface-hover)]" : ""}`
+              }
+            >
+              {columns.map((c) => (
+                <td
+                  key={c.key}
+                  style={{ textAlign: c.align || "left" }}
+                  className={`${cellPad} text-[length:var(--text-sm)] text-[var(--text)] ${
+                    ri < rows.length - 1 ? "border-b border-[var(--border)]" : ""
+                  }`}
+                >
+                  {c.render ? c.render(row[c.key], row) : (row[c.key] as React.ReactNode)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

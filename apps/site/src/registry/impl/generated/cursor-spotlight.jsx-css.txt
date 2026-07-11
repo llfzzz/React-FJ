@@ -1,0 +1,64 @@
+// Free Joy — CursorSpotlight (effect) (JavaScript + CSS)
+// Pairs with CursorSpotlight.css (imported below). Requires the FJ tokens
+// (tokens/*.css). The light follows the cursor via --fj-mx / --fj-my set on
+// mousemove; the radial paint, clipping, and layering are CSS. No light under
+// reduced motion (media query) or when disabled.
+"use client";
+
+import * as React from "react";
+import "./CursorSpotlight.css";
+
+/**
+ * Free Joy — CursorSpotlight (effect)
+ * A soft light that follows the cursor across a container — great behind a grid
+ * of feature cards. The light is a single pointer-transparent layer; content
+ * sits above it.
+ */
+export function CursorSpotlight({
+  children,
+  size = 400,
+  color = "var(--accent-soft)",
+  intensity = 1,
+  performance = "full",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const diameter = performance === "lite" ? size * 0.6 : size;
+
+  const onMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--fj-mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--fj-my", `${e.clientY - r.top}px`);
+  };
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--fj-mx", "-9999px");
+    el.style.setProperty("--fj-my", "-9999px");
+  };
+
+  const vars = {
+    "--fj-size": `${diameter}px`,
+    "--fj-light": color,
+    "--fj-intensity": intensity,
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={`fj-cursorlight ${className}`.trim()}
+      onMouseMove={disabled ? undefined : onMove}
+      onMouseLeave={disabled ? undefined : onLeave}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      {!disabled && <div className="fj-cursorlight-glow" aria-hidden="true" />}
+      <div className="fj-cursorlight-content">{children}</div>
+    </div>
+  );
+}

@@ -1,0 +1,69 @@
+// Free Joy — Progress (TypeScript + CSS)
+// Pairs with Progress.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Determinate width rides --fj-pct; the fill color rides --fj-fill.
+import * as React from "react";
+import "./Progress.css";
+
+export interface ProgressProps {
+  /** Current value. @default 0 */
+  value?: number;
+  /** @default 100 */
+  max?: number;
+  /** Looping indeterminate animation. @default false */
+  indeterminate?: boolean;
+  /** Fill color: a named accent or any CSS color. @default "coral" */
+  accent?: "coral" | "sun" | "bloom" | string;
+  /** @default "md" */
+  size?: "sm" | "md" | "lg";
+  /** Show a % label. @default false */
+  showLabel?: boolean;
+  className?: string;
+}
+
+const ACC: Record<string, string> = { coral: "var(--joy-500)", sun: "var(--sun-500)", bloom: "var(--bloom-500)" };
+
+/**
+ * Free Joy — Progress
+ * Determinate or indeterminate progress bar. `accent` recolors the fill.
+ */
+export function Progress({
+  value = 0,
+  max = 100,
+  indeterminate = false,
+  accent = "coral",
+  size = "md",
+  showLabel = false,
+  className = "",
+  ...rest
+}: ProgressProps) {
+  const color = ACC[accent] || accent;
+  const pct = Math.min(100, Math.max(0, (value / max) * 100));
+
+  const classes = [
+    "fj-progress",
+    size !== "md" && `fj-progress--${size}`,
+    indeterminate && "fj-progress--indeterminate",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      style={{ "--fj-pct": `${pct}%`, "--fj-fill": color } as React.CSSProperties}
+      {...rest}
+    >
+      <div
+        className="fj-progress-track"
+        role="progressbar"
+        aria-valuenow={indeterminate ? undefined : Math.round(pct)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div className="fj-progress-bar" />
+      </div>
+      {showLabel && !indeterminate && <span className="fj-progress-label">{Math.round(pct)}%</span>}
+    </div>
+  );
+}

@@ -1,0 +1,51 @@
+// Free Joy — AmbientBackground (effect) (TypeScript + CSS)
+// Pairs with AmbientBackground.css (imported below). Requires the FJ tokens
+// (tokens/*.css). Drift freezes under reduced motion (media query); washes stay.
+import * as React from "react";
+import "./AmbientBackground.css";
+
+export interface AmbientBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Wash palette. @default "warm" */
+  variant?: "warm" | "cool" | "joy";
+  /** Drift animation on/off (reduced motion freezes it regardless). @default true */
+  animate?: boolean;
+  /** Wash strength 0–1. @default 0.14 */
+  opacity?: number;
+}
+
+/**
+ * Free Joy — AmbientBackground (effect)
+ * Section wrapper with 2–3 huge, slow-drifting color washes. Heroes,
+ * onboarding, empty states and success screens ONLY.
+ */
+export function AmbientBackground({
+  variant = "warm",
+  animate = true,
+  opacity = 0.14,
+  className = "",
+  style,
+  children,
+  ...rest
+}: AmbientBackgroundProps) {
+  const classes = [
+    "fj-ambient",
+    variant !== "warm" && `fj-ambient--${variant}`,
+    !animate && "fj-ambient--still",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      style={{ "--fj-wash": opacity, ...style } as React.CSSProperties}
+      {...rest}
+    >
+      <div className="fj-ambient-blob fj-ambient-blob--a" aria-hidden="true" />
+      <div className="fj-ambient-blob fj-ambient-blob--b" aria-hidden="true" />
+      <div className="fj-ambient-blob fj-ambient-blob--c" aria-hidden="true" />
+      <div className="fj-ambient-content">{children}</div>
+    </div>
+  );
+}

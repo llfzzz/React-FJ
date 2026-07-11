@@ -1,0 +1,64 @@
+// Free Joy — CursorSpotlight (effect) (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// The light follows the cursor via --fj-mx / --fj-my set in a mousemove handler;
+// the radial paint itself is an arbitrary background value. No light under
+// reduced motion (motion-reduce:hidden) or when disabled.
+"use client";
+
+import * as React from "react";
+
+/**
+ * Free Joy — CursorSpotlight (effect)
+ * A soft light that follows the cursor across a container — great behind a grid
+ * of feature cards. The light is a single pointer-transparent layer; content
+ * sits above it.
+ */
+export function CursorSpotlight({
+  children,
+  size = 400,
+  color = "var(--accent-soft)",
+  intensity = 1,
+  performance = "full",
+  disabled = false,
+  className = "",
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const diameter = performance === "lite" ? size * 0.6 : size;
+
+  const onMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--fj-mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--fj-my", `${e.clientY - r.top}px`);
+  };
+  const onLeave = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--fj-mx", "-9999px");
+    el.style.setProperty("--fj-my", "-9999px");
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={disabled ? undefined : onMove}
+      onMouseLeave={disabled ? undefined : onLeave}
+      className={`relative ${className}`}
+      {...rest}
+    >
+      {!disabled && (
+        <div
+          aria-hidden="true"
+          style={{
+            opacity: intensity,
+            background: `radial-gradient(${diameter}px circle at var(--fj-mx,-9999px) var(--fj-my,-9999px), ${color}, transparent 65%)`,
+          }}
+          className="pointer-events-none absolute inset-0 rounded-[inherit] transition-[background] duration-[60ms] motion-reduce:hidden"
+        />
+      )}
+      <div className="relative">{children}</div>
+    </div>
+  );
+}

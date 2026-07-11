@@ -1,0 +1,90 @@
+// Free Joy — Highlighter (effect) (TypeScript + CSS)
+// Pairs with Highlighter.css (imported below). Requires the FJ tokens (tokens/*.css).
+// A marker swipe grows from 0 to 100% width behind the text when .is-lit lands
+// (inview / hover / mount). Reduced motion shows the highlight already filled.
+"use client";
+
+import * as React from "react";
+import "./Highlighter.css";
+
+export interface HighlighterProps extends React.HTMLAttributes<HTMLSpanElement> {
+  children?: React.ReactNode;
+  /** Highlight tone. @default "sun" */
+  color?: "sun" | "coral" | "bloom" | string;
+  /** When the swipe plays. @default "inview" */
+  trigger?: "inview" | "hover" | "mount";
+  /** Lead-in delay in ms. @default 0 */
+  delay?: number;
+  /** Swipe duration in ms. @default 480 */
+  duration?: number;
+  /** Disable the animation (highlight already filled). @default false */
+  disabled?: boolean;
+}
+
+const NAMED = ["sun", "coral", "bloom"];
+
+/**
+ * Free Joy — Highlighter (effect)
+ * A marker swipe fills in behind text when it scrolls into view — for a single
+ * emphasized phrase.
+ */
+export function Highlighter({
+  children,
+  color = "sun",
+  trigger = "inview",
+  delay = 0,
+  duration = 480,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: HighlighterProps) {
+  const ref = React.useRef<HTMLElement>(null);
+  const [active, setActive] = React.useState(trigger === "mount");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setActive(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger]);
+
+  const lit = disabled || active;
+  const isNamed = NAMED.includes(color);
+  const vars = {
+    "--fj-delay": `${delay}ms`,
+    "--fj-duration": `${duration}ms`,
+    ...(isNamed ? {} : { "--fj-tone": color }),
+  } as React.CSSProperties;
+
+  const classes = [
+    "fj-highlight",
+    isNamed && `fj-highlight--${color}`,
+    lit && "is-lit",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <mark
+      ref={ref as React.RefObject<HTMLElement>}
+      className={classes}
+      onMouseEnter={trigger === "hover" ? () => setActive(true) : undefined}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      {children}
+    </mark>
+  );
+}

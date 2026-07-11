@@ -1,0 +1,75 @@
+// Free Joy — Table (TypeScript + CSS)
+// Pairs with Table.css (imported below). Requires the FJ tokens (tokens/*.css).
+import * as React from "react";
+import "./Table.css";
+
+export interface TableColumn<Row = Record<string, unknown>> {
+  key: string;
+  header: React.ReactNode;
+  align?: "left" | "center" | "right";
+  width?: number | string;
+  /** Custom cell renderer. */
+  render?: (value: unknown, row: Row) => React.ReactNode;
+}
+
+export interface TableProps<Row = Record<string, unknown>> {
+  columns: TableColumn<Row>[];
+  rows: Row[];
+  /** Alternating row tint. @default false */
+  zebra?: boolean;
+  /** Row hover highlight. @default true */
+  hover?: boolean;
+  /** Tighter cell padding. @default false */
+  dense?: boolean;
+  className?: string;
+}
+
+/**
+ * Free Joy — Table
+ * Simple data table. columns: [{ key, header, align, width, render }]; rows: object[].
+ * Optional row hover and a quiet zebra option.
+ */
+export function Table<Row extends Record<string, unknown>>({
+  columns = [],
+  rows = [],
+  zebra = false,
+  hover = true,
+  dense = false,
+  className = "",
+}: TableProps<Row>) {
+  const classes = [
+    "fj-table",
+    zebra && "fj-table--zebra",
+    dense && "fj-table--dense",
+    !hover && "fj-table--no-hover",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={`fj-table-wrap ${className}`.trim()}>
+      <table className={classes}>
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th key={c.key} style={{ textAlign: c.align || "left", width: c.width }}>
+                {c.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr key={ri}>
+              {columns.map((c) => (
+                <td key={c.key} style={{ textAlign: c.align || "left" }}>
+                  {c.render ? c.render(row[c.key], row) : (row[c.key] as React.ReactNode)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

@@ -116,10 +116,8 @@ export const countUpDoc: ComponentDoc = {
   keywords: ['animation', 'number', 'stat', 'metric'],
   importLine: "import { CountUp } from '@fj';",
   implementation: impl('count-up', {
-    notApplicable: {
-      css: 'Counting numbers needs to run JavaScript on scroll — a CSS-only version can only show the final value, not the count-up. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Counting numbers needs to run JavaScript on scroll — utility classes can style the number but cannot animate it. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Counting runs in JavaScript on scroll and the number inherits your text styles — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   replayable: true,
   controls: [

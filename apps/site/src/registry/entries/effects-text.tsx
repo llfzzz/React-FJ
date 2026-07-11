@@ -61,10 +61,8 @@ export const rotatingTextDoc: ComponentDoc = {
   keywords: ['rotating', 'words', 'cycle', 'animation', 'hero'],
   importLine: "import { RotatingText } from '@fj-effects';",
   implementation: impl('rotating-text', {
-    notApplicable: {
-      css: 'Cycling through an arbitrary list of words is JavaScript state — a CSS-only version can only step through a fixed, hard-coded set. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Cycling words is JavaScript state; utilities can style the slot but cannot advance it. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Cycling words is JavaScript state — the swap is animated inline, so there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   replayable: true,
   controls: [

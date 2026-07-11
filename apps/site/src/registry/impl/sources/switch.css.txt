@@ -1,20 +1,7 @@
-<!-- Free Joy — Switch (toggle), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Native checkbox is visually hidden; :checked slides the thumb + tints track. -->
+/* Free Joy — Switch.css
+   Pairs with Switch.tsx / Switch.jsx. Requires the FJ tokens (tokens/*.css).
+   Native checkbox is visually hidden; :checked slides the thumb + tints track. */
 
-<label class="fj-switch">
-  <input class="fj-switch-input" type="checkbox" checked />
-  <span class="fj-switch-track" aria-hidden="true"><span class="fj-switch-thumb"></span></span>
-  <span class="fj-switch-label">Auto-publish mixes</span>
-</label>
-
-<label class="fj-switch">
-  <input class="fj-switch-input" type="checkbox" />
-  <span class="fj-switch-track" aria-hidden="true"><span class="fj-switch-thumb"></span></span>
-  <span class="fj-switch-label">Explicit filter</span>
-</label>
-
-<style>
 .fj-switch {
   display: inline-flex;
   align-items: center;
@@ -60,6 +47,7 @@
 }
 
 .fj-switch-input:disabled ~ * { opacity: 0.5; }
+.fj-switch:has(.fj-switch-input:disabled) { cursor: not-allowed; }
 
 .fj-switch-label {
   font-size: var(--text-base);
@@ -69,4 +57,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-switch-track, .fj-switch-thumb { transition-duration: 0.01ms; }
 }
-</style>

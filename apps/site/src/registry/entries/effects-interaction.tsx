@@ -11,10 +11,8 @@ export const magneticDoc: ComponentDoc = {
   keywords: ['magnetic', 'cursor', 'hover', 'button', 'interaction'],
   importLine: "import { Magnetic } from '@fj-effects';",
   implementation: impl('magnetic', {
-    notApplicable: {
-      css: 'The pull offset is computed from the live cursor distance every pointer-move — that math is JavaScript. CSS can’t read pointer coordinates into a transform. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'The magnetic offset is JavaScript state driven by pointer position; utilities can’t express it. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'The pull is a transform computed from live cursor math every pointer-move — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   controls: [
     { type: 'number', prop: 'strength', defaultValue: 0.3, min: 0.1, max: 0.6, step: 0.05 },
@@ -51,10 +49,8 @@ export const tiltCardDoc: ComponentDoc = {
   keywords: ['tilt', '3d', 'card', 'perspective', 'glare', 'interaction'],
   importLine: "import { TiltCard } from '@fj-effects';",
   implementation: impl('tilt-card', {
-    notApplicable: {
-      css: 'The tilt angles track the live cursor position over the card and are recomputed each pointer-move — JavaScript. A CSS-only card can only tilt a fixed direction on hover, not follow the cursor. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Cursor-tracked 3D tilt is JavaScript state; utilities can’t express per-frame rotation. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'The tilt angles track the cursor and are recomputed each pointer-move in JavaScript — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   controls: [
     { type: 'number', prop: 'maxTilt', label: 'Max tilt (deg)', defaultValue: 10, min: 4, max: 20, step: 1 },

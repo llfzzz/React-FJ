@@ -1,15 +1,7 @@
-<!-- Free Joy — Tabs, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     The active pill is the button with [aria-selected="true"]. Toggle that
-     attribute (and your panel visibility) from JS. -->
+/* Free Joy — Tabs.css
+   Pairs with Tabs.tsx / Tabs.jsx. Requires the FJ tokens (tokens/*.css).
+   The active pill is the button with [aria-selected="true"]. */
 
-<div class="fj-tabs" role="tablist">
-  <button class="fj-tab" role="tab" aria-selected="true">Sketches</button>
-  <button class="fj-tab" role="tab" aria-selected="false">Notes</button>
-  <button class="fj-tab" role="tab" aria-selected="false">Circles</button>
-</div>
-
-<style>
 .fj-tabs {
   display: inline-flex;
   gap: 4px;
@@ -46,4 +38,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-tab { transition-duration: 0.01ms; }
 }
-</style>

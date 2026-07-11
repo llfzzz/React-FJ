@@ -1,0 +1,65 @@
+// Free Joy — Aurora (effect) (TypeScript + CSS)
+// Pairs with Aurora.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Three blurred radial ribbons drift slowly behind the content; only transform
+// animates. Static under reduced motion (media query) or when disabled.
+import * as React from "react";
+import "./Aurora.css";
+
+export interface AuroraProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Ribbon palette. @default "warm" */
+  variant?: "warm" | "cool" | "joy";
+  /** Speed multiplier (1 = default). @default 1 */
+  speed?: number;
+  /** Ribbon opacity 0–1. @default 0.5 */
+  opacity?: number;
+  /** Blur radius in px. @default 60 */
+  blur?: number;
+  /** "lite" lowers blur and simplifies motion. @default "full" */
+  performance?: "full" | "lite";
+  /** Disable animation (static wash). @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Aurora (effect)
+ * Slow, soft aurora ribbons behind hero content. Heroes and section headers
+ * only. Blur is capped and only transform/opacity animate.
+ */
+export function Aurora({
+  children,
+  variant = "warm",
+  speed = 1,
+  opacity = 0.5,
+  blur = 60,
+  performance = "full",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: AuroraProps) {
+  const effBlur = performance === "lite" ? Math.min(blur, 40) : blur;
+  const vars = {
+    "--fj-blur": `${effBlur}px`,
+    "--fj-opacity": opacity,
+    "--fj-base": `${24 / speed}s`,
+  } as React.CSSProperties;
+
+  const classes = [
+    "fj-aurora",
+    variant !== "warm" && `fj-aurora--${variant}`,
+    disabled && "fj-aurora--still",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={classes} style={{ ...vars, ...style }} {...rest}>
+      <div className="fj-aurora-ribbon fj-aurora-ribbon--1" aria-hidden="true" />
+      <div className="fj-aurora-ribbon fj-aurora-ribbon--2" aria-hidden="true" />
+      <div className="fj-aurora-ribbon fj-aurora-ribbon--3" aria-hidden="true" />
+      <div className="fj-aurora-content">{children}</div>
+    </div>
+  );
+}

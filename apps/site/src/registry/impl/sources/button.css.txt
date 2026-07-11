@@ -1,26 +1,11 @@
-<!-- Free Joy — Button, no-framework version.
-     Requires the FJ tokens (tokens/*.css) for the var(--*) values.
-     Variants: primary | secondary | ghost | danger · Sizes: sm | md | lg -->
+/* Free Joy — Button.css
+   Pairs with Button.tsx / Button.jsx. Requires the FJ tokens (tokens/*.css)
+   for the var(--*) values.
+   Variants: primary | secondary | ghost | danger · Sizes: sm | md | lg */
 
-<button class="fj-btn fj-btn--primary fj-btn--md">Start free</button>
-<button class="fj-btn fj-btn--secondary fj-btn--md">Continue</button>
-<button class="fj-btn fj-btn--ghost fj-btn--md">Skip</button>
-<button class="fj-btn fj-btn--danger fj-btn--md">Delete sketchbook</button>
-
-<!-- States -->
-<button class="fj-btn fj-btn--primary fj-btn--md" disabled>Unavailable</button>
-<button class="fj-btn fj-btn--primary fj-btn--md is-loading" aria-busy="true" disabled>
-  <span class="fj-btn-spinner" aria-hidden="true"></span>
-  Saving
-</button>
-
-<!-- Full width -->
-<button class="fj-btn fj-btn--primary fj-btn--md fj-btn--full">Create account</button>
-
-<style>
 .fj-btn {
-  /* Per-instance accent recoloring: override these three custom properties
-     (they default to Joy Coral, matching accent="coral"). */
+  /* Per-instance accent recoloring: the component sets these three custom
+     properties (they default to Joy Coral, matching accent="coral"). */
   --fj-btn-accent: var(--accent);
   --fj-btn-accent-hover: var(--accent-hover);
   --fj-btn-on-accent: var(--text-on-accent);
@@ -88,19 +73,7 @@
 
 .fj-btn--full { display: flex; width: 100%; }
 
-/* Named accents from the FJ palette (accent="sun" / accent="bloom") */
-.fj-btn--accent-sun {
-  --fj-btn-accent: var(--sun-500);
-  --fj-btn-accent-hover: var(--sun-700);
-  --fj-btn-on-accent: var(--ink);
-}
-.fj-btn--accent-bloom {
-  --fj-btn-accent: var(--bloom-500);
-  --fj-btn-accent-hover: var(--bloom-700);
-  --fj-btn-on-accent: var(--white);
-}
-
-/* Loading spinner (matches the FJ Spinner component) */
+/* Loading spinner (matches the FJ Spinner component; sized per button size) */
 .fj-btn-spinner {
   width: 16px;
   height: 16px;
@@ -111,6 +84,8 @@
   opacity: 0.9;
   animation: fj-btn-spin 0.7s linear infinite;
 }
+.fj-btn--sm .fj-btn-spinner { width: 14px; height: 14px; }
+.fj-btn--lg .fj-btn-spinner { width: 18px; height: 18px; }
 @keyframes fj-btn-spin { to { transform: rotate(360deg); } }
 
 /* Reduced motion: collapse movement, keep the state change. */
@@ -119,4 +94,3 @@
   .fj-btn:active:not(:disabled) { transform: none; }
   .fj-btn-spinner { animation-duration: 1.4s; }
 }
-</style>

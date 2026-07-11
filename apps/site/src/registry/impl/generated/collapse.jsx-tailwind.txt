@@ -1,0 +1,51 @@
+// Free Joy — Collapse (effect) (JavaScript + Tailwind CSS)
+// Uses the modern grid-template-rows 0fr → 1fr trick — pure CSS height
+// animation, no JS measuring. `open` toggles the row from 0fr to 1fr.
+"use client";
+
+import * as React from "react";
+
+/**
+ * Free Joy — Collapse (effect)
+ * Smoothly expands/collapses to its content's natural height — accordions,
+ * "show more", filter panels. Snaps under reduced motion.
+ */
+export function Collapse({
+  children,
+  open,
+  duration = 280,
+  easing = "out",
+  unmountOnExit = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  // When unmountOnExit is off, children always stay mounted (just clipped).
+  const [render, setRender] = React.useState(open || !unmountOnExit);
+
+  React.useEffect(() => {
+    if (open) setRender(true);
+  }, [open]);
+
+  return (
+    <div
+      aria-hidden={!open}
+      // Clipped-but-mounted content must not stay keyboard-reachable.
+      inert={!open}
+      style={{ transitionDuration: `${duration}ms`, transitionTimingFunction: `var(--ease-${easing})`, ...style }}
+      onTransitionEnd={() => {
+        if (!open && unmountOnExit) setRender(false);
+      }}
+      className={
+        "grid transition-[grid-template-rows] motion-reduce:transition-none " +
+        (open ? "grid-rows-[1fr]" : "grid-rows-[0fr]") +
+        " " +
+        className
+      }
+      {...rest}
+    >
+      {/* min-h-0 lets the row collapse fully; overflow-hidden clips during travel */}
+      <div className="min-h-0 overflow-hidden">{render ? children : null}</div>
+    </div>
+  );
+}

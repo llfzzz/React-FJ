@@ -1,19 +1,10 @@
-<!-- Free Joy — AmbientBackground (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     A section wrapper with 2–3 huge, slow-drifting color washes. Heroes,
-     onboarding, empty states and success screens ONLY — never dense UI.
-     Swap the wash colors via the .fj-ambient--cool / --joy modifiers. -->
+/* Free Joy — AmbientBackground.css
+   Pairs with AmbientBackground.tsx / AmbientBackground.jsx. Requires the FJ
+   tokens (tokens/*.css).
+   2–3 huge, slow-drifting color washes. Heroes, onboarding, empty states and
+   success screens ONLY — never dense UI. Palettes: warm (default) | --cool |
+   --joy. --fj-wash (0–1) sets the strength; --still stops the drift. */
 
-<section class="fj-ambient fj-ambient--warm" style="--fj-wash: 0.14">
-  <div class="fj-ambient-blob fj-ambient-blob--a" aria-hidden="true"></div>
-  <div class="fj-ambient-blob fj-ambient-blob--b" aria-hidden="true"></div>
-  <div class="fj-ambient-blob fj-ambient-blob--c" aria-hidden="true"></div>
-  <div class="fj-ambient-content">
-    <h1>Make something you love</h1>
-  </div>
-</section>
-
-<style>
 .fj-ambient {
   position: relative;
   overflow: hidden;
@@ -48,6 +39,9 @@
   animation: fj-drift-c 29s var(--ease-in-out) infinite alternate;
 }
 
+/* animate={false} */
+.fj-ambient--still .fj-ambient-blob { animation: none; }
+
 .fj-ambient-content { position: relative; }
 
 @keyframes fj-drift-a { from { transform: translate(0, 0) scale(1); }    to { transform: translate(6%, -8%) scale(1.08); } }
@@ -58,4 +52,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-ambient-blob { animation: none; }
 }
-</style>

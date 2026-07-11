@@ -1,19 +1,11 @@
-<!-- Free Joy — GridPattern (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     A static dot (or line) grid with a radial fade mask. No animation.
-     Line variant: swap the background-image (commented below). -->
+/* Free Joy — GridPattern.css
+   Pairs with GridPattern.tsx / GridPattern.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   A static dot (or line, via --line) grid with an optional radial fade mask
+   (--fade). The component feeds --fj-size, --fj-color, and --fj-opacity.
+   No animation. */
 
-<section class="fj-grid fj-grid--fade">
-  <div class="fj-grid-content">
-    <h2>Section background</h2>
-  </div>
-</section>
-
-<style>
 .fj-grid {
-  --fj-size: 24px;
-  --fj-color: var(--border);
-  --fj-opacity: 0.5;
   position: relative;
 }
 
@@ -22,17 +14,18 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: var(--fj-opacity);
+  opacity: var(--fj-opacity, 0.5);
 
-  /* Dot grid */
-  background-image: radial-gradient(var(--fj-color) 1px, transparent 1px);
-  background-size: var(--fj-size) var(--fj-size);
+  /* Dot grid (default) */
+  background-image: radial-gradient(var(--fj-color, var(--border)) 1px, transparent 1px);
+  background-size: var(--fj-size, 24px) var(--fj-size, 24px);
+}
 
-  /* Line grid — use instead of the dot grid above:
+/* Line grid */
+.fj-grid--line::before {
   background-image:
-    linear-gradient(to right, var(--fj-color) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--fj-color) 1px, transparent 1px);
-  */
+    linear-gradient(to right, var(--fj-color, var(--border)) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--fj-color, var(--border)) 1px, transparent 1px);
 }
 
 /* Radial fade so the grid dissolves toward the edges. */
@@ -42,4 +35,3 @@
 }
 
 .fj-grid-content { position: relative; }
-</style>

@@ -1,0 +1,73 @@
+// Free Joy — Tag / Chip (TypeScript + CSS)
+// Pairs with Tag.css (imported below). Requires the FJ tokens (tokens/*.css).
+"use client";
+
+import * as React from "react";
+import "./Tag.css";
+
+export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Color: a brand accent name, any CSS color, or "neutral". @default "neutral" */
+  accent?: "neutral" | "coral" | "sun" | "bloom" | string;
+  /** Show a leading status dot. @default false */
+  dot?: boolean;
+  /** Leading icon node. */
+  icon?: React.ReactNode;
+  /** Show a remove (×) button; called when clicked. */
+  onRemove?: () => void;
+  /** Outline to indicate a selected/active chip. @default false */
+  selected?: boolean;
+}
+
+const NAMED = ["coral", "sun", "bloom"];
+
+/**
+ * Free Joy — Tag / Chip
+ * Compact label. Optional dot, leading icon, and a remove (×) affordance.
+ * `accent` recolors it per-instance ("coral" | "sun" | "bloom" | any CSS color).
+ */
+export function Tag({
+  accent = "neutral",
+  dot = false,
+  icon,
+  onRemove,
+  selected = false,
+  className = "",
+  style,
+  children,
+  ...rest
+}: TagProps) {
+  // Named accents map to stylesheet classes; any other CSS color feeds the
+  // same custom properties inline (soft tint via color-mix).
+  const isNamed = NAMED.includes(accent);
+  const customVars =
+    !isNamed && accent !== "neutral"
+      ? ({
+          "--fj-tag-bg": `color-mix(in srgb, ${accent} 14%, transparent)`,
+          "--fj-tag-fg": accent,
+          "--fj-tag-dot": accent,
+        } as React.CSSProperties)
+      : undefined;
+
+  const classes = [
+    "fj-tag",
+    isNamed && `fj-tag--${accent}`,
+    onRemove && "fj-tag--removable",
+    selected && "fj-tag--selected",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span className={classes} style={customVars ? { ...customVars, ...style } : style} {...rest}>
+      {dot && <span className="fj-tag-dot" />}
+      {icon}
+      {children}
+      {onRemove && (
+        <button className="fj-tag-remove" onClick={onRemove} aria-label="Remove">
+          ×
+        </button>
+      )}
+    </span>
+  );
+}

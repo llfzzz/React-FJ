@@ -1,0 +1,35 @@
+// Free Joy — Tooltip (TypeScript + CSS)
+// Pairs with Tooltip.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Pure CSS reveal: the bubble shows on hover/focus-within of the wrapper.
+import * as React from "react";
+import "./Tooltip.css";
+
+export interface TooltipProps {
+  /** Text shown in the bubble. */
+  label: React.ReactNode;
+  /** @default "top" */
+  placement?: "top" | "bottom" | "left" | "right";
+  /** The trigger element. */
+  children: React.ReactNode;
+  className?: string;
+}
+
+/**
+ * Free Joy — Tooltip
+ * Hover/focus label bubble. Wraps a single trigger child.
+ * Restrained dark bubble; placement: top | bottom | left | right.
+ */
+export function Tooltip({ label, placement = "top", children, className = "" }: TooltipProps) {
+  const classes = ["fj-tip", placement !== "top" && `fj-tip--${placement}`, className]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span className={classes} tabIndex={0}>
+      {children}
+      <span className="fj-tip-bubble" role="tooltip">
+        {label}
+      </span>
+    </span>
+  );
+}

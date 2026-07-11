@@ -1,0 +1,58 @@
+// Free Joy — GridPattern (effect) (TypeScript + CSS)
+// Pairs with GridPattern.css (imported below). Requires the FJ tokens (tokens/*.css).
+// A static dot (or line) grid with an optional radial fade mask. No animation,
+// so it's safe anywhere and needs no reduced-motion handling.
+import * as React from "react";
+import "./GridPattern.css";
+
+export interface GridPatternProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Dots or lines. @default "dot" */
+  type?: "dot" | "line";
+  /** Cell size in px. @default 24 */
+  size?: number;
+  /** Pattern opacity 0–1. @default 0.5 */
+  opacity?: number;
+  /** Radial fade mask so edges dissolve. @default true */
+  fade?: boolean;
+  /** Line/dot color. @default var(--border) */
+  color?: string;
+}
+
+/**
+ * Free Joy — GridPattern (effect)
+ * A subtle dot or line grid with an optional radial fade — a quiet, static
+ * texture for hero and section backgrounds.
+ */
+export function GridPattern({
+  children,
+  type = "dot",
+  size = 24,
+  opacity = 0.5,
+  fade = true,
+  color = "var(--border)",
+  className = "",
+  style,
+  ...rest
+}: GridPatternProps) {
+  const vars = {
+    "--fj-size": `${size}px`,
+    "--fj-color": color,
+    "--fj-opacity": opacity,
+  } as React.CSSProperties;
+
+  const classes = [
+    "fj-grid",
+    type === "line" && "fj-grid--line",
+    fade && "fj-grid--fade",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={classes} style={{ ...vars, ...style }} {...rest}>
+      <div className="fj-grid-content">{children}</div>
+    </div>
+  );
+}

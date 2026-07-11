@@ -1,0 +1,46 @@
+// Free Joy — GradientText (effect) (JavaScript + CSS)
+// Pairs with GradientText.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The gradient is clipped to the text and slid on a loop; reduced motion holds
+// it still (the color still reads).
+import "./GradientText.css";
+
+/**
+ * Free Joy — GradientText (effect)
+ * A word or heading painted with a slow-moving FJ gradient. Landing/hero
+ * surfaces. Under reduced motion (or disabled) the gradient holds still.
+ */
+export function GradientText({
+  children,
+  colors = ["var(--joy-500)", "var(--bloom-500)", "var(--sun-500)"],
+  duration = 6,
+  angle = 100,
+  loop = true,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {children}
+      </span>
+    );
+  }
+  const stops = [...colors, colors[0]].join(", ");
+  const vars = {
+    "--fj-gradient-stops": stops,
+    "--fj-angle": `${angle}deg`,
+    "--fj-duration": `${duration}s`,
+  };
+
+  const classes = ["fj-gradient-text", !loop && "fj-gradient-text--still", className]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span className={classes} style={{ ...vars, ...style }} {...rest}>
+      {children}
+    </span>
+  );
+}

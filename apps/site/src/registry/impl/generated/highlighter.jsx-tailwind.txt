@@ -1,0 +1,76 @@
+// Free Joy — Highlighter (effect) (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// The trigger is JS state (inview / hover / mount); the swipe is a
+// background-size transition. Reduced motion shows the highlight filled.
+"use client";
+
+import * as React from "react";
+
+const TONES = {
+  sun: "var(--sun-200)",
+  coral: "var(--joy-100)",
+  bloom: "var(--bloom-200)",
+};
+
+/**
+ * Free Joy — Highlighter (effect)
+ * A marker swipe fills in behind text when it scrolls into view — for a single
+ * emphasized phrase.
+ */
+export function Highlighter({
+  children,
+  color = "sun",
+  trigger = "inview",
+  delay = 0,
+  duration = 480,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [active, setActive] = React.useState(trigger === "mount");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setActive(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger]);
+
+  const lit = disabled || active;
+  const tone = TONES[color] || color;
+
+  return (
+    <mark
+      ref={ref}
+      onMouseEnter={trigger === "hover" ? () => setActive(true) : undefined}
+      style={{
+        backgroundImage: `linear-gradient(${tone}, ${tone})`,
+        backgroundSize: lit ? "100% 100%" : "0% 100%",
+        transitionDuration: `${duration}ms`,
+        transitionDelay: `${delay}ms`,
+        ...style,
+      }}
+      className={
+        "inline rounded-[var(--radius-xs)] bg-transparent bg-left bg-no-repeat px-[0.15em] " +
+        "-mx-[0.15em] text-inherit transition-[background-size] ease-[var(--ease-out)] " +
+        "motion-reduce:transition-none motion-reduce:bg-[length:100%_100%] " +
+        className
+      }
+      {...rest}
+    >
+      {children}
+    </mark>
+  );
+}

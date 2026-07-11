@@ -1,0 +1,58 @@
+// Free Joy — Tabs (TypeScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// Active styling keys off aria-selected via the aria-selected: variant.
+"use client";
+
+import * as React from "react";
+
+export interface TabItem {
+  id: string;
+  label: string;
+}
+
+export interface TabsProps {
+  items: TabItem[];
+  /** Active tab id. Defaults to the first item. */
+  value?: string;
+  onChange?: (id: string) => void;
+  className?: string;
+}
+
+/**
+ * Free Joy — Tabs
+ * items: [{ id, label }]; controlled via value + onChange (uncontrolled falls
+ * back to internal state starting on the first item).
+ */
+export function Tabs({ items = [], value, onChange, className = "", ...rest }: TabsProps) {
+  const [internal, setInternal] = React.useState(items[0]?.id);
+  const active = value ?? internal;
+  const select = (id: string) => {
+    if (value === undefined) setInternal(id);
+    onChange && onChange(id);
+  };
+  return (
+    <div
+      role="tablist"
+      className={`inline-flex gap-1 rounded-full bg-[var(--paper-2)] p-1 ${className}`}
+      {...rest}
+    >
+      {items.map((it) => (
+        <button
+          key={it.id}
+          role="tab"
+          aria-selected={it.id === active}
+          onClick={() => select(it.id)}
+          className={
+            "cursor-pointer rounded-full border-none px-[18px] py-2 " +
+            "font-[family-name:var(--font-text)] text-[length:var(--text-sm)] font-semibold " +
+            "text-[var(--text-subtle)] transition-all duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+            "aria-selected:bg-[var(--surface)] aria-selected:text-[var(--text)] aria-selected:shadow-[var(--shadow-xs)] " +
+            "focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+          }
+        >
+          {it.label}
+        </button>
+      ))}
+    </div>
+  );
+}

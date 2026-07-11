@@ -1,0 +1,41 @@
+// Free Joy — AmbientBackground (effect) (JavaScript + CSS)
+// Pairs with AmbientBackground.css (imported below). Requires the FJ tokens
+// (tokens/*.css). Drift freezes under reduced motion (media query); washes stay.
+import "./AmbientBackground.css";
+
+/**
+ * Free Joy — AmbientBackground (effect)
+ * Section wrapper with 2–3 huge, slow-drifting color washes. Heroes,
+ * onboarding, empty states and success screens ONLY.
+ */
+export function AmbientBackground({
+  variant = "warm",
+  animate = true,
+  opacity = 0.14,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const classes = [
+    "fj-ambient",
+    variant !== "warm" && `fj-ambient--${variant}`,
+    !animate && "fj-ambient--still",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      style={{ "--fj-wash": opacity, ...style }}
+      {...rest}
+    >
+      <div className="fj-ambient-blob fj-ambient-blob--a" aria-hidden="true" />
+      <div className="fj-ambient-blob fj-ambient-blob--b" aria-hidden="true" />
+      <div className="fj-ambient-blob fj-ambient-blob--c" aria-hidden="true" />
+      <div className="fj-ambient-content">{children}</div>
+    </div>
+  );
+}
