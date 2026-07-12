@@ -1,0 +1,92 @@
+// Free Joy — BlurReveal (effect) (JavaScript + Tailwind CSS)
+// Words sharpen out of a soft blur with a small lift, staggered per word. The
+// scroll trigger stays JS (IntersectionObserver flipping `shown`); the motion
+// itself is transition utilities. Blur stays hard-capped at 12px.
+"use client";
+
+import * as React from "react";
+
+const MAX_BLUR = 12; // motion-policy cap on animated blur
+
+/**
+ * Free Joy — BlurReveal (effect)
+ * Words sharpen out of a soft blur with a small lift, staggered left to right —
+ * an editorial entrance for section titles and hero lines.
+ */
+export function BlurReveal({
+  text,
+  trigger = "inview",
+  active,
+  duration = 480,
+  stagger = 60,
+  blur = 8,
+  lift = 6,
+  once = true,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [shown, setShown] = React.useState(trigger === "mount");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setShown(true);
+          if (once) io.disconnect();
+        } else if (!once) setShown(false);
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger, once]);
+
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {text}
+      </span>
+    );
+  }
+
+  const on = trigger === "manual" ? Boolean(active) : shown;
+  const effBlur = Math.min(blur, MAX_BLUR);
+  const units = text.split(/(\s+)/).filter(Boolean);
+
+  return (
+    <span
+      ref={ref}
+      role="text"
+      aria-label={text}
+      className={`inline-block whitespace-pre-wrap ${className}`}
+      style={style}
+      {...rest}
+    >
+      {units.map((u, i) => (
+        <span
+          key={i}
+          aria-hidden="true"
+          style={{
+            transitionDelay: `${i * stagger}ms`,
+            transitionDuration: `${duration}ms`,
+            ...(on ? {} : { transform: `translateY(${lift}px)`, filter: `blur(${effBlur}px)` }),
+          }}
+          className={
+            "inline-block whitespace-pre " +
+            "transition-[opacity,transform,filter] ease-[var(--ease-out)] " +
+            "motion-reduce:transition-none motion-reduce:opacity-100 motion-reduce:transform-none motion-reduce:blur-0 " +
+            (on ? "translate-y-0 opacity-100 blur-0" : "opacity-0")
+          }
+        >
+          {u}
+        </span>
+      ))}
+    </span>
+  );
+}

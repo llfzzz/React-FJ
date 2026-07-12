@@ -1,0 +1,44 @@
+/* Free Joy — ProgressRing.css
+   Pairs with ProgressRing.tsx / ProgressRing.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   The value arc is a stroke-dashoffset sweep: the component feeds --fj-value
+   (0–100), --fj-c (circumference 2πr), --fj-stroke, and --fj-duration, and
+   sets the color inline. It starts the value at 0 and flips to the real value
+   on mount / inview, so the transition sweeps in. */
+
+.fj-progress-ring {
+  position: relative;
+  display: inline-flex;
+}
+
+.fj-progress-ring-track,
+.fj-progress-ring-value {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--fj-stroke, 4);
+}
+.fj-progress-ring-track { stroke-opacity: 0.15; }
+
+.fj-progress-ring-value {
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  stroke-dasharray: var(--fj-c);
+  stroke-dashoffset: calc(var(--fj-c) * (1 - var(--fj-value) / 100));
+  transition: stroke-dashoffset var(--fj-duration, 600ms) var(--ease-out);
+}
+
+.fj-progress-ring-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-progress-ring-value { transition: none; }
+}

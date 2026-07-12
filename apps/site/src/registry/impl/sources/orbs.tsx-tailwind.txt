@@ -1,0 +1,110 @@
+// Free Joy — Orbs (effect) (TypeScript + Tailwind CSS)
+// The drift keyframes can't be utilities — add the CSS block below to your
+// global stylesheet once. Orb positions/sizes are scattered in JavaScript; the
+// utilities carry the shared shape + drift loop. Only transform animates.
+"use client";
+
+import * as React from "react";
+
+const MAX = 6; // hard cap on orbs
+
+export interface OrbsProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Orb count (capped at 6; "lite" caps at 3). @default 3 */
+  count?: number;
+  /** Orb colors (FJ tokens or CSS colors). @default joy/bloom/sun */
+  colors?: string[];
+  /** Base orb diameter in px (±30% variance). @default 240 */
+  size?: number;
+  /** Speed multiplier (1 = default). @default 1 */
+  speed?: number;
+  /** Orb opacity 0–1. @default 0.5 */
+  opacity?: number;
+  /** Blur radius in px ("lite" caps at 24). @default 40 */
+  blur?: number;
+  /** "lite" caps the count at 3 and the blur at 24. @default "full" */
+  performance?: "full" | "lite";
+  /** Static wash, no drift. @default false */
+  disabled?: boolean;
+}
+
+interface Orb {
+  top: number;
+  left: number;
+  size: number;
+  color: string;
+  dur: number;
+  delay: number;
+}
+
+/**
+ * Free Joy — Orbs (effect)
+ * Soft gradient blobs drifting slowly behind hero content.
+ */
+export function Orbs({
+  children,
+  count = 3,
+  colors = ["var(--joy-300)", "var(--bloom-300)", "var(--sun-300)"],
+  size = 240,
+  speed = 1,
+  opacity = 0.5,
+  blur = 40,
+  performance = "full",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: OrbsProps) {
+  const n = Math.min(performance === "lite" ? 3 : MAX, Math.max(0, count));
+  const effBlur = performance === "lite" ? Math.min(blur, 24) : blur;
+
+  const orbs = React.useMemo<Orb[]>(
+    () =>
+      Array.from({ length: n }, (_, i) => ({
+        top: 15 + Math.random() * 70,
+        left: 10 + Math.random() * 80,
+        size: size * (0.7 + Math.random() * 0.6),
+        color: colors[i % colors.length],
+        dur: (18 + Math.random() * 12) / speed,
+        delay: -Math.random() * 20,
+      })),
+    [n, size, colors, speed],
+  );
+
+  return (
+    <div className={`relative overflow-hidden ${className}`} style={style} {...rest}>
+      {orbs.map((o, i) => (
+        <div
+          key={i}
+          aria-hidden="true"
+          style={{
+            top: `${o.top}%`,
+            left: `${o.left}%`,
+            width: o.size,
+            height: o.size,
+            margin: `${-o.size / 2}px 0 0 ${-o.size / 2}px`,
+            opacity,
+            filter: `blur(${effBlur}px)`,
+            background: `radial-gradient(closest-side, ${o.color}, transparent)`,
+            animationDuration: `${o.dur}s`,
+            animationDelay: `${o.delay}s`,
+          }}
+          className={
+            "pointer-events-none absolute rounded-full will-change-transform " +
+            (disabled ? "" : "animate-[fj-orb_var(--ease-in-out)_infinite] motion-reduce:animate-none")
+          }
+        />
+      ))}
+      <div className="relative">{children}</div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-orb {
+  0% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(6%, -8%, 0); }
+  66% { transform: translate3d(-5%, 6%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+*/

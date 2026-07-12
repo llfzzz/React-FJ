@@ -1,0 +1,58 @@
+// Free Joy — PingDot (effect) (JavaScript + CSS)
+// Pairs with PingDot.css (imported below). Requires the FJ tokens (tokens/*.css).
+// A solid dot with an aria-hidden echo that scales up and fades on a loop. Pin
+// it to an anchor's corner via the position modifier, or use the dot inline.
+// Reduced motion (or disabled) hides the echo; the solid dot keeps the meaning.
+import "./PingDot.css";
+
+/**
+ * Free Joy — PingDot (effect)
+ * A notification dot with a radiating echo — "something new here". Pin it to a
+ * corner of any anchor, or use it inline. For semantic status colors see
+ * fj-ui's StatusDot — PingDot is the attention ping.
+ */
+export function PingDot({
+  children,
+  size = 10,
+  color = "var(--accent)",
+  speed = 1,
+  position = "top-right",
+  label = "New activity",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const pinned = children != null;
+  const vars = {
+    "--fj-size": `${size}px`,
+    "--fj-color": color,
+    "--fj-duration": `${1800 / speed}ms`,
+  };
+
+  const dot = (
+    <span
+      className={[
+        "fj-ping",
+        pinned ? `fj-ping--${position}` : "fj-ping--inline",
+        disabled && "fj-ping--static",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      role="status"
+      aria-label={label}
+      style={pinned ? vars : { ...vars, ...style }}
+    >
+      <span className="fj-ping-echo" aria-hidden="true" />
+    </span>
+  );
+
+  if (!pinned) return dot;
+
+  return (
+    <span className={`fj-ping-anchor ${className}`.trim()} style={style} {...rest}>
+      {children}
+      {dot}
+    </span>
+  );
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ErrorShake, LoaderDots, SuccessCheck } from '@fj-effects';
-import { Input } from '@fj';
+import { ErrorShake, LoaderDots, PingDot, ProgressRing, SuccessCheck, type PingDotProps } from '@fj-effects';
+import { Button, Input } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
 
@@ -116,5 +116,93 @@ export const loaderDotsDoc: ComponentDoc = {
     'Exposes role="status" with an accessible label so assistive tech announces the busy state.',
     'Under reduced motion the dots hold at a steady mid-opacity instead of pulsing.',
     'The dots themselves are aria-hidden — the label carries the meaning.',
+  ],
+};
+
+export const progressRingDoc: ComponentDoc = {
+  id: 'progress-ring',
+  name: 'ProgressRing',
+  category: 'effects-status',
+  blurb: 'A circular progress ring that sweeps to its value — goals, scores, upload completion.',
+  keywords: ['progress', 'ring', 'circular', 'percent', 'gauge', 'animation'],
+  importLine: "import { ProgressRing } from '@fj-effects';",
+  implementation: impl('progress-ring'),
+  replayable: true,
+  controls: [
+    { type: 'number', prop: 'value', defaultValue: 72, min: 0, max: 100, step: 5 },
+    { type: 'number', prop: 'size', defaultValue: 48, min: 32, max: 96, step: 8 },
+    { type: 'boolean', prop: 'showValue', defaultValue: true },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)}>
+      <ProgressRing value={Number(v.value)} size={Number(v.size)} showValue={Boolean(v.showValue)} />
+    </span>
+  ),
+  code: (v) => `<ProgressRing value={${Number(v.value)}}${v.size !== 48 ? ` size={${Number(v.size)}}` : ''}${
+    v.showValue !== false ? ' showValue' : ''
+  } />`,
+  props: [
+    { name: 'value', type: 'number', description: 'Progress 0–100 (clamped).' },
+    { name: 'size', type: 'number', defaultValue: '48', description: 'Pixel diameter.' },
+    { name: 'strokeWidth', type: 'number', defaultValue: '4', description: 'Ring stroke width in px.' },
+    { name: 'color', type: 'string', defaultValue: 'var(--accent)', description: 'Value-arc color.' },
+    { name: 'duration', type: 'number', defaultValue: '600', description: 'Sweep duration in ms.' },
+    { name: 'showValue', type: 'boolean', defaultValue: 'false', description: 'Show the % label in the center.' },
+    { name: 'trigger', type: '"mount" | "inview" | "manual"', defaultValue: '"mount"', description: 'When to sweep in.' },
+  ],
+  a11y: [
+    'Exposes role="progressbar" with aria-valuenow/min/max and a label; the SVG and % text are aria-hidden.',
+    'Reduced motion renders the final value instantly; later value changes jump with no sweep.',
+    'For indeterminate waiting use Spinner; for linear completion use Progress — the ring is for scored values.',
+  ],
+};
+
+const PING_TONES: Record<string, string> = {
+  accent: 'var(--accent)',
+  success: 'var(--success-500)',
+  danger: 'var(--danger-500)',
+};
+
+export const pingDotDoc: ComponentDoc = {
+  id: 'ping-dot',
+  name: 'PingDot',
+  category: 'effects-status',
+  blurb: 'A notification dot with a radiating echo, pinned to a corner — “something new here”.',
+  keywords: ['ping', 'dot', 'notification', 'badge', 'pulse', 'animation'],
+  importLine: "import { PingDot } from '@fj-effects';",
+  implementation: impl('ping-dot'),
+  controls: [
+    { type: 'select', prop: 'tone', options: ['accent', 'success', 'danger'], defaultValue: 'accent' },
+    { type: 'number', prop: 'size', defaultValue: 10, min: 6, max: 16, step: 1 },
+    { type: 'number', prop: 'speed', defaultValue: 1, min: 0.5, max: 2, step: 0.1 },
+    { type: 'select', prop: 'position', options: ['top-right', 'top-left', 'bottom-right', 'bottom-left'], defaultValue: 'top-right' },
+  ],
+  render: (v) => (
+    <PingDot
+      color={PING_TONES[String(v.tone)]}
+      size={Number(v.size)}
+      speed={Number(v.speed)}
+      position={v.position as PingDotProps['position']}
+    >
+      <Button>Inbox</Button>
+    </PingDot>
+  ),
+  code: (v) => `<PingDot${v.tone !== 'accent' ? ` color="${PING_TONES[String(v.tone)]}"` : ''}${
+    v.size !== 10 ? ` size={${Number(v.size)}}` : ''
+  }${v.position !== 'top-right' ? ` position="${String(v.position)}"` : ''}>
+  <Button>Inbox</Button>
+</PingDot>`,
+  props: [
+    { name: 'size', type: 'number', defaultValue: '10', description: 'Dot diameter in px.' },
+    { name: 'color', type: 'string', defaultValue: 'var(--accent)', description: 'Dot color.' },
+    { name: 'speed', type: 'number', defaultValue: '1', description: 'Echo speed multiplier.' },
+    { name: 'position', type: '"top-right" | "top-left" | "bottom-right" | "bottom-left"', defaultValue: '"top-right"', description: 'Corner to pin to (with children).' },
+    { name: 'label', type: 'string', defaultValue: '"New activity"', description: 'Accessible status label.' },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Steady dot, no echo.' },
+  ],
+  a11y: [
+    'Exposes role="status" with an accessible label; the echo layer is aria-hidden.',
+    'Under reduced motion (or disabled) the echo is gone but the solid dot keeps the meaning.',
+    'Pair with a count or text for real notifications; for semantic status colors see StatusDot.',
   ],
 };

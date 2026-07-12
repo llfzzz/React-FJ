@@ -36,24 +36,36 @@ import {
 } from './entries/effects';
 import {
   animatedUnderlineDoc,
+  blurRevealDoc,
   gradientTextDoc,
   highlighterDoc,
   rotatingTextDoc,
+  scrambleTextDoc,
+  typewriterDoc,
 } from './entries/effects-text';
-import { floatDoc, shimmerDoc } from './entries/effects-surfaces';
+import { floatDoc, imageZoomDoc, marqueeDoc, shimmerDoc } from './entries/effects-surfaces';
 import {
   cursorSpotlightDoc,
   magneticDoc,
+  rippleDoc,
   tactileDoc,
   tiltCardDoc,
 } from './entries/effects-interaction';
-import { errorShakeDoc, loaderDotsDoc, successCheckDoc } from './entries/effects-status';
+import {
+  errorShakeDoc,
+  loaderDotsDoc,
+  pingDotDoc,
+  progressRingDoc,
+  successCheckDoc,
+} from './entries/effects-status';
 import {
   auroraDoc,
   confettiBurstDoc,
   gridPatternDoc,
   noiseOverlayDoc,
+  orbsDoc,
   sparklesDoc,
+  wavesDoc,
 } from './entries/effects-backgrounds';
 import {
   collapseDoc,
@@ -101,20 +113,30 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   rotatingTextDoc,
   animatedUnderlineDoc,
   highlighterDoc,
+  typewriterDoc,
+  scrambleTextDoc,
+  blurRevealDoc,
   shimmerDoc,
   floatDoc,
+  marqueeDoc,
+  imageZoomDoc,
   magneticDoc,
   tiltCardDoc,
   tactileDoc,
   cursorSpotlightDoc,
+  rippleDoc,
   successCheckDoc,
   errorShakeDoc,
   loaderDotsDoc,
+  progressRingDoc,
+  pingDotDoc,
   auroraDoc,
   gridPatternDoc,
   noiseOverlayDoc,
   sparklesDoc,
   confettiBurstDoc,
+  orbsDoc,
+  wavesDoc,
   staggerListDoc,
   scrollProgressDoc,
   fadeSwitchDoc,

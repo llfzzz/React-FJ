@@ -1,0 +1,51 @@
+/* Free Joy — ImageZoom.css
+   Pairs with ImageZoom.tsx / ImageZoom.jsx. Requires the FJ tokens (tokens/*.css).
+   The frame clips overflow; only the inner transform animates, so nothing
+   shifts layout. The component feeds --fj-scale (≤ 1.15), --fj-duration, and
+   --fj-drift-dur. Default is hover zoom; --drift runs the slow ken-burns loop;
+   --static holds the image still. */
+
+.fj-image-zoom {
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  margin: 0;
+}
+
+.fj-image-zoom-inner {
+  display: block;
+  transition: transform var(--fj-duration, 600ms) var(--ease-out);
+}
+.fj-image-zoom-inner > * {
+  display: block;
+  width: 100%;
+}
+
+.fj-image-zoom:hover .fj-image-zoom-inner {
+  transform: scale(var(--fj-scale, 1.06));
+}
+
+/* Slow ken-burns loop instead of hover. */
+.fj-image-zoom--drift .fj-image-zoom-inner {
+  transition: none;
+  animation: fj-kenburns var(--fj-drift-dur, 16s) var(--ease-in-out) infinite alternate;
+}
+
+.fj-image-zoom--static .fj-image-zoom-inner {
+  transition: none;
+  animation: none;
+}
+.fj-image-zoom--static:hover .fj-image-zoom-inner {
+  transform: none;
+}
+
+@keyframes fj-kenburns {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(var(--fj-scale, 1.06)) translate(-1.5%, 1%); }
+}
+
+/* Reduced motion: still image. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-image-zoom-inner { transition: none; animation: none; }
+  .fj-image-zoom:hover .fj-image-zoom-inner { transform: none; }
+}

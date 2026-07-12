@@ -1,0 +1,43 @@
+/* Free Joy — Waves.css
+   Pairs with Waves.tsx / Waves.jsx. Requires the FJ tokens (tokens/*.css).
+   The path spans two 1440-unit periods; this keyframe slides exactly one, so
+   the loop is seamless (keep the -1440px in sync with PERIOD in the component).
+   The component sets each layer's duration/direction inline; --static holds the
+   lines still. Only transform animates — never the path. */
+
+.fj-waves {
+  position: relative;
+  overflow: hidden;
+}
+
+.fj-waves-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.fj-wave {
+  will-change: transform;
+  animation-name: fj-wave;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 12s; /* per-layer duration set inline overrides this */
+}
+
+.fj-waves--static .fj-wave { animation: none; }
+
+.fj-waves-content { position: relative; }
+
+/* Slides exactly one period (1440 viewBox units). */
+@keyframes fj-wave {
+  from { transform: translateX(0); }
+  to { transform: translateX(-1440px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-wave { animation: none; }
+}

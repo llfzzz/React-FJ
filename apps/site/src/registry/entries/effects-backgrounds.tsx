@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { Aurora, ConfettiBurst, GridPattern, NoiseOverlay, Sparkles } from '@fj-effects';
+import { Aurora, ConfettiBurst, GridPattern, NoiseOverlay, Orbs, Sparkles, Waves } from '@fj-effects';
 import { Button, Text } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
@@ -232,5 +232,103 @@ export const confettiBurstDoc: ComponentDoc = {
     'Purely celebratory — never the sole signal of success; pair with a message.',
     'Suppressed entirely under reduced motion (children still render, onDone still fires).',
     'Pieces are capped and removed after the fall, so nothing accumulates.',
+  ],
+};
+
+export const orbsDoc: ComponentDoc = {
+  id: 'orbs',
+  name: 'Orbs',
+  category: 'effects-backgrounds',
+  blurb: 'Soft gradient blobs drifting slowly behind hero content — a rounder, calmer Aurora.',
+  keywords: ['orbs', 'blobs', 'gradient', 'background', 'ambient', 'hero'],
+  importLine: "import { Orbs } from '@fj-effects';",
+  implementation: impl('orbs'),
+  replayable: true,
+  controls: [
+    { type: 'number', prop: 'count', defaultValue: 3, min: 1, max: 6, step: 1 },
+    { type: 'number', prop: 'speed', defaultValue: 1, min: 0.5, max: 2, step: 0.1 },
+    { type: 'select', prop: 'performance', options: ['full', 'lite'], defaultValue: 'full' },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)} style={{ width: '100%' }}>
+      <Orbs
+        count={Number(v.count)}
+        speed={Number(v.speed)}
+        performance={v.performance as 'full' | 'lite'}
+        style={heroBox}
+      >
+        <Text variant="h3" as="p">
+          Ambient by default
+        </Text>
+      </Orbs>
+    </span>
+  ),
+  code: (v) => `<Orbs${v.count !== 3 ? ` count={${Number(v.count)}}` : ''}${
+    v.speed !== 1 ? ` speed={${Number(v.speed)}}` : ''
+  }${v.performance !== 'full' ? ` performance="lite"` : ''}>
+  <h1>Ambient by default</h1>
+</Orbs>`,
+  props: [
+    { name: 'count', type: 'number', defaultValue: '3', description: 'Orb count (capped at 6; "lite" caps at 3).' },
+    { name: 'colors', type: 'string[]', defaultValue: 'joy/bloom/sun', description: 'Orb colors (FJ tokens or CSS colors).' },
+    { name: 'size', type: 'number', defaultValue: '240', description: 'Base orb diameter in px (±30% variance).' },
+    { name: 'speed', type: 'number', defaultValue: '1', description: 'Speed multiplier.' },
+    { name: 'opacity', type: 'number', defaultValue: '0.5', description: 'Orb opacity 0–1.' },
+    { name: 'performance', type: '"full" | "lite"', defaultValue: '"full"', description: '"lite" caps count at 3 and blur at 24.' },
+  ],
+  a11y: [
+    'Orbs are aria-hidden and pointer-transparent; content sits above the wash.',
+    'Static under reduced motion — the wash remains, the drift stops (unlike Sparkles, nothing disappears).',
+    'Heroes and section headers only; keep text contrast AA over the wash.',
+  ],
+};
+
+export const wavesDoc: ComponentDoc = {
+  id: 'waves',
+  name: 'Waves',
+  category: 'effects-backgrounds',
+  blurb: 'Slow wave lines drifting across the container’s bottom edge — heroes and footers.',
+  keywords: ['waves', 'lines', 'water', 'background', 'ambient', 'footer'],
+  importLine: "import { Waves } from '@fj-effects';",
+  implementation: impl('waves'),
+  replayable: true,
+  controls: [
+    { type: 'number', prop: 'layers', defaultValue: 3, min: 1, max: 4, step: 1 },
+    { type: 'number', prop: 'amplitude', defaultValue: 14, min: 6, max: 24, step: 2 },
+    { type: 'number', prop: 'speed', defaultValue: 1, min: 0.5, max: 2, step: 0.1 },
+    { type: 'select', prop: 'performance', options: ['full', 'lite'], defaultValue: 'full' },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)} style={{ width: '100%' }}>
+      <Waves
+        layers={Number(v.layers)}
+        amplitude={Number(v.amplitude)}
+        speed={Number(v.speed)}
+        performance={v.performance as 'full' | 'lite'}
+        style={{ ...heroBox, alignItems: 'start', paddingBottom: 'var(--space-10)' }}
+      >
+        <Text variant="h4" as="p">
+          Calm under the surface
+        </Text>
+      </Waves>
+    </span>
+  ),
+  code: (v) => `<Waves${v.layers !== 3 ? ` layers={${Number(v.layers)}}` : ''}${
+    v.amplitude !== 14 ? ` amplitude={${Number(v.amplitude)}}` : ''
+  }${v.performance !== 'full' ? ` performance="lite"` : ''}>
+  <footer>…</footer>
+</Waves>`,
+  props: [
+    { name: 'layers', type: 'number', defaultValue: '3', description: 'Wave-line count (capped at 4; "lite" caps at 2).' },
+    { name: 'color', type: 'string', defaultValue: 'var(--joy-300)', description: 'Line color.' },
+    { name: 'amplitude', type: 'number', defaultValue: '14', description: 'Wave height (capped at 24).' },
+    { name: 'height', type: 'number', defaultValue: '120', description: 'Band height in px, anchored to the bottom.' },
+    { name: 'speed', type: 'number', defaultValue: '1', description: 'Speed multiplier.' },
+    { name: 'performance', type: '"full" | "lite"', defaultValue: '"full"', description: '"lite" caps the layer count at 2.' },
+  ],
+  a11y: [
+    'The whole SVG band is aria-hidden and pointer-transparent — pure texture.',
+    'Static under reduced motion; the lines stay, the drift stops.',
+    'The geometry is drawn once and only transform animates — the path itself never morphs.',
   ],
 };

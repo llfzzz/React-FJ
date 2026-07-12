@@ -39,6 +39,9 @@ const STYLING_NEUTRAL_EFFECTS = [
   "Sparkles",
   "ConfettiBurst",
   "FadeSwitch",
+  "Ripple",
+  "ScrambleText",
+  "Typewriter",
 ];
 
 /** "GradientText.tsx" → "gradient-text" (matches registry ids). */

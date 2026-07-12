@@ -1,0 +1,35 @@
+/* Free Joy — BlurReveal.css
+   Pairs with BlurReveal.tsx / BlurReveal.jsx. Requires the FJ tokens (tokens/*.css).
+   Words sharpen out of a soft blur with a small lift, staggered by --fj-i; the
+   component adds .is-in when the text scrolls into view and feeds --fj-stagger,
+   --fj-duration, --fj-blur (≤ 12px), and --fj-lift. */
+
+.fj-blur-reveal {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.fj-blur-reveal-w {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(var(--fj-lift, 6px));
+  filter: blur(var(--fj-blur, 8px));
+  transition:
+    opacity var(--fj-duration, 480ms) var(--ease-out),
+    transform var(--fj-duration, 480ms) var(--ease-out),
+    filter var(--fj-duration, 480ms) var(--ease-out);
+  transition-delay: calc(var(--fj-i, 0) * var(--fj-stagger, 60ms));
+}
+
+/* In view: words sharpen to rest. */
+.fj-blur-reveal.is-in .fj-blur-reveal-w {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Reduced motion: no lift, no blur — text simply present. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-blur-reveal-w { opacity: 1; transform: none; filter: none; transition: none; }
+}

@@ -1,0 +1,47 @@
+/* Free Joy — Marquee.css
+   Pairs with Marquee.tsx / Marquee.jsx. Requires the FJ tokens (tokens/*.css).
+   The strip is rendered twice; the track slides one strip-width (-50%) on a
+   linear loop, so the seam is invisible. The component feeds --fj-duration
+   (on the track) and --fj-gap (on each group). Modifiers: --no-fade,
+   --no-pause, --static. Hover pauses; reduced motion stops the loop AND hides
+   the clone, leaving one static readable row. */
+
+.fj-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.fj-marquee--no-fade {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.fj-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: fj-marquee var(--fj-duration, 24s) linear infinite;
+}
+.fj-marquee:not(.fj-marquee--no-pause):hover .fj-marquee-track { animation-play-state: paused; }
+/* Static: freeze the loop and drop the clone so items read once. */
+.fj-marquee--static .fj-marquee-track { animation: none; }
+.fj-marquee--static .fj-marquee-group[aria-hidden="true"] { display: none; }
+
+.fj-marquee-group {
+  display: flex;
+  align-items: center;
+  gap: var(--fj-gap, 24px);
+  padding-right: var(--fj-gap, 24px);
+  flex-shrink: 0;
+}
+
+@keyframes fj-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Reduced motion: one static row, no clone. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-marquee-track { animation: none; }
+  .fj-marquee-group[aria-hidden="true"] { display: none; }
+}
