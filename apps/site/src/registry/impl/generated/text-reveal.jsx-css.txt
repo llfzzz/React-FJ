@@ -1,0 +1,75 @@
+// Free Joy — TextReveal (effect) (JavaScript + CSS)
+// Pairs with TextReveal.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The rise-in stagger is pure CSS; the scroll trigger toggles .is-in via
+// IntersectionObserver. Reduced motion renders the text plainly (media query).
+"use client";
+
+import * as React from "react";
+import "./TextReveal.css";
+
+/**
+ * Free Joy — TextReveal (effect)
+ * Editorial headline reveal: words (or characters) rise in with a gentle
+ * stagger when scrolled into view. Showcase surfaces only.
+ */
+export function TextReveal({
+  text = "",
+  by = "word",
+  delay = 0,
+  stagger = 45,
+  duration = 640,
+  once = true,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [shown, setShown] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setShown(true);
+            if (once) io.disconnect();
+          } else if (!once) setShown(false);
+        });
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [once]);
+
+  const units = by === "char" ? Array.from(text) : text.split(/(\s+)/).filter(Boolean);
+  const vars = {
+    "--fj-delay": `${delay}ms`,
+    "--fj-stagger": `${stagger}ms`,
+    "--fj-duration": `${duration}ms`,
+  };
+
+  return (
+    <span
+      ref={ref}
+      className={`fj-reveal ${shown ? "is-in " : ""}${className}`.trim()}
+      aria-label={text}
+      role="text"
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      {units.map((u, i) => (
+        <span
+          key={i}
+          className="fj-reveal-w"
+          aria-hidden="true"
+          style={{ "--fj-i": i }}
+        >
+          <span>{u}</span>
+        </span>
+      ))}
+    </span>
+  );
+}

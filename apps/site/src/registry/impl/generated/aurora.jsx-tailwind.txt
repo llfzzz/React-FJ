@@ -1,0 +1,64 @@
+// Free Joy — Aurora (effect) (JavaScript + Tailwind CSS)
+// The drift keyframes can't be utilities — add the CSS block below to your
+// global stylesheet once. The ribbons then use utilities + fj-aurora.
+
+const VARIANTS = {
+  warm: ["var(--joy-400)", "var(--sun-300)", "var(--bloom-300)"],
+  cool: ["var(--bloom-400)", "var(--info-300)", "var(--joy-300)"],
+  joy: ["var(--joy-500)", "var(--joy-300)", "var(--sun-300)"],
+};
+
+/**
+ * Free Joy — Aurora (effect)
+ * Slow, soft aurora ribbons behind hero content. Heroes and section headers
+ * only. Blur is capped and only transform/opacity animate. Static under
+ * reduced motion or disabled.
+ */
+export function Aurora({
+  children,
+  variant = "warm",
+  speed = 1,
+  opacity = 0.5,
+  blur = 60,
+  performance = "full",
+  disabled = false,
+  className = "",
+  ...rest
+}) {
+  const [c1, c2, c3] = VARIANTS[variant] || VARIANTS.warm;
+  const effBlur = performance === "lite" ? Math.min(blur, 40) : blur;
+  const base = 24 / speed;
+
+  const ribbon = (color, top, dur) => (
+    <div
+      aria-hidden="true"
+      style={{
+        top,
+        filter: `blur(${effBlur}px)`,
+        opacity,
+        background: `radial-gradient(closest-side, ${color}, transparent)`,
+        animationDuration: `${dur}s`,
+      }}
+      className={
+        "pointer-events-none absolute -left-1/5 h-[60%] w-[140%] rounded-[50%] will-change-transform " +
+        (disabled ? "" : "animate-[fj-aurora_var(--ease-in-out)_infinite] motion-reduce:animate-none")
+      }
+    />
+  );
+  return (
+    <div className={`relative overflow-hidden bg-[var(--bg)] ${className}`} {...rest}>
+      {ribbon(c1, "-15%", base)}
+      {ribbon(c2, "10%", base * 1.25)}
+      {ribbon(c3, "35%", base * 1.1)}
+      <div className="relative">{children}</div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-aurora {
+  0% { transform: translate3d(-10%, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(10%, 4%, 0) rotate(8deg); }
+  100% { transform: translate3d(-10%, 0, 0) rotate(0deg); }
+}
+*/

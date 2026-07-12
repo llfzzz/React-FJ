@@ -1,0 +1,65 @@
+// Free Joy — Button (JavaScript + CSS)
+// Pairs with Button.css (imported below). Requires the FJ tokens (tokens/*.css).
+import "./Button.css";
+
+/** [base fill, hover fill, text-on-fill] per named accent. */
+const ACC = {
+  coral: ["var(--accent)", "var(--accent-hover)", "var(--text-on-accent)"],
+  sun:   ["var(--sun-500)", "var(--sun-700)", "var(--ink)"],
+  bloom: ["var(--bloom-500)", "var(--bloom-700)", "var(--white)"],
+};
+
+/**
+ * Free Joy — Button
+ * Variants: primary | secondary | ghost | danger
+ * Sizes: sm | md | lg
+ * `accent` recolors the primary fill per-instance; `loading` shows a spinner
+ * and blocks interaction (aria-busy).
+ */
+export function Button({
+  variant = "primary",
+  size = "md",
+  accent = "coral",
+  iconLeft,
+  iconRight,
+  disabled = false,
+  loading = false,
+  full = false,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const [accBase, accHover, accOn] = ACC[accent] || [accent, accent, "var(--white)"];
+  // The stylesheet reads these three custom properties for the primary fill.
+  const accentVars = {
+    "--fj-btn-accent": accBase,
+    "--fj-btn-accent-hover": accHover,
+    "--fj-btn-on-accent": accOn,
+  };
+
+  const classes = [
+    "fj-btn",
+    `fj-btn--${variant}`,
+    `fj-btn--${size}`,
+    full && "fj-btn--full",
+    loading && "is-loading",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <button
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={classes}
+      style={{ ...accentVars, ...style }}
+      {...rest}
+    >
+      {loading ? <span className="fj-btn-spinner" aria-hidden="true" /> : iconLeft}
+      {children}
+      {iconRight}
+    </button>
+  );
+}

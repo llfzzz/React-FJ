@@ -1,0 +1,46 @@
+// Free Joy — NoiseOverlay (effect) (TypeScript + Tailwind CSS)
+// Static grain from an inline SVG turbulence data URI — no animation.
+import * as React from "react";
+
+const NOISE =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+export interface NoiseOverlayProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Grain opacity 0–1. @default 0.04 */
+  opacity?: number;
+  /** CSS mix-blend-mode for the grain. @default "overlay" */
+  blend?: React.CSSProperties["mixBlendMode"];
+  /** Grain tile scale (px). @default 120 */
+  scale?: number;
+}
+
+/**
+ * Free Joy — NoiseOverlay (effect)
+ * A fine, static film-grain overlay that adds tactile texture to flat surfaces.
+ * Purely decorative and non-animated — no motion, no reduced-motion concern.
+ */
+export function NoiseOverlay({
+  children,
+  opacity = 0.04,
+  blend = "overlay",
+  scale = 120,
+  className = "",
+  ...rest
+}: NoiseOverlayProps) {
+  return (
+    <div className={`relative ${className}`} {...rest}>
+      <div
+        aria-hidden="true"
+        style={{
+          opacity,
+          mixBlendMode: blend,
+          backgroundImage: NOISE,
+          backgroundSize: `${scale}px ${scale}px`,
+        }}
+        className="pointer-events-none absolute inset-0"
+      />
+      <div className="relative">{children}</div>
+    </div>
+  );
+}

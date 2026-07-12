@@ -1,11 +1,17 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { useReducedMotion } from "../motion/useReducedMotion";
 import { useTrigger } from "../motion/useTrigger";
+
 const CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#%&";
-const SHUFFLE_MS = 40;
+const SHUFFLE_MS = 40; // re-randomize at most this often — calm flicker, low cost
+
+/**
+ * Free Joy — ScrambleText (effect)
+ * Reveals a short display string left-to-right out of a churn of random
+ * characters — logos, hero words, easter eggs. An invisible ghost reserves the
+ * final box so random glyph widths never shift layout. Reduced motion shows
+ * the plain text with no churn.
+ */
 export function ScrambleText({
   text,
   duration = 800,
@@ -22,6 +28,7 @@ export function ScrambleText({
   const [output, setOutput] = React.useState(null);
   const onDoneRef = React.useRef(onDone);
   onDoneRef.current = onDone;
+
   React.useEffect(() => {
     if (!on || reduced || disabled) {
       setOutput(null);
@@ -53,27 +60,31 @@ export function ScrambleText({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [on, reduced, disabled, text, duration, charset]);
+
   if (disabled || reduced) {
-    return <span ref={ref} style={style} {...rest}>
+    return (
+      <span ref={ref} style={style} {...rest}>
         {text}
-      </span>;
+      </span>
+    );
   }
-  return <span
-    ref={ref}
-    {...bind}
-    role="text"
-    aria-label={text}
-    style={{ position: "relative", display: "inline-block", whiteSpace: "pre-wrap", ...style }}
-    {...rest}
-  >
-      {
-    /* Invisible ghost reserves the final box so random glyphs never reflow. */
-  }
+
+  return (
+    <span
+      ref={ref}
+      {...bind}
+      role="text"
+      aria-label={text}
+      style={{ position: "relative", display: "inline-block", whiteSpace: "pre-wrap", ...style }}
+      {...rest}
+    >
+      {/* Invisible ghost reserves the final box so random glyphs never reflow. */}
       <span aria-hidden="true" style={{ visibility: "hidden" }}>
         {text}
       </span>
       <span aria-hidden="true" style={{ position: "absolute", inset: 0 }}>
         {output ?? text}
       </span>
-    </span>;
+    </span>
+  );
 }

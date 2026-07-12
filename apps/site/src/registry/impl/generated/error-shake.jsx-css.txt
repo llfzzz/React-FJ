@@ -1,0 +1,58 @@
+// Free Joy — ErrorShake (effect) (JavaScript + CSS)
+// Pairs with ErrorShake.css (imported below). Requires the FJ tokens
+// (tokens/*.css). Plays .is-shaking (error) or .is-pulsing (warning) once when
+// `active` flips true, clearing on animationend so it can replay. Reduced
+// motion swaps the shake for a single ring flash (media query).
+"use client";
+
+import * as React from "react";
+import "./ErrorShake.css";
+
+/**
+ * Free Joy — ErrorShake (effect)
+ * A short horizontal shake (error) or a warning-colored pulse, played when
+ * `active` flips true — for a rejected form field or a failed action.
+ */
+export function ErrorShake({
+  children,
+  mode = "error",
+  active = false,
+  intensity = 4,
+  duration = 400,
+  onDone,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const [playing, setPlaying] = React.useState(false);
+  const prev = React.useRef(active);
+
+  React.useEffect(() => {
+    if (active && !prev.current && !disabled) setPlaying(true);
+    prev.current = active;
+  }, [active, disabled]);
+
+  const stateClass = playing ? (mode === "error" ? "is-shaking" : "is-pulsing") : "";
+  const vars = {
+    "--fj-amp": `${intensity}px`,
+    "--fj-dur": `${duration}ms`,
+    "--fj-pulse-dur": `${Math.max(duration, 500)}ms`,
+  };
+
+  return (
+    <div
+      className={`fj-shake ${stateClass} ${className}`.trim()}
+      style={{ ...vars, ...style }}
+      onAnimationEnd={(e) => {
+        // animationend bubbles — ignore animations finishing inside children.
+        if (e.animationName !== "fj-shake" && e.animationName !== "fj-warn-pulse") return;
+        setPlaying(false);
+        onDone?.();
+      }}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

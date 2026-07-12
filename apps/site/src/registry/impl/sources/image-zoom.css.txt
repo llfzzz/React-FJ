@@ -1,48 +1,51 @@
-<!-- Free Joy — ImageZoom (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     The frame clips overflow; only the inner transform animates, so nothing
-     shifts layout. Default is hover zoom; add the fj-image-zoom--drift
-     modifier for the slow ken-burns loop. Keep scale ≤ 1.15. -->
+/* Free Joy — ImageZoom.css
+   Pairs with ImageZoom.tsx / ImageZoom.jsx. Requires the FJ tokens (tokens/*.css).
+   The frame clips overflow; only the inner transform animates, so nothing
+   shifts layout. The component feeds --fj-scale (≤ 1.15), --fj-duration, and
+   --fj-drift-dur. Default is hover zoom; --drift runs the slow ken-burns loop;
+   --static holds the image still. */
 
-<figure class="fj-image-zoom">
-  <img src="/studio.jpg" alt="The studio at golden hour" />
-</figure>
-
-<!-- Drift (ken-burns) variant:
-<figure class="fj-image-zoom fj-image-zoom--drift"> … </figure> -->
-
-<style>
 .fj-image-zoom {
-  --fj-scale: 1.06;   /* keep ≤ 1.15 */
-  --fj-duration: 600ms;
+  display: block;
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  border-radius: inherit;
   margin: 0;
 }
-.fj-image-zoom > * {
+
+.fj-image-zoom-inner {
+  display: block;
+  transition: transform var(--fj-duration, 600ms) var(--ease-out);
+}
+.fj-image-zoom-inner > * {
   display: block;
   width: 100%;
-  transition: transform var(--fj-duration) var(--ease-out);
 }
-.fj-image-zoom:hover > * {
-  transform: scale(var(--fj-scale));
+
+.fj-image-zoom:hover .fj-image-zoom-inner {
+  transform: scale(var(--fj-scale, 1.06));
 }
 
 /* Slow ken-burns loop instead of hover. */
-.fj-image-zoom--drift > * {
+.fj-image-zoom--drift .fj-image-zoom-inner {
   transition: none;
-  animation: fj-kenburns 16s var(--ease-in-out) infinite alternate;
+  animation: fj-kenburns var(--fj-drift-dur, 16s) var(--ease-in-out) infinite alternate;
 }
-.fj-image-zoom--drift:hover > * { transform: none; }
+
+.fj-image-zoom--static .fj-image-zoom-inner {
+  transition: none;
+  animation: none;
+}
+.fj-image-zoom--static:hover .fj-image-zoom-inner {
+  transform: none;
+}
 
 @keyframes fj-kenburns {
   from { transform: scale(1) translate(0, 0); }
-  to { transform: scale(1.06) translate(-1.5%, 1%); }
+  to { transform: scale(var(--fj-scale, 1.06)) translate(-1.5%, 1%); }
 }
 
 /* Reduced motion: still image. */
 @media (prefers-reduced-motion: reduce) {
-  .fj-image-zoom > * { transition: none; animation: none; }
-  .fj-image-zoom:hover > * { transform: none; }
+  .fj-image-zoom-inner { transition: none; animation: none; }
+  .fj-image-zoom:hover .fj-image-zoom-inner { transform: none; }
 }
-</style>

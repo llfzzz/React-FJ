@@ -93,10 +93,8 @@ export const fadeSwitchDoc: ComponentDoc = {
   keywords: ['fade', 'switch', 'crossfade', 'transition', 'tabs'],
   importLine: "import { FadeSwitch } from '@fj-effects';",
   implementation: impl('fade-switch', {
-    notApplicable: {
-      css: 'Crossfading between arbitrary React children keyed on a changing value is framework state — CSS has no notion of "the previous children". Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Keyed content crossfade is React state; utilities can’t track the outgoing children. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Crossfading keyed children is React state and the fade is animated inline — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   controls: [
     { type: 'select', prop: 'mode', options: ['fade', 'slide-up', 'scale'], defaultValue: 'fade' },

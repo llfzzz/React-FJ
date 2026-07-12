@@ -1,0 +1,90 @@
+// Free Joy — Highlighter (effect) (TypeScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// The trigger is JS state (inview / hover / mount); the swipe is a
+// background-size transition. Reduced motion shows the highlight filled.
+"use client";
+
+import * as React from "react";
+
+export interface HighlighterProps extends React.HTMLAttributes<HTMLSpanElement> {
+  children?: React.ReactNode;
+  /** Highlight tone. @default "sun" */
+  color?: "sun" | "coral" | "bloom" | string;
+  /** When the swipe plays. @default "inview" */
+  trigger?: "inview" | "hover" | "mount";
+  /** Lead-in delay in ms. @default 0 */
+  delay?: number;
+  /** Swipe duration in ms. @default 480 */
+  duration?: number;
+  /** Disable the animation (highlight already filled). @default false */
+  disabled?: boolean;
+}
+
+const TONES: Record<string, string> = {
+  sun: "var(--sun-200)",
+  coral: "var(--joy-100)",
+  bloom: "var(--bloom-200)",
+};
+
+/**
+ * Free Joy — Highlighter (effect)
+ * A marker swipe fills in behind text when it scrolls into view — for a single
+ * emphasized phrase.
+ */
+export function Highlighter({
+  children,
+  color = "sun",
+  trigger = "inview",
+  delay = 0,
+  duration = 480,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: HighlighterProps) {
+  const ref = React.useRef<HTMLElement>(null);
+  const [active, setActive] = React.useState(trigger === "mount");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setActive(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger]);
+
+  const lit = disabled || active;
+  const tone = TONES[color] || color;
+
+  return (
+    <mark
+      ref={ref as React.RefObject<HTMLElement>}
+      onMouseEnter={trigger === "hover" ? () => setActive(true) : undefined}
+      style={{
+        backgroundImage: `linear-gradient(${tone}, ${tone})`,
+        backgroundSize: lit ? "100% 100%" : "0% 100%",
+        transitionDuration: `${duration}ms`,
+        transitionDelay: `${delay}ms`,
+        ...style,
+      }}
+      className={
+        "inline rounded-[var(--radius-xs)] bg-transparent bg-left bg-no-repeat px-[0.15em] " +
+        "-mx-[0.15em] text-inherit transition-[background-size] ease-[var(--ease-out)] " +
+        "motion-reduce:transition-none motion-reduce:bg-[length:100%_100%] " +
+        className
+      }
+      {...rest}
+    >
+      {children}
+    </mark>
+  );
+}

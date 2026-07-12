@@ -1,0 +1,67 @@
+// Free Joy — ScrollProgress (effect) (JavaScript + Tailwind CSS)
+// The fill needs the scroll position, which is JavaScript state. Utilities
+// handle the layout; the scaleX value comes from a small scroll listener.
+"use client";
+
+import * as React from "react";
+
+/**
+ * Free Joy — ScrollProgress (effect)
+ * A thin reading-progress bar pinned to the top (or bottom) of the viewport
+ * that fills as the page scrolls. Only scaleX changes — no layout, no reflow.
+ */
+export function ScrollProgress({
+  height = 3,
+  color = "var(--accent)",
+  position = "top",
+  target,
+  zIndex,
+  className = "",
+  style,
+  ...rest
+}) {
+  const [progress, setProgress] = React.useState(0);
+
+  React.useEffect(() => {
+    const el = target?.current;
+    const compute = () => {
+      if (el) {
+        const max = el.scrollHeight - el.clientHeight;
+        setProgress(max > 0 ? el.scrollTop / max : 0);
+      } else {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress(max > 0 ? window.scrollY / max : 0);
+      }
+    };
+    const src = el ?? window;
+    compute();
+    src.addEventListener("scroll", compute, { passive: true });
+    window.addEventListener("resize", compute);
+    return () => {
+      src.removeEventListener("scroll", compute);
+      window.removeEventListener("resize", compute);
+    };
+  }, [target]);
+
+  return (
+    <div
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(progress * 100)}
+      aria-label="Reading progress"
+      style={{
+        height,
+        background: color,
+        transform: `scaleX(${progress})`,
+        ...(zIndex !== undefined ? { zIndex: zIndex} : {}),
+        ...style,
+      }}
+      className={
+        `pointer-events-none inset-x-0 z-[var(--z-sticky)] origin-left ` +
+        `${target ? "sticky" : "fixed"} ${position === "bottom" ? "bottom-0" : "top-0"} ${className}`
+      }
+      {...rest}
+    />
+  );
+}

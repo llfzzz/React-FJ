@@ -1,0 +1,53 @@
+// Free Joy — Table (JavaScript + CSS)
+// Pairs with Table.css (imported below). Requires the FJ tokens (tokens/*.css).
+import "./Table.css";
+
+/**
+ * Free Joy — Table
+ * Simple data table. columns: [{ key, header, align, width, render }]; rows: object[].
+ * Optional row hover and a quiet zebra option.
+ */
+export function Table({
+  columns = [],
+  rows = [],
+  zebra = false,
+  hover = true,
+  dense = false,
+  className = "",
+}) {
+  const classes = [
+    "fj-table",
+    zebra && "fj-table--zebra",
+    dense && "fj-table--dense",
+    !hover && "fj-table--no-hover",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={`fj-table-wrap ${className}`.trim()}>
+      <table className={classes}>
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th key={c.key} style={{ textAlign: c.align || "left", width: c.width }}>
+                {c.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr key={ri}>
+              {columns.map((c) => (
+                <td key={c.key} style={{ textAlign: c.align || "left" }}>
+                  {c.render ? c.render(row[c.key], row) : (row[c.key])}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}

@@ -1,14 +1,7 @@
-<!-- Free Joy — Avatar, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Sizes: sm (28) | md (40) | lg (56). Initials fallback when no image. -->
+/* Free Joy — Avatar.css
+   Pairs with Avatar.tsx / Avatar.jsx. Requires the FJ tokens (tokens/*.css).
+   Sizes: sm (28) | md (40) | lg (56). Initials fallback when no image. */
 
-<span class="fj-avatar fj-avatar--md">LF</span>
-<span class="fj-avatar fj-avatar--lg">
-  <img src="/portrait.jpg" alt="Luo Fangzheng" />
-</span>
-<span class="fj-avatar fj-avatar--sm">?</span>
-
-<style>
 .fj-avatar {
   display: inline-flex;
   align-items: center;
@@ -32,4 +25,3 @@
   height: 100%;
   object-fit: cover;
 }
-</style>

@@ -1,0 +1,88 @@
+// Free Joy — Tag / Chip (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+"use client";
+
+const ACCENTS = {
+  neutral: {
+    chip: "bg-[var(--paper-2)] text-[var(--text-muted)]",
+    dot: "bg-[var(--ink-3)]",
+  },
+  coral: {
+    chip: "bg-[var(--joy-50)] text-[var(--joy-700)]",
+    dot: "bg-[var(--joy-200)]",
+  },
+  sun: {
+    chip: "bg-[var(--sun-100)] text-[var(--sun-700)]",
+    dot: "bg-[var(--sun-300)]",
+  },
+  bloom: {
+    chip: "bg-[var(--bloom-100)] text-[var(--bloom-700)]",
+    dot: "bg-[var(--bloom-300)]",
+  },
+};
+
+// Any other CSS color feeds these custom properties inline (soft tint via color-mix).
+const CUSTOM = {
+  chip: "bg-[var(--fj-tag-bg)] text-[var(--fj-tag-fg)]",
+  dot: "bg-[var(--fj-tag-dot)]",
+};
+
+/**
+ * Free Joy — Tag / Chip
+ * Compact label. Optional dot, leading icon, and a remove (×) affordance.
+ * `accent` recolors it per-instance ("coral" | "sun" | "bloom" | any CSS color).
+ */
+export function Tag({
+  accent = "neutral",
+  dot = false,
+  icon,
+  onRemove,
+  selected = false,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const a = ACCENTS[accent] ?? CUSTOM;
+  const customVars =
+    ACCENTS[accent] === undefined
+      ? ({
+          "--fj-tag-bg": `color-mix(in srgb, ${accent} 14%, transparent)`,
+          "--fj-tag-fg": accent,
+          "--fj-tag-dot": accent,
+        })
+      : undefined;
+
+  return (
+    <span
+      className={
+        "inline-flex items-center gap-1.5 rounded-full " +
+        "font-[family-name:var(--font-text)] text-[length:var(--text-sm)] font-medium leading-[1.3] " +
+        `${onRemove ? "py-1 pl-3 pr-1.5" : "px-3 py-1"} ` +
+        `${selected ? "border border-current" : "border border-transparent"} ` +
+        `${a.chip} ${className}`
+      }
+      style={customVars ? { ...customVars, ...style } : style}
+      {...rest}
+    >
+      {dot && <span className={`size-[7px] flex-none rounded-full ${a.dot}`} />}
+      {icon}
+      {children}
+      {onRemove && (
+        <button
+          onClick={onRemove}
+          aria-label="Remove"
+          className={
+            "inline-flex size-[18px] items-center justify-center rounded-full border-none " +
+            "bg-transparent p-0 text-[15px] leading-none text-inherit opacity-70 " +
+            "cursor-pointer hover:opacity-100 " +
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 " +
+            "focus-visible:outline-[var(--accent)]"
+          }
+        >
+          ×
+        </button>
+      )}
+    </span>
+  );
+}

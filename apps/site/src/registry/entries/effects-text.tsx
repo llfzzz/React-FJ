@@ -67,10 +67,8 @@ export const rotatingTextDoc: ComponentDoc = {
   keywords: ['rotating', 'words', 'cycle', 'animation', 'hero'],
   importLine: "import { RotatingText } from '@fj-effects';",
   implementation: impl('rotating-text', {
-    notApplicable: {
-      css: 'Cycling through an arbitrary list of words is JavaScript state — a CSS-only version can only step through a fixed, hard-coded set. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Cycling words is JavaScript state; utilities can style the slot but cannot advance it. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Cycling words is JavaScript state — the swap is animated inline, so there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   replayable: true,
   controls: [
@@ -209,10 +207,8 @@ export const typewriterDoc: ComponentDoc = {
   keywords: ['typewriter', 'typing', 'caret', 'terminal', 'text', 'animation'],
   importLine: "import { Typewriter } from '@fj-effects';",
   implementation: impl('typewriter', {
-    notApplicable: {
-      css: 'A CSS-only typewriter (width + steps()) only works for single-line monospace text; typing FJ’s proportional type means slicing the string in JavaScript. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Typing is JavaScript state advancing a character index; utilities can style the caret but can’t type. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Typing slices the string in JavaScript one character at a time — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   replayable: true,
   controls: [
@@ -257,10 +253,8 @@ export const scrambleTextDoc: ComponentDoc = {
   keywords: ['scramble', 'decrypt', 'shuffle', 'glitch', 'text', 'animation'],
   importLine: "import { ScrambleText } from '@fj-effects';",
   implementation: impl('scramble-text', {
-    notApplicable: {
-      css: 'Each frame substitutes random characters generated in JavaScript — CSS can’t generate characters. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'The per-frame character churn is JavaScript state; utilities can style the text but can’t scramble it. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Each frame substitutes random characters generated in JavaScript — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   replayable: true,
   controls: [

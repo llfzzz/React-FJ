@@ -1,0 +1,47 @@
+// Free Joy — Textarea (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+import * as React from "react";
+
+/**
+ * Free Joy — Textarea
+ * Multi-line text field with label, hint, error. Matches Input styling.
+ */
+export function Textarea({ label, hint, error, rows = 4, id, className = "", ...rest }) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      {label && (
+        <label
+          htmlFor={fid}
+          className="text-[length:var(--text-sm)] font-medium text-[var(--text-muted)]"
+        >
+          {label}
+        </label>
+      )}
+      <textarea
+        id={fid}
+        rows={rows}
+        className={
+          "w-full resize-y rounded-[var(--radius-md)] bg-[var(--surface)] px-3.5 py-[11px] " +
+          "font-[family-name:var(--font-text)] text-[length:var(--text-base)] text-[var(--text)] " +
+          "leading-[var(--leading-normal)] outline-none border " +
+          "transition-[border-color,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+          (error
+            ? "border-[var(--danger-500)]"
+            : "border-[var(--border-strong)] focus:border-[var(--accent)] focus:shadow-[var(--ring)]")
+        }
+        {...rest}
+      />
+      {(hint || error) && (
+        <span
+          className={`text-[length:var(--text-xs)] ${
+            error ? "text-[var(--danger-700)]" : "text-[var(--text-subtle)]"
+          }`}
+        >
+          {error || hint}
+        </span>
+      )}
+    </div>
+  );
+}

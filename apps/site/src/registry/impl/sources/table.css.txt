@@ -1,26 +1,8 @@
-<!-- Free Joy — Table, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Add .fj-table--zebra for alternating tints, .fj-table--dense for tighter
-     rows. Row hover is pure CSS. -->
+/* Free Joy — Table.css
+   Pairs with Table.tsx / Table.jsx. Requires the FJ tokens (tokens/*.css).
+   Modifiers: .fj-table--zebra (alternating tints), .fj-table--dense (tighter
+   rows), .fj-table--no-hover (static rows). Row hover is pure CSS. */
 
-<div class="fj-table-wrap">
-  <table class="fj-table">
-    <thead>
-      <tr>
-        <th>Track</th>
-        <th>Artist</th>
-        <th style="text-align:right">Plays</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Morning Set</td><td>Nils</td><td style="text-align:right">1,204</td></tr>
-      <tr><td>Blue Hour</td><td>Sena</td><td style="text-align:right">986</td></tr>
-      <tr><td>Afterglow</td><td>Rue</td><td style="text-align:right">742</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<style>
 .fj-table-wrap {
   width: 100%;
   overflow: auto;
@@ -56,17 +38,22 @@
 }
 .fj-table tbody tr:last-child td { border-bottom: none; }
 
+/* Zebra + dense modifiers (declared before hover so hover wins on even rows) */
+.fj-table--zebra tbody tr:nth-child(even) { background: var(--surface-2); }
+.fj-table--dense th, .fj-table--dense td { padding: 10px 14px; }
+
 /* Row hover */
 .fj-table tbody tr {
   transition: background var(--dur-fast) var(--ease-out);
 }
 .fj-table tbody tr:hover { background: var(--surface-hover); }
-
-/* Zebra + dense modifiers */
-.fj-table--zebra tbody tr:nth-child(even) { background: var(--surface-2); }
-.fj-table--dense th, .fj-table--dense td { padding: 10px 14px; }
+.fj-table--no-hover tbody tr:hover {
+  background: transparent;
+}
+.fj-table--no-hover.fj-table--zebra tbody tr:nth-child(even):hover {
+  background: var(--surface-2);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .fj-table tbody tr { transition-duration: 0.01ms; }
 }
-</style>

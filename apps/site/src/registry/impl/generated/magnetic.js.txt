@@ -1,8 +1,12 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { useReducedMotion } from "../motion/useReducedMotion";
+
+/**
+ * Free Joy — Magnetic (effect)
+ * Eases its child toward the cursor when the pointer is near — a tactile pull
+ * for a primary CTA. Snaps back on leave. Inert under reduced motion, on touch,
+ * and when disabled (the child still works as a normal button).
+ */
 export function Magnetic({
   children,
   strength = 0.3,
@@ -16,6 +20,7 @@ export function Magnetic({
   const ref = React.useRef(null);
   const [offset, setOffset] = React.useState({ x: 0, y: 0 });
   const inactive = disabled || reduced;
+
   const onMove = (e) => {
     if (inactive) return;
     const el = ref.current;
@@ -32,20 +37,27 @@ export function Magnetic({
     }
     setOffset({ x: dx * strength, y: dy * strength });
   };
+
   const reset = () => setOffset({ x: 0, y: 0 });
-  return <div
-    ref={ref}
-    onMouseMove={onMove}
-    onMouseLeave={reset}
-    style={{
-      display: "inline-block",
-      transform: `translate(${offset.x}px, ${offset.y}px)`,
-      transition: offset.x === 0 && offset.y === 0 ? `transform ${restDuration}ms var(--ease-spring)` : "transform 80ms var(--ease-out)",
-      willChange: inactive ? void 0 : "transform",
-      ...style
-    }}
-    {...rest}
-  >
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={reset}
+      style={{
+        display: "inline-block",
+        transform: `translate(${offset.x}px, ${offset.y}px)`,
+        transition:
+          offset.x === 0 && offset.y === 0
+            ? `transform ${restDuration}ms var(--ease-spring)`
+            : "transform 80ms var(--ease-out)",
+        willChange: inactive ? undefined : "transform",
+        ...style,
+      }}
+      {...rest}
+    >
       {children}
-    </div>;
+    </div>
+  );
 }

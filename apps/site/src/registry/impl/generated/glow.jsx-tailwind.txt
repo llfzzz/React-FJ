@@ -1,0 +1,35 @@
+// Free Joy — Glow (effect) (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// Static single blur layer — no animation, cheap. The gradient, blur, opacity,
+// and spread are prop-driven, so they ride inline style.
+
+/**
+ * Free Joy — Glow (effect)
+ * Static soft gradient glow behind a child element — lifts a hero screenshot,
+ * plan card, or CTA off the page.
+ */
+export function Glow({
+  colors = ["var(--joy-300)", "var(--bloom-300)"],
+  intensity = 0.35,
+  blur = 48,
+  spread = 8,
+  className = "",
+  children,
+  ...rest
+}) {
+  return (
+    <div className={`relative inline-block ${className}`} {...rest}>
+      <div
+        aria-hidden="true"
+        style={{
+          inset: -spread,
+          background: `linear-gradient(120deg, ${colors.join(", ")})`,
+          filter: `blur(${blur}px)`,
+          opacity: intensity,
+        }}
+        className="pointer-events-none absolute rounded-[var(--radius-xl)]"
+      />
+      <div className="relative">{children}</div>
+    </div>
+  );
+}

@@ -1,0 +1,81 @@
+// Free Joy — Marquee (effect) (TypeScript + CSS)
+// Pairs with Marquee.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The strip is rendered twice; the track slides one strip-width (-50%) on a
+// linear loop, so the seam is invisible. The clone is aria-hidden + inert.
+// Hover pauses; reduced motion stops the loop AND hides the clone (media query).
+"use client";
+
+import * as React from "react";
+import "./Marquee.css";
+
+export interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** The item strip to scroll (logos, tags, quotes). */
+  children?: React.ReactNode;
+  /** Seconds per loop. @default 24 */
+  duration?: number;
+  /** Scroll direction. @default "left" */
+  direction?: "left" | "right";
+  /** Pause while hovered. @default true */
+  pauseOnHover?: boolean;
+  /** Gap between items in px. @default 24 */
+  gap?: number;
+  /** Fade the strip out at both edges. @default true */
+  fade?: boolean;
+  /** Static row, no scrolling. @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Marquee (effect)
+ * An infinite, seamless ticker for decorative streams — logo walls, tag clouds.
+ */
+export function Marquee({
+  children,
+  duration = 24,
+  direction = "left",
+  pauseOnHover = true,
+  gap = 24,
+  fade = true,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: MarqueeProps) {
+  const group = (clone: boolean) => (
+    <div
+      className="fj-marquee-group"
+      aria-hidden={clone || undefined}
+      inert={clone || undefined}
+      style={{ "--fj-gap": `${gap}px` } as React.CSSProperties}
+    >
+      {children}
+    </div>
+  );
+
+  const classes = [
+    "fj-marquee",
+    !fade && "fj-marquee--no-fade",
+    !pauseOnHover && "fj-marquee--no-pause",
+    disabled && "fj-marquee--static",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={classes} style={style} {...rest}>
+      <div
+        className="fj-marquee-track"
+        style={
+          {
+            "--fj-duration": `${duration}s`,
+            animationDirection: direction === "right" ? "reverse" : undefined,
+          } as React.CSSProperties
+        }
+      >
+        {group(false)}
+        {group(true)}
+      </div>
+    </div>
+  );
+}

@@ -1,14 +1,8 @@
-<!-- Free Joy — Tooltip, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Pure CSS: the bubble reveals on hover/focus-within of the wrapper.
-     Placement modifiers: default top | --bottom | --left | --right. -->
+/* Free Joy — Tooltip.css
+   Pairs with Tooltip.tsx / Tooltip.jsx. Requires the FJ tokens (tokens/*.css).
+   Pure CSS: the bubble reveals on hover/focus-within of the wrapper.
+   Placement modifiers: default top | --bottom | --left | --right. */
 
-<span class="fj-tip" tabindex="0">
-  <button class="fj-tip-trigger">Hover me</button>
-  <span class="fj-tip-bubble" role="tooltip">Publishes to your followers</span>
-</span>
-
-<style>
 .fj-tip {
   position: relative;
   display: inline-flex;
@@ -55,4 +49,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-tip-bubble { transition-duration: 0.01ms; }
 }
-</style>

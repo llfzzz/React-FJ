@@ -1,8 +1,11 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { useReducedMotion } from "../motion/useReducedMotion";
+
+/**
+ * Free Joy — TiltCard (effect)
+ * A card that tilts in 3D toward the cursor, with an optional soft glare. For
+ * flagship/showcase cards only. Flat and still under reduced motion or disabled.
+ */
 export function TiltCard({
   children,
   maxTilt = 10,
@@ -21,6 +24,7 @@ export function TiltCard({
   const [hover, setHover] = React.useState(false);
   const inactive = disabled || reduced;
   const showGlare = glare && performance === "full" && !inactive;
+
   const onMove = (e) => {
     if (inactive) return;
     const el = ref.current;
@@ -32,41 +36,50 @@ export function TiltCard({
       rx: (0.5 - py) * maxTilt * 2,
       ry: (px - 0.5) * maxTilt * 2,
       gx: px * 100,
-      gy: py * 100
+      gy: py * 100,
     });
   };
+
   const reset = () => {
     setHover(false);
     setTilt({ rx: 0, ry: 0, gx: 50, gy: 50 });
   };
-  const transform = inactive ? void 0 : `perspective(${perspective}px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) scale(${hover ? scale : 1})`;
-  return <div
-    ref={ref}
-    onMouseEnter={() => !inactive && setHover(true)}
-    onMouseMove={onMove}
-    onMouseLeave={reset}
-    style={{
-      position: "relative",
-      transformStyle: "preserve-3d",
-      transform,
-      transition: hover ? "transform 80ms var(--ease-out)" : `transform ${resetDuration}ms var(--ease-out)`,
-      willChange: inactive ? void 0 : "transform",
-      ...style
-    }}
-    {...rest}
-  >
+
+  const transform = inactive
+    ? undefined
+    : `perspective(${perspective}px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) scale(${hover ? scale : 1})`;
+
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => !inactive && setHover(true)}
+      onMouseMove={onMove}
+      onMouseLeave={reset}
+      style={{
+        position: "relative",
+        transformStyle: "preserve-3d",
+        transform,
+        transition: hover ? "transform 80ms var(--ease-out)" : `transform ${resetDuration}ms var(--ease-out)`,
+        willChange: inactive ? undefined : "transform",
+        ...style,
+      }}
+      {...rest}
+    >
       {children}
-      {showGlare && <span
-    aria-hidden="true"
-    style={{
-      position: "absolute",
-      inset: 0,
-      pointerEvents: "none",
-      borderRadius: "inherit",
-      background: `radial-gradient(circle at ${tilt.gx}% ${tilt.gy}%, color-mix(in srgb, var(--white) 35%, transparent), transparent 60%)`,
-      opacity: hover ? 1 : 0,
-      transition: "opacity var(--dur-base) var(--ease-out)"
-    }}
-  />}
-    </div>;
+      {showGlare && (
+        <span
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            borderRadius: "inherit",
+            background: `radial-gradient(circle at ${tilt.gx}% ${tilt.gy}%, color-mix(in srgb, var(--white) 35%, transparent), transparent 60%)`,
+            opacity: hover ? 1 : 0,
+            transition: "opacity var(--dur-base) var(--ease-out)",
+          }}
+        />
+      )}
+    </div>
+  );
 }

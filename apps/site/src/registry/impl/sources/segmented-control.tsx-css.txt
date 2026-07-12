@@ -1,0 +1,75 @@
+// Free Joy — SegmentedControl (TypeScript + CSS)
+// Pairs with SegmentedControl.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Segments are equal-width grid columns, so the sliding thumb is a reliable
+// 1/n slice of the track — the component feeds --fj-n and --fj-idx inline.
+"use client";
+
+import * as React from "react";
+import "./SegmentedControl.css";
+
+export interface SegmentOption {
+  value: string;
+  label: React.ReactNode;
+  /** Lucide icon name. */
+  icon?: string;
+}
+
+export interface SegmentedControlProps {
+  options: SegmentOption[];
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  /** @default "md" */
+  size?: "sm" | "md" | "lg";
+  /** Stretch to fill width. @default false */
+  full?: boolean;
+  className?: string;
+}
+
+/**
+ * Free Joy — SegmentedControl
+ * iOS-style segmented control with a sliding thumb. options: [{ value, label, icon }]
+ */
+export function SegmentedControl({
+  options = [],
+  value,
+  defaultValue,
+  onChange,
+  size = "md",
+  full = false,
+  className = "",
+}: SegmentedControlProps) {
+  const [internal, setInternal] = React.useState(defaultValue ?? options[0]?.value);
+  const val = value ?? internal;
+  const n = options.length || 1;
+  const idx = Math.max(0, options.findIndex((o) => o.value === val));
+
+  const set = (v: string) => {
+    if (value === undefined) setInternal(v);
+    onChange && onChange(v);
+  };
+
+  const classes = [
+    "fj-seg",
+    size !== "md" && `fj-seg--${size}`,
+    full && "fj-seg--full",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={classes} style={{ "--fj-n": n, "--fj-idx": idx } as React.CSSProperties}>
+      <div className="fj-seg-thumb" aria-hidden="true" />
+      {options.map((o) => (
+        <button
+          key={o.value}
+          className={o.value === val ? "fj-seg-btn is-active" : "fj-seg-btn"}
+          onClick={() => set(o.value)}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}

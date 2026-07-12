@@ -1,13 +1,8 @@
-<!-- Free Joy — Tactile (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Pure CSS: :active scales the element down. Works with mouse and touch.
-     Tune via the custom properties. -->
+/* Free Joy — Tactile.css
+   Pairs with Tactile.tsx / Tactile.jsx. Requires the FJ tokens (tokens/*.css).
+   Pure CSS: :active scales the element down. Works with mouse and touch.
+   The component feeds --fj-scale and --fj-duration; --off disables the press. */
 
-<button class="fj-tactile" style="--fj-scale: 0.96; --fj-duration: 120ms">
-  Press me
-</button>
-
-<style>
 .fj-tactile {
   display: inline-block;
   transition: transform var(--fj-duration, 120ms) var(--ease-out);
@@ -18,8 +13,10 @@
   transform: scale(var(--fj-scale, 0.96));
 }
 
+.fj-tactile--off { transition: none; }
+.fj-tactile--off:active { transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   .fj-tactile { transition: none; }
   .fj-tactile:active { transform: none; }
 }
-</style>

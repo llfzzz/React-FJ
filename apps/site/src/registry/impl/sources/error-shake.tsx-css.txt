@@ -1,0 +1,74 @@
+// Free Joy — ErrorShake (effect) (TypeScript + CSS)
+// Pairs with ErrorShake.css (imported below). Requires the FJ tokens
+// (tokens/*.css). Plays .is-shaking (error) or .is-pulsing (warning) once when
+// `active` flips true, clearing on animationend so it can replay. Reduced
+// motion swaps the shake for a single ring flash (media query).
+"use client";
+
+import * as React from "react";
+import "./ErrorShake.css";
+
+export interface ErrorShakeProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** "error" shakes; "warning" pulses a ring. @default "error" */
+  mode?: "error" | "warning";
+  /** Controlled: play when this flips to true. */
+  active?: boolean;
+  /** Shake amplitude in px. @default 4 */
+  intensity?: number;
+  /** Animation duration in ms. @default 400 */
+  duration?: number;
+  /** Called when the animation ends. */
+  onDone?: () => void;
+  /** Disable (children unchanged). @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — ErrorShake (effect)
+ * A short horizontal shake (error) or a warning-colored pulse, played when
+ * `active` flips true — for a rejected form field or a failed action.
+ */
+export function ErrorShake({
+  children,
+  mode = "error",
+  active = false,
+  intensity = 4,
+  duration = 400,
+  onDone,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: ErrorShakeProps) {
+  const [playing, setPlaying] = React.useState(false);
+  const prev = React.useRef(active);
+
+  React.useEffect(() => {
+    if (active && !prev.current && !disabled) setPlaying(true);
+    prev.current = active;
+  }, [active, disabled]);
+
+  const stateClass = playing ? (mode === "error" ? "is-shaking" : "is-pulsing") : "";
+  const vars = {
+    "--fj-amp": `${intensity}px`,
+    "--fj-dur": `${duration}ms`,
+    "--fj-pulse-dur": `${Math.max(duration, 500)}ms`,
+  } as React.CSSProperties;
+
+  return (
+    <div
+      className={`fj-shake ${stateClass} ${className}`.trim()}
+      style={{ ...vars, ...style }}
+      onAnimationEnd={(e) => {
+        // animationend bubbles — ignore animations finishing inside children.
+        if (e.animationName !== "fj-shake" && e.animationName !== "fj-warn-pulse") return;
+        setPlaying(false);
+        onDone?.();
+      }}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

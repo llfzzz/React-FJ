@@ -1,0 +1,35 @@
+// Free Joy — Tactile (effect) (JavaScript + Tailwind CSS)
+// Pure :active press — no JS needed. Wrap any child. Reduced motion keeps the
+// press instant with no scaling.
+
+/**
+ * Free Joy — Tactile (effect)
+ * Adds a satisfying press-down (scale + settle) to any child — buttons, cards,
+ * tappable tiles.
+ */
+export function Tactile({
+  children,
+  scale = 0.96,
+  duration = 120,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  return (
+    <span
+      style={{ "--fj-scale": scale, transitionDuration: `${duration}ms`, ...style }}
+      className={
+        "inline-block [-webkit-tap-highlight-color:transparent] " +
+        "transition-transform ease-[var(--ease-out)] " +
+        (disabled
+          ? "transition-none "
+          : "active:scale-[var(--fj-scale)] motion-reduce:transition-none motion-reduce:active:scale-100 ") +
+        className
+      }
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+}

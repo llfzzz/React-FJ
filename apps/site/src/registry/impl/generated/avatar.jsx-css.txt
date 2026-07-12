@@ -1,0 +1,22 @@
+// Free Joy — Avatar (JavaScript + CSS)
+// Pairs with Avatar.css (imported below). Requires the FJ tokens (tokens/*.css).
+import "./Avatar.css";
+
+/**
+ * Free Joy — Avatar
+ * Image or initials, circular. sizes: sm | md | lg
+ */
+export function Avatar({ src, name = "", size = "md", className = "", ...rest }) {
+  const initials = name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+  return (
+    <span className={`fj-avatar fj-avatar--${size} ${className}`.trim()} {...rest}>
+      {src ? <img src={src} alt={name} /> : initials || "?"}
+    </span>
+  );
+}

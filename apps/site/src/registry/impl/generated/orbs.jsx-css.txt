@@ -1,0 +1,75 @@
+// Free Joy — Orbs (effect) (JavaScript + CSS)
+// Pairs with Orbs.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Soft gradient blobs drifting slowly behind the content — a rounder, calmer
+// cousin of Aurora. Positions/sizes are scattered in JavaScript; the shared
+// blur, opacity, and drift loop live in the stylesheet. Only transform
+// animates. Static (but still present) under reduced motion (media query).
+"use client";
+
+import * as React from "react";
+import "./Orbs.css";
+
+const MAX = 6; // hard cap on orbs
+
+/**
+ * Free Joy — Orbs (effect)
+ * Soft gradient blobs drifting slowly behind hero content.
+ */
+export function Orbs({
+  children,
+  count = 3,
+  colors = ["var(--joy-300)", "var(--bloom-300)", "var(--sun-300)"],
+  size = 240,
+  speed = 1,
+  opacity = 0.5,
+  blur = 40,
+  performance = "full",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const n = Math.min(performance === "lite" ? 3 : MAX, Math.max(0, count));
+  const effBlur = performance === "lite" ? Math.min(blur, 24) : blur;
+
+  const orbs = React.useMemo(
+    () =>
+      Array.from({ length: n }, (_, i) => ({
+        top: 15 + Math.random() * 70,
+        left: 10 + Math.random() * 80,
+        size: size * (0.7 + Math.random() * 0.6),
+        color: colors[i % colors.length],
+        dur: (18 + Math.random() * 12) / speed,
+        delay: -Math.random() * 20,
+      })),
+    [n, size, colors, speed],
+  );
+
+  return (
+    <div
+      className={`fj-orbs ${disabled ? "fj-orbs--static " : ""}${className}`.trim()}
+      style={{ "--fj-blur": `${effBlur}px`, "--fj-opacity": opacity, ...style }}
+      {...rest}
+    >
+      {orbs.map((o, i) => (
+        <div
+          key={i}
+          className="fj-orb"
+          aria-hidden="true"
+          style={{
+            top: `${o.top}%`,
+            left: `${o.left}%`,
+            width: o.size,
+            height: o.size,
+            marginTop: -o.size / 2,
+            marginLeft: -o.size / 2,
+            background: `radial-gradient(closest-side, ${o.color}, transparent)`,
+            animationDuration: `${o.dur}s`,
+            animationDelay: `${o.delay}s`,
+          }}
+        />
+      ))}
+      <div className="fj-orbs-content">{children}</div>
+    </div>
+  );
+}

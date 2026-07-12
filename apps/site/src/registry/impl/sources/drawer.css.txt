@@ -1,24 +1,9 @@
-<!-- Free Joy — Drawer, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Toggle .is-open to slide the panel in and fade the scrim. Focus-trapping,
-     Escape-to-close and scrim-click are JS behavior. Side modifiers set the
-     anchor + slide direction (default right; --left / --top / --bottom). -->
+/* Free Joy — Drawer.css
+   Pairs with Drawer.tsx / Drawer.jsx. Requires the FJ tokens (tokens/*.css).
+   .is-open slides the panel in and fades the scrim. Side modifiers set the
+   anchor + slide direction (default right; --left / --top / --bottom).
+   The component sets --fj-drawer-size (panel width or height). */
 
-<div class="fj-drawer fj-drawer--right is-open">
-  <div class="fj-drawer-scrim"></div>
-  <aside class="fj-drawer-panel" role="dialog" aria-modal="true" aria-label="Filters" tabindex="-1">
-    <div class="fj-drawer-head">
-      <span class="fj-drawer-title">Filters</span>
-      <button class="fj-drawer-close" aria-label="Close">×</button>
-    </div>
-    <div class="fj-drawer-body">Narrow the catalog by mood, tempo, and length.</div>
-    <div class="fj-drawer-foot">
-      <button class="fj-btn fj-btn--primary fj-btn--md fj-btn--full">Apply</button>
-    </div>
-  </aside>
-</div>
-
-<style>
 .fj-drawer {
   position: fixed;
   inset: 0;
@@ -48,10 +33,10 @@
 }
 
 /* Anchors + hidden offsets + corner rounding per side. */
-.fj-drawer--right .fj-drawer-panel  { top: 0; right: 0; bottom: 0; width: 380px; border-radius: var(--radius-xl) 0 0 var(--radius-xl); transform: translateX(100%); }
-.fj-drawer--left .fj-drawer-panel   { top: 0; left: 0; bottom: 0; width: 380px; border-radius: 0 var(--radius-xl) var(--radius-xl) 0; transform: translateX(-100%); }
-.fj-drawer--top .fj-drawer-panel    { top: 0; left: 0; right: 0; height: 380px; border-radius: 0 0 var(--radius-xl) var(--radius-xl); transform: translateY(-100%); }
-.fj-drawer--bottom .fj-drawer-panel { bottom: 0; left: 0; right: 0; height: 380px; border-radius: var(--radius-xl) var(--radius-xl) 0 0; transform: translateY(100%); }
+.fj-drawer--right .fj-drawer-panel  { top: 0; right: 0; bottom: 0; width: var(--fj-drawer-size, 380px); border-radius: var(--radius-xl) 0 0 var(--radius-xl); transform: translateX(100%); }
+.fj-drawer--left .fj-drawer-panel   { top: 0; left: 0; bottom: 0; width: var(--fj-drawer-size, 380px); border-radius: 0 var(--radius-xl) var(--radius-xl) 0; transform: translateX(-100%); }
+.fj-drawer--top .fj-drawer-panel    { top: 0; left: 0; right: 0; height: var(--fj-drawer-size, 380px); border-radius: 0 0 var(--radius-xl) var(--radius-xl); transform: translateY(-100%); }
+.fj-drawer--bottom .fj-drawer-panel { bottom: 0; left: 0; right: 0; height: var(--fj-drawer-size, 380px); border-radius: var(--radius-xl) var(--radius-xl) 0 0; transform: translateY(100%); }
 
 .fj-drawer.is-open .fj-drawer-panel { transform: none; }
 
@@ -87,4 +72,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-drawer-scrim, .fj-drawer-panel { transition-duration: 0.01ms; }
 }
-</style>

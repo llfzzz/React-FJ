@@ -1,0 +1,73 @@
+// Free Joy — ErrorShake (effect) (JavaScript + Tailwind CSS)
+// The shake / warning-pulse keyframes can't be utilities — add the CSS block
+// below to your global stylesheet once. The wrapper plays them when `active`
+// flips true, then clears on animationend so it can replay.
+"use client";
+
+import * as React from "react";
+
+/**
+ * Free Joy — ErrorShake (effect)
+ * A short horizontal shake (error) or a warning-colored pulse, played when
+ * `active` flips true — for a rejected form field or a failed action.
+ */
+export function ErrorShake({
+  children,
+  mode = "error",
+  active = false,
+  intensity = 4,
+  duration = 400,
+  onDone,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const [playing, setPlaying] = React.useState(false);
+  const prev = React.useRef(active);
+
+  React.useEffect(() => {
+    if (active && !prev.current && !disabled) setPlaying(true);
+    prev.current = active;
+  }, [active, disabled]);
+
+  const anim =
+    mode === "error"
+      ? "animate-[fj-shake_var(--fj-dur)_var(--ease-out)]"
+      : "animate-[fj-warn-pulse_var(--fj-pulse-dur)_var(--ease-out)]";
+
+  return (
+    <div
+      style={{
+        "--fj-amp": `${intensity}px`,
+        "--fj-dur": `${duration}ms`,
+        "--fj-pulse-dur": `${Math.max(duration, 500)}ms`,
+        ...style,
+      }}
+      className={`inline-block rounded-[inherit] ${playing ? anim : ""} ${className}`}
+      onAnimationEnd={(e) => {
+        // animationend bubbles — ignore animations finishing inside children.
+        if (e.animationName !== "fj-shake" && e.animationName !== "fj-warn-pulse") return;
+        setPlaying(false);
+        onDone?.();
+      }}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(calc(-1 * var(--fj-amp, 4px))); }
+  40% { transform: translateX(var(--fj-amp, 4px)); }
+  60% { transform: translateX(calc(-1 * var(--fj-amp, 4px))); }
+  80% { transform: translateX(var(--fj-amp, 4px)); }
+}
+@keyframes fj-warn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  30% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn-500) 40%, transparent); }
+}
+*/

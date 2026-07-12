@@ -1,0 +1,46 @@
+// Free Joy — Glow (effect) (TypeScript + CSS)
+// Pairs with Glow.css (imported below). Requires the FJ tokens (tokens/*.css).
+// No animation, cheap single blur layer.
+import * as React from "react";
+import "./Glow.css";
+
+export interface GlowProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Gradient colors. @default coral→lilac */
+  colors?: string[];
+  /** Glow opacity 0–1. @default 0.35 */
+  intensity?: number;
+  /** Blur radius in px. @default 48 */
+  blur?: number;
+  /** How far the glow extends past the child, in px. @default 8 */
+  spread?: number;
+}
+
+/**
+ * Free Joy — Glow (effect)
+ * Static soft gradient glow behind a child element — lifts a hero screenshot,
+ * plan card, or CTA off the page.
+ */
+export function Glow({
+  colors = ["var(--joy-300)", "var(--bloom-300)"],
+  intensity = 0.35,
+  blur = 48,
+  spread = 8,
+  className = "",
+  style,
+  children,
+  ...rest
+}: GlowProps) {
+  const vars = {
+    "--fj-glow-colors": colors.join(", "),
+    "--fj-intensity": intensity,
+    "--fj-blur": `${blur}px`,
+    "--fj-spread": `${spread}px`,
+  } as React.CSSProperties;
+
+  return (
+    <div className={`fj-glow ${className}`.trim()} style={{ ...vars, ...style }} {...rest}>
+      <div className="fj-glow-aura" aria-hidden="true" />
+      <div className="fj-glow-content">{children}</div>
+    </div>
+  );
+}

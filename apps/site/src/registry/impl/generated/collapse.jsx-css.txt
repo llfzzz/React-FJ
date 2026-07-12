@@ -1,0 +1,53 @@
+// Free Joy — Collapse (effect) (JavaScript + CSS)
+// Pairs with Collapse.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The modern grid-template-rows 0fr → 1fr trick animates to the content's
+// natural height with pure CSS — no JS height measuring. Under reduced motion
+// it snaps open/closed with no travel (media query).
+"use client";
+
+import * as React from "react";
+import "./Collapse.css";
+
+/**
+ * Free Joy — Collapse (effect)
+ * Smoothly expands/collapses to its content's natural height — accordions,
+ * "show more", filter panels.
+ */
+export function Collapse({
+  children,
+  open,
+  duration = 280,
+  easing = "out",
+  unmountOnExit = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  // When unmountOnExit is off, children always stay mounted (just clipped).
+  const [render, setRender] = React.useState(open || !unmountOnExit);
+
+  React.useEffect(() => {
+    if (open) setRender(true);
+  }, [open]);
+
+  const vars = {
+    "--fj-duration": `${duration}ms`,
+    "--fj-ease": `var(--ease-${easing})`,
+  };
+
+  return (
+    <div
+      className={`fj-collapse ${open ? "is-open " : ""}${className}`.trim()}
+      style={{ ...vars, ...style }}
+      onTransitionEnd={() => {
+        if (!open && unmountOnExit) setRender(false);
+      }}
+      aria-hidden={!open}
+      // Clipped-but-mounted content must not stay keyboard-reachable.
+      inert={!open}
+      {...rest}
+    >
+      <div className="fj-collapse-inner">{render ? children : null}</div>
+    </div>
+  );
+}

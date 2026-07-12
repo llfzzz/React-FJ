@@ -1,24 +1,21 @@
-<!-- Free Joy — ErrorShake (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Add .is-shaking (error) or .is-pulsing (warning) to play the animation once,
-     then remove it on animationend so it can replay. Reduced motion falls back
-     to a single ring flash. -->
+/* Free Joy — ErrorShake.css
+   Pairs with ErrorShake.tsx / ErrorShake.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   The component adds .is-shaking (error) or .is-pulsing (warning) to play the
+   animation once, then clears it on animationend so it can replay. It feeds
+   --fj-amp, --fj-dur, and --fj-pulse-dur. Reduced motion falls back to a
+   single ring flash. */
 
-<div class="fj-shake is-shaking" style="--fj-amp: 4px">
-  <input class="fj-field-input" placeholder="Your handle" />
-</div>
-
-<style>
 .fj-shake {
   display: inline-block;
   border-radius: inherit;
 }
 
 .fj-shake.is-shaking {
-  animation: fj-shake 400ms var(--ease-out);
+  animation: fj-shake var(--fj-dur, 400ms) var(--ease-out);
 }
 .fj-shake.is-pulsing {
-  animation: fj-warn-pulse 500ms var(--ease-out);
+  animation: fj-warn-pulse var(--fj-pulse-dur, 500ms) var(--ease-out);
 }
 
 @keyframes fj-shake {
@@ -36,13 +33,5 @@
 
 /* Reduced motion: no shake — flash the warning ring once instead. */
 @media (prefers-reduced-motion: reduce) {
-  .fj-shake.is-shaking { animation: fj-warn-pulse 500ms var(--ease-out); }
+  .fj-shake.is-shaking { animation: fj-warn-pulse var(--fj-pulse-dur, 500ms) var(--ease-out); }
 }
-</style>
-
-<script>
-  // Remove the class on animationend so the same node can shake again.
-  document.querySelectorAll(".fj-shake").forEach((el) => {
-    el.addEventListener("animationend", () => el.classList.remove("is-shaking", "is-pulsing"));
-  });
-</script>

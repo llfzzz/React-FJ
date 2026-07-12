@@ -1,0 +1,87 @@
+// Free Joy — Marquee (effect) (TypeScript + Tailwind CSS)
+// The loop keyframes can't be utilities — add the CSS block below to your
+// global stylesheet once. The clone is aria-hidden + inert and hidden under
+// reduced motion, so assistive tech and still viewers see each item once.
+"use client";
+
+import * as React from "react";
+
+export interface MarqueeProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** The item strip to scroll (logos, tags, quotes). */
+  children?: React.ReactNode;
+  /** Seconds per loop. @default 24 */
+  duration?: number;
+  /** Scroll direction. @default "left" */
+  direction?: "left" | "right";
+  /** Pause while hovered. @default true */
+  pauseOnHover?: boolean;
+  /** Gap between items in px. @default 24 */
+  gap?: number;
+  /** Fade the strip out at both edges. @default true */
+  fade?: boolean;
+  /** Static row, no scrolling. @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Marquee (effect)
+ * An infinite, seamless ticker for decorative streams — logo walls, tag clouds.
+ */
+export function Marquee({
+  children,
+  duration = 24,
+  direction = "left",
+  pauseOnHover = true,
+  gap = 24,
+  fade = true,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: MarqueeProps) {
+  const group = (clone: boolean) => (
+    <div
+      aria-hidden={clone || undefined}
+      inert={clone || undefined}
+      style={{ gap, paddingRight: gap }}
+      className={"flex shrink-0 items-center " + (clone ? "motion-reduce:hidden" : "")}
+    >
+      {children}
+    </div>
+  );
+  return (
+    <div
+      style={style}
+      className={
+        "overflow-hidden " +
+        (fade ? "[mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] " : "") +
+        className
+      }
+      {...rest}
+    >
+      <div
+        style={{
+          animationDuration: `${duration}s`,
+          animationDirection: direction === "right" ? "reverse" : undefined,
+        }}
+        className={
+          "flex w-max will-change-transform " +
+          (disabled
+            ? ""
+            : "animate-[fj-marquee_linear_infinite] motion-reduce:animate-none " +
+              (pauseOnHover ? "hover:[animation-play-state:paused]" : ""))
+        }
+      >
+        {group(false)}
+        {!disabled && group(true)}
+      </div>
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+*/

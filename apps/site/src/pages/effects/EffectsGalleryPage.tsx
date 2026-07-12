@@ -10,7 +10,7 @@ import { usePageTitle } from '../../lib/usePageTitle';
 /**
  * The animation gallery: a filterable grid of live mini-previews. Each card
  * renders the animation at its default settings and links to the full
- * component page (playground, props, 4-format code, a11y notes).
+ * component page (playground, props, language × styling code, a11y notes).
  */
 export function EffectsGalleryPage() {
   usePageTitle('Animation');

@@ -1,26 +1,34 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { ensureKeyframes } from "../motion/keyframes";
 import { useReducedMotion } from "../motion/useReducedMotion";
+
+// Two static keyframes instead of one per-instance definition: a shared name
+// whose body depended on props would let the last-rendered instance redefine
+// the animation for every other one on the page.
 ensureKeyframes(
   "fj-rotate-in-slide",
   `@keyframes fj-rotate-in-slide {
     from { opacity: 0; transform: translateY(100%); }
     to { opacity: 1; transform: none; }
-  }`
+  }`,
 );
 ensureKeyframes(
   "fj-rotate-in-fade",
   `@keyframes fj-rotate-in-fade {
     from { opacity: 0; }
     to { opacity: 1; }
-  }`
+  }`,
 );
+
+/**
+ * Free Joy — RotatingText (effect)
+ * Cycles a slot of words with a gentle slide or fade — "Build something ___".
+ * Landing/hero surfaces. Under reduced motion it crossfades instantly and can
+ * still advance, but with no travel.
+ */
 export function RotatingText({
   words,
-  interval = 2e3,
+  interval = 2000,
   mode = "slide",
   duration = 400,
   pauseOnHover = true,
@@ -31,28 +39,35 @@ export function RotatingText({
   const reduced = useReducedMotion();
   const [index, setIndex] = React.useState(0);
   const [paused, setPaused] = React.useState(false);
+
   React.useEffect(() => {
     if (disabled || words.length < 2 || paused) return;
     const id = setInterval(() => setIndex((i) => (i + 1) % words.length), interval);
     return () => clearInterval(id);
   }, [disabled, words.length, paused, interval]);
+
   const current = words[disabled ? 0 : index] ?? "";
   const travel = mode === "slide" && !reduced;
-  return <span
-    style={{ display: "inline-flex", overflow: "hidden", verticalAlign: "bottom", ...style }}
-    onMouseEnter={() => pauseOnHover && setPaused(true)}
-    onMouseLeave={() => pauseOnHover && setPaused(false)}
-    aria-live="polite"
-    {...rest}
-  >
+
+  return (
+    <span
+      style={{ display: "inline-flex", overflow: "hidden", verticalAlign: "bottom", ...style }}
+      onMouseEnter={() => pauseOnHover && setPaused(true)}
+      onMouseLeave={() => pauseOnHover && setPaused(false)}
+      aria-live="polite"
+      {...rest}
+    >
       <span
-    key={current + index}
-    style={{
-      display: "inline-block",
-      animation: disabled ? "none" : `${travel ? "fj-rotate-in-slide" : "fj-rotate-in-fade"} ${duration}ms var(--ease-emphasized)`
-    }}
-  >
+        key={current + index}
+        style={{
+          display: "inline-block",
+          animation: disabled
+            ? "none"
+            : `${travel ? "fj-rotate-in-slide" : "fj-rotate-in-fade"} ${duration}ms var(--ease-emphasized)`,
+        }}
+      >
         {current}
       </span>
-    </span>;
+    </span>
+  );
 }

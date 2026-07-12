@@ -1,26 +1,8 @@
-<!-- Free Joy — Modal (Dialog), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Toggle the .is-open class to show/hide. Focus-trapping, Escape-to-close and
-     backdrop-click are behavior you wire in JS — the styles + entrance are here.
-     Tip: the native <dialog> element gives you the focus trap + Esc for free. -->
+/* Free Joy — Modal.css
+   Pairs with Modal.tsx / Modal.jsx. Requires the FJ tokens (tokens/*.css).
+   The component renders .fj-modal.is-open while open; the backdrop fades in
+   and the panel rises. Glass variant via .fj-modal-panel--glass. */
 
-<div class="fj-modal is-open" role="presentation">
-  <div class="fj-modal-panel" role="dialog" aria-modal="true" aria-label="Rename mix" tabindex="-1">
-    <div class="fj-modal-head">
-      <h3 class="fj-modal-title">Rename mix</h3>
-      <button class="fj-modal-close" aria-label="Close">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="fj-modal-body">Give this set a name your followers will recognise.</div>
-    <div class="fj-modal-foot">
-      <button class="fj-btn fj-btn--secondary fj-btn--md">Cancel</button>
-      <button class="fj-btn fj-btn--primary fj-btn--md">Save</button>
-    </div>
-  </div>
-</div>
-
-<style>
 .fj-modal {
   position: fixed;
   inset: 0;
@@ -102,4 +84,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-modal.is-open, .fj-modal-panel { animation-duration: 0.01ms; }
 }
-</style>

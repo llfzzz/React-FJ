@@ -1,18 +1,8 @@
-<!-- Free Joy — Badge, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Tones: neutral | accent | success | warn | danger | sun | bloom
-     Soft tint by default; add .fj-badge--solid for a filled pill. -->
+/* Free Joy — Badge.css
+   Pairs with Badge.tsx / Badge.jsx. Requires the FJ tokens (tokens/*.css).
+   Tones: neutral | accent | success | warn | danger | sun | bloom
+   Soft tint by default; .fj-badge--solid fills the pill. */
 
-<span class="fj-badge">Neutral</span>
-<span class="fj-badge fj-badge--accent">Accent</span>
-<span class="fj-badge fj-badge--success">Success</span>
-<span class="fj-badge fj-badge--warn">Warn</span>
-<span class="fj-badge fj-badge--danger">Danger</span>
-<span class="fj-badge fj-badge--sun">Sun</span>
-<span class="fj-badge fj-badge--bloom">Bloom</span>
-<span class="fj-badge fj-badge--accent fj-badge--solid">Solid</span>
-
-<style>
 .fj-badge {
   /* Soft tint (default) and solid fill per tone, via custom properties. */
   --fj-badge-soft-bg: var(--paper-2);
@@ -44,4 +34,3 @@
 .fj-badge--danger  { --fj-badge-soft-bg: var(--danger-100);  --fj-badge-soft-fg: var(--danger-700);  --fj-badge-solid-bg: var(--danger-500);  --fj-badge-solid-fg: var(--white); }
 .fj-badge--sun     { --fj-badge-soft-bg: var(--sun-100);     --fj-badge-soft-fg: var(--sun-700);     --fj-badge-solid-bg: var(--sun-500);     --fj-badge-solid-fg: var(--ink); }
 .fj-badge--bloom   { --fj-badge-soft-bg: var(--bloom-100);   --fj-badge-soft-fg: var(--bloom-700);   --fj-badge-solid-bg: var(--bloom-500);   --fj-badge-solid-fg: var(--white); }
-</style>

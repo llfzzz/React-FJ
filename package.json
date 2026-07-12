@@ -10,9 +10,11 @@
     "typecheck": "pnpm --filter fj-site typecheck",
     "test": "pnpm --filter fj-site test",
     "e2e": "pnpm --filter fj-site e2e",
-    "gen:impl": "node scripts/gen-impl-js.mjs"
+    "gen:impl": "node scripts/gen-impl-js.mjs",
+    "check:impl": "node scripts/check-impl-ports.mjs"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "ts-blank-space": "^0.9.0",
+    "typescript": "^6.0.3"
   }
 }

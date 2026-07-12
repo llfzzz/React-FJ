@@ -1,15 +1,10 @@
-<!-- Free Joy — NoiseOverlay (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     A static film-grain overlay from an inline SVG turbulence data URI — no
-     network request, no animation. Keep opacity low for legibility. -->
+/* Free Joy — NoiseOverlay.css
+   Pairs with NoiseOverlay.tsx / NoiseOverlay.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   A static film-grain overlay from an inline SVG turbulence data URI — no
+   network request, no animation. The component feeds --fj-opacity, --fj-blend,
+   and --fj-scale. Keep opacity low for legibility. */
 
-<section class="fj-noise" style="--fj-opacity: 0.04">
-  <div class="fj-noise-content">
-    <h2>Textured surface</h2>
-  </div>
-</section>
-
-<style>
 .fj-noise {
   position: relative;
 }
@@ -20,11 +15,10 @@
   inset: 0;
   pointer-events: none;
   opacity: var(--fj-opacity, 0.04);
-  mix-blend-mode: overlay;
-  background-size: 120px 120px;
+  mix-blend-mode: var(--fj-blend, overlay);
+  background-size: var(--fj-scale, 120px) var(--fj-scale, 120px);
   /* Inline SVG fractal noise (URL-encoded). */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .fj-noise-content { position: relative; }
-</style>

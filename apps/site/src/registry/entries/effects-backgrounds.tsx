@@ -154,10 +154,8 @@ export const sparklesDoc: ComponentDoc = {
   keywords: ['sparkles', 'particles', 'twinkle', 'hero', 'background'],
   importLine: "import { Sparkles } from '@fj-effects';",
   implementation: impl('sparkles', {
-    notApplicable: {
-      css: 'Particles are scattered at random positions computed in JavaScript. A CSS-only version can only place a fixed, hand-authored set. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Random particle placement is JavaScript; utilities can style a dot but can’t scatter a variable count. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Particles are scattered at random positions computed in JavaScript — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   replayable: true,
   controls: [
@@ -206,10 +204,8 @@ export const confettiBurstDoc: ComponentDoc = {
   keywords: ['confetti', 'celebration', 'success', 'burst', 'particles'],
   importLine: "import { ConfettiBurst } from '@fj-effects';",
   implementation: impl('confetti-burst', {
-    notApplicable: {
-      css: 'Each burst generates a variable number of pieces with randomized trajectories in JavaScript, then removes them. CSS can’t generate or clean up procedural elements. Use the JavaScript or TypeScript implementation.',
-      tailwind: 'Procedural, self-cleaning particles are JavaScript; utilities can’t express them. Use the JavaScript or TypeScript implementation.',
-    },
+    stylingNeutral:
+      'Each burst generates pieces with randomized trajectories in JavaScript, then removes them — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
   }),
   controls: [
     { type: 'number', prop: 'count', defaultValue: 28, min: 8, max: 40, step: 4 },

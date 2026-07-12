@@ -1,0 +1,65 @@
+// Free Joy — Select (TypeScript + CSS)
+// Pairs with Select.css (imported below). Requires the FJ tokens (tokens/*.css),
+// including --ring for the focus glow.
+import * as React from "react";
+import "./Select.css";
+
+export interface SelectOption {
+  label: string;
+  value: string;
+}
+
+export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "size"> {
+  /** Field label rendered above the select. */
+  label?: string;
+  /** Helper text below the field. */
+  hint?: string;
+  /** Error message — turns the field red and overrides hint. */
+  error?: string;
+  /** Options as plain strings or {label, value} objects. */
+  options?: Array<string | SelectOption>;
+  /** @default "md" */
+  size?: "sm" | "md" | "lg";
+}
+
+/**
+ * Free Joy — Select
+ * Native select styled to match Input: label, hint, error, custom chevron.
+ */
+export function Select({ label, hint, error, options = [], size = "md", id, className = "", ...rest }: SelectProps) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+
+  const classes = ["fj-field", error && "fj-field--error", className].filter(Boolean).join(" ");
+
+  return (
+    <div className={classes}>
+      {label && (
+        <label className="fj-field-label" htmlFor={fid}>
+          {label}
+        </label>
+      )}
+      <div className="fj-select-wrap">
+        <select className={`fj-select fj-select--${size}`} id={fid} {...rest}>
+          {options.map((o) =>
+            typeof o === "string" ? (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ) : (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ),
+          )}
+        </select>
+        <span className="fj-select-chevron" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </span>
+      </div>
+      {(hint || error) && <span className="fj-field-note">{error || hint}</span>}
+    </div>
+  );
+}

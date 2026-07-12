@@ -1,0 +1,28 @@
+// Free Joy — Textarea (JavaScript + CSS)
+// Pairs with Textarea.css (imported below). Requires the FJ tokens (tokens/*.css),
+// including --ring for the focus glow.
+import * as React from "react";
+import "./Textarea.css";
+
+/**
+ * Free Joy — Textarea
+ * Multi-line text field with label, hint, error. Matches Input styling.
+ */
+export function Textarea({ label, hint, error, rows = 4, id, className = "", ...rest }) {
+  const autoId = React.useId();
+  const fid = id || autoId;
+
+  const classes = ["fj-field", error && "fj-field--error", className].filter(Boolean).join(" ");
+
+  return (
+    <div className={classes}>
+      {label && (
+        <label className="fj-field-label" htmlFor={fid}>
+          {label}
+        </label>
+      )}
+      <textarea className="fj-textarea" id={fid} rows={rows} {...rest} />
+      {(hint || error) && <span className="fj-field-note">{error || hint}</span>}
+    </div>
+  );
+}

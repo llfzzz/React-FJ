@@ -1,0 +1,72 @@
+// Free Joy — Skeleton (TypeScript + CSS)
+// Pairs with Skeleton.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The stylesheet carries the shapes + shimmer; width/height props override inline.
+import "./Skeleton.css";
+
+export interface SkeletonProps {
+  /** @default "text" */
+  variant?: "text" | "circle" | "rect";
+  width?: number | string;
+  height?: number | string;
+  /** Number of text lines (text variant). @default 1 */
+  lines?: number;
+  /** Corner radius (rect variant). */
+  radius?: number | string;
+  className?: string;
+}
+
+/**
+ * Free Joy — Skeleton
+ * Loading placeholder with a gentle shimmer. Shapes: text | circle | rect.
+ */
+export function Skeleton({
+  variant = "text",
+  width,
+  height,
+  lines = 1,
+  radius,
+  className = "",
+  ...rest
+}: SkeletonProps) {
+  if (variant === "circle") {
+    const d = width || height || 44;
+    return (
+      <span
+        className={`fj-skel fj-skel--circle ${className}`.trim()}
+        style={{ width: d, height: d }}
+        {...rest}
+      />
+    );
+  }
+  if (variant === "rect") {
+    return (
+      <span
+        className={`fj-skel fj-skel--rect ${className}`.trim()}
+        style={{
+          width: width || undefined,
+          height: height || undefined,
+          borderRadius: radius,
+        }}
+        {...rest}
+      />
+    );
+  }
+  // text — possibly multiple lines; the last of a stack runs shorter.
+  return (
+    <span
+      className={`fj-skel-stack ${className}`.trim()}
+      style={{ width: width || undefined }}
+      {...rest}
+    >
+      {Array.from({ length: lines }).map((_, i) => (
+        <span
+          key={i}
+          className={
+            i === lines - 1 && lines > 1 ? "fj-skel fj-skel--text fj-skel--short" : "fj-skel fj-skel--text"
+          }
+          style={{ height: height || undefined }}
+        />
+      ))}
+    </span>
+  );
+}

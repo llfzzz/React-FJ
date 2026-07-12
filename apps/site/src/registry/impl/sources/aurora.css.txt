@@ -1,22 +1,11 @@
-<!-- Free Joy — Aurora (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Three blurred radial ribbons drift slowly behind the content. Only
-     transform animates. Palette modifiers: default warm | --cool | --joy.
-     Static under reduced motion. -->
+/* Free Joy — Aurora.css
+   Pairs with Aurora.tsx / Aurora.jsx. Requires the FJ tokens (tokens/*.css).
+   Three blurred radial ribbons drift slowly behind the content. Only transform
+   animates. Palettes: warm (default) | --cool | --joy. The component feeds
+   --fj-blur, --fj-opacity, and --fj-base (loop duration); --still holds the
+   wash static. Static under reduced motion. */
 
-<section class="fj-aurora fj-aurora--warm">
-  <div class="fj-aurora-ribbon fj-aurora-ribbon--1" aria-hidden="true"></div>
-  <div class="fj-aurora-ribbon fj-aurora-ribbon--2" aria-hidden="true"></div>
-  <div class="fj-aurora-ribbon fj-aurora-ribbon--3" aria-hidden="true"></div>
-  <div class="fj-aurora-content">
-    <h1>Made with joy</h1>
-  </div>
-</section>
-
-<style>
 .fj-aurora {
-  --fj-blur: 60px;
-  --fj-opacity: 0.5;
   --fj-c1: var(--joy-400);
   --fj-c2: var(--sun-300);
   --fj-c3: var(--bloom-300);
@@ -34,15 +23,17 @@
   width: 140%;
   height: 60%;
   border-radius: 50%;
-  filter: blur(var(--fj-blur));
-  opacity: var(--fj-opacity);
+  filter: blur(var(--fj-blur, 60px));
+  opacity: var(--fj-opacity, 0.5);
   pointer-events: none;
   will-change: transform;
-  animation: fj-aurora 24s var(--ease-in-out) infinite;
+  animation: fj-aurora var(--fj-base, 24s) var(--ease-in-out) infinite;
 }
 .fj-aurora-ribbon--1 { top: -15%; background: radial-gradient(closest-side, var(--fj-c1), transparent); }
-.fj-aurora-ribbon--2 { top: 10%;  background: radial-gradient(closest-side, var(--fj-c2), transparent); animation-duration: 30s; }
-.fj-aurora-ribbon--3 { top: 35%;  background: radial-gradient(closest-side, var(--fj-c3), transparent); animation-duration: 26s; }
+.fj-aurora-ribbon--2 { top: 10%;  background: radial-gradient(closest-side, var(--fj-c2), transparent); animation-duration: calc(var(--fj-base, 24s) * 1.25); }
+.fj-aurora-ribbon--3 { top: 35%;  background: radial-gradient(closest-side, var(--fj-c3), transparent); animation-duration: calc(var(--fj-base, 24s) * 1.1); }
+
+.fj-aurora--still .fj-aurora-ribbon { animation: none; }
 
 .fj-aurora-content { position: relative; }
 
@@ -55,4 +46,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-aurora-ribbon { animation: none; }
 }
-</style>

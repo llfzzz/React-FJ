@@ -1,0 +1,34 @@
+// Free Joy — Glow (effect) (JavaScript + CSS)
+// Pairs with Glow.css (imported below). Requires the FJ tokens (tokens/*.css).
+// No animation, cheap single blur layer.
+import "./Glow.css";
+
+/**
+ * Free Joy — Glow (effect)
+ * Static soft gradient glow behind a child element — lifts a hero screenshot,
+ * plan card, or CTA off the page.
+ */
+export function Glow({
+  colors = ["var(--joy-300)", "var(--bloom-300)"],
+  intensity = 0.35,
+  blur = 48,
+  spread = 8,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const vars = {
+    "--fj-glow-colors": colors.join(", "),
+    "--fj-intensity": intensity,
+    "--fj-blur": `${blur}px`,
+    "--fj-spread": `${spread}px`,
+  };
+
+  return (
+    <div className={`fj-glow ${className}`.trim()} style={{ ...vars, ...style }} {...rest}>
+      <div className="fj-glow-aura" aria-hidden="true" />
+      <div className="fj-glow-content">{children}</div>
+    </div>
+  );
+}

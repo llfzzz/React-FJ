@@ -88,8 +88,9 @@ export function InstallationPage() {
       <DocSection id="tailwind" title="Using FJ with Tailwind">
         <div className="doc-prose">
           <p>
-            Every component’s <strong>Implementation</strong> section offers a Tailwind version. Those
-            examples reference FJ tokens directly with arbitrary values (e.g.{' '}
+            Every component’s <strong>Implementation</strong> section offers a Tailwind version —
+            set the Style picker to <strong>Tailwind CSS</strong> (it pairs with either language).
+            Those examples reference FJ tokens directly with arbitrary values (e.g.{' '}
             <code>bg-[var(--accent)]</code>), so they stay token- and theme-correct with no extra
             setup. If you’d rather write the shorter <code>bg-accent</code> / <code>rounded-lg</code>{' '}
             forms, add the optional <code>@theme</code> mapping below to your main CSS.

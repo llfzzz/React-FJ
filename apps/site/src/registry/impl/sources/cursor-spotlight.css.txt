@@ -1,27 +1,12 @@
-<!-- Free Joy — CursorSpotlight (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     The light position follows the cursor via --fj-mx / --fj-my, set from a
-     mousemove handler (~5 lines of JS, at the bottom). The radial paint, the
-     clipping, and the layering are all CSS. -->
+/* Free Joy — CursorSpotlight.css
+   Pairs with CursorSpotlight.tsx / CursorSpotlight.jsx. Requires the FJ tokens
+   (tokens/*.css).
+   The light position follows the cursor via --fj-mx / --fj-my (set from the
+   component's mousemove handler). --fj-size is the light diameter; --fj-light
+   the color; --fj-intensity the center opacity. Reduced motion hides it. */
 
-<div class="fj-cursorlight">
-  <div class="fj-cursorlight-glow" aria-hidden="true"></div>
-  <div class="fj-cursorlight-content">
-    <!-- your grid of cards -->
-    <div class="fj-card">Sketches</div>
-    <div class="fj-card">Notes</div>
-    <div class="fj-card">Circles</div>
-    <div class="fj-card">Sets</div>
-  </div>
-</div>
-
-<style>
 .fj-cursorlight {
-  --fj-size: 400px;
   position: relative;
-  padding: var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
 }
 
 .fj-cursorlight-glow {
@@ -29,36 +14,17 @@
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
+  opacity: var(--fj-intensity, 1);
   background: radial-gradient(
-    var(--fj-size) circle at var(--fj-mx, -9999px) var(--fj-my, -9999px),
-    var(--accent-soft),
+    var(--fj-size, 400px) circle at var(--fj-mx, -9999px) var(--fj-my, -9999px),
+    var(--fj-light, var(--accent-soft)),
     transparent 65%
   );
   transition: background 60ms linear;
 }
 
-.fj-cursorlight-content {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
-}
+.fj-cursorlight-content { position: relative; }
 
 @media (prefers-reduced-motion: reduce) {
   .fj-cursorlight-glow { display: none; }
 }
-</style>
-
-<script>
-  document.querySelectorAll(".fj-cursorlight").forEach((box) => {
-    box.addEventListener("mousemove", (e) => {
-      const r = box.getBoundingClientRect();
-      box.style.setProperty("--fj-mx", `${e.clientX - r.left}px`);
-      box.style.setProperty("--fj-my", `${e.clientY - r.top}px`);
-    });
-    box.addEventListener("mouseleave", () => {
-      box.style.setProperty("--fj-mx", "-9999px");
-      box.style.setProperty("--fj-my", "-9999px");
-    });
-  });
-</script>

@@ -1,0 +1,56 @@
+// Free Joy — SpotlightCard (effect) (JavaScript + CSS)
+// Pairs with SpotlightCard.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The glow position follows the cursor via --fj-mx / --fj-my set on mousemove;
+// the lift, the fade, and the radial paint are pure CSS.
+"use client";
+
+import * as React from "react";
+import "./SpotlightCard.css";
+
+/**
+ * Free Joy — SpotlightCard (effect)
+ * A Card whose surface carries a soft warm highlight that follows the cursor.
+ * For flagship/showcase cards only — not dense data views.
+ */
+export function SpotlightCard({
+  size = 320,
+  padding,
+  radius,
+  interactive = true,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+
+  const onMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--fj-mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--fj-my", `${e.clientY - r.top}px`);
+  };
+
+  const classes = ["fj-spotlight", !interactive && "fj-spotlight--static", className]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      ref={ref}
+      className={classes}
+      onMouseMove={onMove}
+      style={{
+        "--fj-size": `${size}px`,
+        padding,
+        borderRadius: radius,
+        ...style,
+      }}
+      {...rest}
+    >
+      <div className="fj-spotlight-glow" aria-hidden="true" />
+      <div className="fj-spotlight-content">{children}</div>
+    </div>
+  );
+}

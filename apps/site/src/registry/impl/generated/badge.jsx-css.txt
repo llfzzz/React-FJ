@@ -1,0 +1,24 @@
+// Free Joy — Badge (JavaScript + CSS)
+// Pairs with Badge.css (imported below). Requires the FJ tokens (tokens/*.css).
+import "./Badge.css";
+
+/**
+ * Free Joy — Badge (status / count)
+ * tones: neutral | accent | success | warn | danger | sun | bloom
+ */
+export function Badge({ tone = "neutral", solid = false, className = "", children, ...rest }) {
+  const classes = [
+    "fj-badge",
+    tone !== "neutral" && `fj-badge--${tone}`,
+    solid && "fj-badge--solid",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span className={classes} {...rest}>
+      {children}
+    </span>
+  );
+}

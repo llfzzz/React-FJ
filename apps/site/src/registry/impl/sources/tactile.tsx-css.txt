@@ -1,0 +1,45 @@
+// Free Joy — Tactile (effect) (TypeScript + CSS)
+// Pairs with Tactile.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Pure CSS: :active scales the element down. Works with mouse and touch.
+// Under reduced motion the press is instant with no scaling (media query).
+import * as React from "react";
+import "./Tactile.css";
+
+export interface TactileProps extends React.HTMLAttributes<HTMLSpanElement> {
+  children?: React.ReactNode;
+  /** Scale while pressed. @default 0.96 */
+  scale?: number;
+  /** Press transition duration in ms. @default 120 */
+  duration?: number;
+  /** Disable (children unchanged). @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Tactile (effect)
+ * Adds a satisfying press-down (scale + settle) to any child — buttons, cards,
+ * tappable tiles.
+ */
+export function Tactile({
+  children,
+  scale = 0.96,
+  duration = 120,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: TactileProps) {
+  const classes = ["fj-tactile", disabled && "fj-tactile--off", className]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <span
+      className={classes}
+      style={{ "--fj-scale": scale, "--fj-duration": `${duration}ms`, ...style } as React.CSSProperties}
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+}

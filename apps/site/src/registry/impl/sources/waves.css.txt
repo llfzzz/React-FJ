@@ -1,28 +1,10 @@
-<!-- Free Joy — Waves (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Wave lines drifting across a band at the container's bottom. The path is
-     drawn ONCE (the React version generates it from `amplitude`; here it's
-     baked in) and spans two periods of 1440 viewBox units; the keyframe slides
-     exactly one period, so the loop is seamless. Only transform animates —
-     never the path. Static under reduced motion. -->
+/* Free Joy — Waves.css
+   Pairs with Waves.tsx / Waves.jsx. Requires the FJ tokens (tokens/*.css).
+   The path spans two 1440-unit periods; this keyframe slides exactly one, so
+   the loop is seamless (keep the -1440px in sync with PERIOD in the component).
+   The component sets each layer's duration/direction inline; --static holds the
+   lines still. Only transform animates — never the path. */
 
-<section class="fj-waves">
-  <svg class="fj-waves-band" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-    <g class="fj-wave fj-wave--1">
-      <path d="M 0 60 Q 90 46 180 60 T 360 60 T 540 60 T 720 60 T 900 60 T 1080 60 T 1260 60 T 1440 60 T 1620 60 T 1800 60 T 1980 60 T 2160 60 T 2340 60 T 2520 60 T 2700 60 T 2880 60"
-            fill="none" stroke="var(--joy-300)" stroke-width="2" stroke-opacity="0.38" vector-effect="non-scaling-stroke" />
-    </g>
-    <g class="fj-wave fj-wave--2">
-      <path d="M 0 74 Q 90 60 180 74 T 360 74 T 540 74 T 720 74 T 900 74 T 1080 74 T 1260 74 T 1440 74 T 1620 74 T 1800 74 T 1980 74 T 2160 74 T 2340 74 T 2520 74 T 2700 74 T 2880 74"
-            fill="none" stroke="var(--joy-300)" stroke-width="2" stroke-opacity="0.26" vector-effect="non-scaling-stroke" />
-    </g>
-  </svg>
-  <div class="fj-waves-content">
-    <h2>Calm under the surface</h2>
-  </div>
-</section>
-
-<style>
 .fj-waves {
   position: relative;
   overflow: hidden;
@@ -34,16 +16,19 @@
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 120px;
   display: block;
   pointer-events: none;
 }
 
 .fj-wave {
   will-change: transform;
-  animation: fj-wave 12s linear infinite;
+  animation-name: fj-wave;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 12s; /* per-layer duration set inline overrides this */
 }
-.fj-wave--2 { animation-duration: 17s; animation-direction: reverse; }
+
+.fj-waves--static .fj-wave { animation: none; }
 
 .fj-waves-content { position: relative; }
 
@@ -56,4 +41,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-wave { animation: none; }
 }
-</style>

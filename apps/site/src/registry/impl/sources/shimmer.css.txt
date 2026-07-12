@@ -1,14 +1,10 @@
-<!-- Free Joy — Shimmer (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     A sheen overlay sweeps across the wrapped content. The wrapper clips it and
-     stays the size of its child. Add .fj-shimmer--hover to sweep on hover only. -->
+/* Free Joy — Shimmer.css
+   Pairs with Shimmer.tsx / Shimmer.jsx. Requires the FJ tokens (tokens/*.css).
+   A sheen overlay sweeps across the wrapped content. The wrapper clips it and
+   stays the size of its child. The component feeds --fj-duration, --fj-angle,
+   and --fj-intensity. Modifiers: --hover (sweep on hover only), --once (one
+   sweep on mount). */
 
-<span class="fj-shimmer" style="--fj-duration: 1400ms; --fj-intensity: 0.35">
-  <span class="fj-badge fj-badge--accent fj-badge--solid">New</span>
-  <span class="fj-shimmer-sheen" aria-hidden="true"></span>
-</span>
-
-<style>
 .fj-shimmer {
   position: relative;
   display: inline-block;
@@ -21,7 +17,7 @@
   pointer-events: none;
   transform: translateX(-100%);
   background: linear-gradient(
-    110deg,
+    var(--fj-angle, 110deg),
     transparent 20%,
     color-mix(in srgb, var(--white) calc(var(--fj-intensity, 0.35) * 100%), transparent) 50%,
     transparent 80%
@@ -33,6 +29,9 @@
 .fj-shimmer--hover .fj-shimmer-sheen { animation-play-state: paused; }
 .fj-shimmer--hover:hover .fj-shimmer-sheen { animation-play-state: running; }
 
+/* Mount variant: a single sweep. */
+.fj-shimmer--once .fj-shimmer-sheen { animation-iteration-count: 1; }
+
 @keyframes fj-shimmer-sweep {
   from { transform: translateX(-100%); }
   to   { transform: translateX(100%); }
@@ -41,4 +40,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-shimmer-sheen { animation: none; opacity: 0; }
 }
-</style>

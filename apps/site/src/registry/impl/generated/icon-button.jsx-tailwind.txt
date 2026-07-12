@@ -1,0 +1,70 @@
+// Free Joy — IconButton (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// Icon-only: always pass an aria-label.
+
+/** [base fill, hover fill, icon color] per named accent. */
+const ACC = {
+  coral: ["var(--joy-500)", "var(--joy-600)", "var(--white)"],
+  sun:   ["var(--sun-500)", "var(--sun-700)", "var(--ink)"],
+  bloom: ["var(--bloom-500)", "var(--bloom-700)", "var(--white)"],
+};
+
+const BASE =
+  "inline-flex items-center justify-center p-0 border border-transparent " +
+  "transition-[background-color,transform] duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+  "focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 " +
+  "focus-visible:outline-[var(--accent)] " +
+  "disabled:cursor-not-allowed disabled:opacity-[var(--opacity-disabled)]";
+
+const SIZES = {
+  sm: "size-8",
+  md: "size-10",
+  lg: "size-12",
+};
+
+// The solid fill reads the three --fj-iconbtn-* custom properties the
+// component sets inline, so any accent (named or custom) recolors it.
+const VARIANTS = {
+  ghost: "bg-transparent text-[var(--text)] hover:enabled:bg-[var(--surface-hover)]",
+  solid:
+    "bg-[var(--fj-iconbtn-accent)] text-[var(--fj-iconbtn-on-accent)] " +
+    "hover:enabled:bg-[var(--fj-iconbtn-accent-hover)]",
+  outline:
+    "bg-[var(--surface)] text-[var(--text)] border-[var(--border-strong)] " +
+    "hover:enabled:bg-[var(--surface-hover)]",
+};
+
+/**
+ * Free Joy — IconButton
+ * Square/round icon-only button. Variants ghost | solid | outline.
+ * `accent` recolors the solid fill per-instance.
+ */
+export function IconButton({
+  variant = "ghost",
+  size = "md",
+  accent = "coral",
+  round = true,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const [base, hover, on] = ACC[accent] ?? [accent, accent, "var(--white)"];
+  const accentVars = {
+    "--fj-iconbtn-accent": base,
+    "--fj-iconbtn-accent-hover": hover,
+    "--fj-iconbtn-on-accent": on,
+  };
+
+  return (
+    <button
+      className={`${BASE} ${SIZES[size] ?? SIZES.md} ${VARIANTS[variant] ?? VARIANTS.ghost} ${
+        round ? "rounded-full" : "rounded-[var(--radius-md)]"
+      } ${className}`}
+      style={{ ...accentVars, ...style }}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}

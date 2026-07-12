@@ -1,0 +1,81 @@
+// Free Joy — PingDot (effect) (TypeScript + Tailwind CSS)
+// The echo keyframes can't be utilities — add the CSS block below to your
+// global stylesheet once (Tailwind's built-in `animate-ping` is close, but
+// this echo is softer and slower, tuned to FJ motion).
+import * as React from "react";
+
+export interface PingDotProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Optional anchor; the dot pins to one of its corners when present. */
+  children?: React.ReactNode;
+  /** Dot diameter in px. @default 10 */
+  size?: number;
+  /** Dot color. @default var(--accent) */
+  color?: string;
+  /** Speed multiplier (period 1800ms / speed). @default 1 */
+  speed?: number;
+  /** Corner to pin to (with children). @default "top-right" */
+  position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
+  /** Accessible label. @default "New activity" */
+  label?: string;
+  /** Steady dot, no echo. @default false */
+  disabled?: boolean;
+}
+
+const CORNERS: Record<NonNullable<PingDotProps["position"]>, string> = {
+  "top-right": "top-0 right-0 translate-x-[35%] -translate-y-[35%]",
+  "top-left": "top-0 left-0 -translate-x-[35%] -translate-y-[35%]",
+  "bottom-right": "bottom-0 right-0 translate-x-[35%] translate-y-[35%]",
+  "bottom-left": "bottom-0 left-0 -translate-x-[35%] translate-y-[35%]",
+};
+
+/**
+ * Free Joy — PingDot (effect)
+ * A notification dot with a radiating echo — "something new here". Pin it to a
+ * corner of any anchor, or use it inline.
+ */
+export function PingDot({
+  children,
+  size = 10,
+  color = "var(--accent)",
+  speed = 1,
+  position = "top-right",
+  label = "New activity",
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: PingDotProps) {
+  const dot = (
+    <span
+      role="status"
+      aria-label={label}
+      style={{ width: size, height: size, background: color }}
+      className={
+        "inline-block rounded-full " +
+        (children ? `absolute ${CORNERS[position]}` : "relative align-middle")
+      }
+    >
+      {!disabled && (
+        <span
+          aria-hidden="true"
+          style={{ background: color, animationDuration: `${1800 / speed}ms` }}
+          className="absolute inset-0 rounded-full animate-[fj-ping_var(--ease-out)_infinite] motion-reduce:hidden"
+        />
+      )}
+    </span>
+  );
+  if (!children) return dot;
+  return (
+    <span className={`relative inline-block ${className}`} style={style} {...rest}>
+      {children}
+      {dot}
+    </span>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-ping {
+  from { transform: scale(1); opacity: 0.55; }
+  to { transform: scale(2.6); opacity: 0; }
+}
+*/

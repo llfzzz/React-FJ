@@ -1,9 +1,14 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { useReducedMotion } from "../motion/useReducedMotion";
-const CAP = 40;
+
+const CAP = 40; // hard cap on pieces
+
+/**
+ * Free Joy — ConfettiBurst (effect)
+ * A one-shot celebration burst for success moments — a completed onboarding, a
+ * published mix. Pieces are capped, auto-clean after the fall, and are entirely
+ * suppressed under reduced motion (the children still render and fire onDone).
+ */
 export function ConfettiBurst({
   children,
   trigger = "click",
@@ -21,20 +26,28 @@ export function ConfettiBurst({
   const [burstId, setBurstId] = React.useState(null);
   const prevActive = React.useRef(active);
   const n = Math.min(performance === "lite" ? 20 : CAP, Math.max(0, count));
+
   const fire = React.useCallback(() => {
     if (reduced || n <= 0) {
+      // No pieces will render, so no animationend would ever clean up.
       onDone?.();
       return;
     }
     setBurstId(Date.now());
   }, [reduced, n, onDone]);
+
+  // mount trigger
   React.useEffect(() => {
     if (trigger === "mount") fire();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // manual trigger (false → true)
   React.useEffect(() => {
     if (trigger === "manual" && active && !prevActive.current) fire();
     prevActive.current = active;
   }, [active, trigger, fire]);
+
   const pieces = React.useMemo(() => {
     if (burstId === null) return [];
     return Array.from({ length: n }, () => {
@@ -45,43 +58,47 @@ export function ConfettiBurst({
         dy: Math.sin(angle) * dist - spread * 0.4,
         rot: Math.random() * 360,
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: 6 + Math.random() * 4
+        size: 6 + Math.random() * 4,
       };
     });
   }, [burstId, n, spread, colors]);
-  return <span
-    onClick={() => trigger === "click" && fire()}
-    style={{ position: "relative", display: "inline-block", ...style }}
-    {...rest}
-  >
+
+  return (
+    <span
+      onClick={() => trigger === "click" && fire()}
+      style={{ position: "relative", display: "inline-block", ...style }}
+      {...rest}
+    >
       {children}
-      {burstId !== null && <span aria-hidden="true" key={burstId} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-          {pieces.map((p, i) => <span
-    key={i}
-    style={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      width: p.size,
-      height: p.size * 0.6,
-      background: p.color,
-      borderRadius: 1,
-      ["--fj-dx"]: `${p.dx}px`,
-      ["--fj-dy"]: `${p.dy}px`,
-      ["--fj-rot"]: `${p.rot}deg`,
-      animation: `fj-confetti ${duration}ms var(--ease-out) forwards`
-    }}
-    onAnimationEnd={i === 0 ? () => {
-      setBurstId(null);
-      onDone?.();
-    } : void 0}
-  />)}
-        </span>}
+      {burstId !== null && (
+        <span aria-hidden="true" key={burstId} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+          {pieces.map((p, i) => (
+            <span
+              key={i}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                width: p.size,
+                height: p.size * 0.6,
+                background: p.color,
+                borderRadius: 1,
+                ["--fj-dx"]: `${p.dx}px`,
+                ["--fj-dy"]: `${p.dy}px`,
+                ["--fj-rot"]: `${p.rot}deg`,
+                animation: `fj-confetti ${duration}ms var(--ease-out) forwards`,
+              }}
+              onAnimationEnd={i === 0 ? () => { setBurstId(null); onDone?.(); } : undefined}
+            />
+          ))}
+        </span>
+      )}
       <style>{`
         @keyframes fj-confetti {
           0% { transform: translate(-50%, -50%) rotate(0deg); opacity: 1; }
           100% { transform: translate(calc(-50% + var(--fj-dx)), calc(-50% + var(--fj-dy) + 60px)) rotate(var(--fj-rot)); opacity: 0; }
         }
       `}</style>
-    </span>;
+    </span>
+  );
 }

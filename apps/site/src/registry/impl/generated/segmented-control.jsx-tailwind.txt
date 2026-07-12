@@ -1,0 +1,67 @@
+// Free Joy — SegmentedControl (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// The thumb width/offset are dynamic (1/n), so they're set with inline style;
+// everything else is utilities.
+"use client";
+
+import * as React from "react";
+
+const SIZES = {
+  sm: "h-[34px]",
+  md: "h-10",
+  lg: "h-[46px]",
+};
+
+/**
+ * Free Joy — SegmentedControl
+ * iOS-style segmented control with a sliding thumb. options: [{ value, label, icon }]
+ */
+export function SegmentedControl({
+  options = [],
+  value,
+  defaultValue,
+  onChange,
+  size = "md",
+  full = false,
+  className = "",
+}) {
+  const [internal, setInternal] = React.useState(defaultValue ?? options[0]?.value);
+  const val = value ?? internal;
+  const n = options.length || 1;
+  const idx = Math.max(0, options.findIndex((o) => o.value === val));
+  const set = (v) => {
+    if (value === undefined) setInternal(v);
+    onChange && onChange(v);
+  };
+  return (
+    <div
+      style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}
+      className={
+        "relative box-border rounded-full bg-[var(--paper-2)] p-1 " +
+        `${full ? "grid w-full" : "inline-grid"} ${SIZES[size] ?? SIZES.md} ${className}`
+      }
+    >
+      <div
+        aria-hidden="true"
+        style={{ width: `calc((100% - 8px) / ${n})`, transform: `translateX(${idx * 100}%)` }}
+        className="pointer-events-none absolute inset-y-1 left-1 z-0 rounded-full bg-[var(--surface)] shadow-[var(--shadow-xs)] transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none"
+      />
+      {options.map((o) => (
+        <button
+          key={o.value}
+          onClick={() => set(o.value)}
+          className={
+            "relative z-[1] inline-flex h-full items-center justify-center gap-[7px] whitespace-nowrap border-none " +
+            "bg-transparent px-[18px] font-[family-name:var(--font-text)] text-[length:var(--text-sm)] font-semibold " +
+            "cursor-pointer transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)] " +
+            "focus-visible:rounded-full focus-visible:outline focus-visible:outline-[3px] " +
+            "focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] " +
+            (o.value === val ? "text-[var(--text)]" : "text-[var(--text-subtle)]")
+          }
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}

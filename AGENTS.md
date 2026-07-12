@@ -1,6 +1,7 @@
 # FJ — Free Joy design system website
 
-Last updated: 2026-07-08 (post-launch audit pass: bug fixes, doc sync, deploy files committed)
+Last updated: 2026-07-11 (Phase C: language × styling implementation switcher — two-axis code
+picker, all 48 ported components re-authored as synchronized TSX/CSS/Tailwind triples)
 Repo: `github.com/llfzzz/React-FJ` · Live: `https://reactfreejoy.top` (served from the
 `/var/www/React-FJ` deploy clone — see "Deployment" below)
 
@@ -92,6 +93,8 @@ pnpm workspace
 - `pnpm typecheck` — TS project references build check
 - `pnpm test` — Vitest (from Phase 7)
 - `pnpm e2e` — Playwright (from Phase 7)
+- `pnpm gen:impl` — regenerate the JavaScript implementation ports (ts-blank-space; committed)
+- `pnpm check:impl` — strict-typecheck every authored TSX implementation port
 
 ## Implementation phases / status
 
@@ -119,6 +122,12 @@ pnpm workspace
   BlurReveal (text); Ripple (interaction); Marquee, ImageZoom (surfaces); Orbs, Waves
   (backgrounds); ProgressRing, PingDot (status) — with registry docs, css/tailwind ports or
   notApplicable reasons, behavior tests, and reduced-motion e2e for Typewriter/Marquee
+- [x] Phase C (2026-07-11) — language × styling implementation switcher: 2D variant model
+  (`ImplLanguage` × `ImplStyling`), two-picker `ImplementationBlock` with per-file code blocks,
+  two-key persisted store with legacy migration, all documented components re-authored as
+  synchronized `tsx-css` / `css` / `tsx-tailwind` triples (10 JS-drawn effects marked
+  styling-neutral, incl. Phase B5's Ripple / ScrambleText / Typewriter), ts-blank-space generator
+  + `pnpm check:impl` strict harness, tests + e2e rewritten for the combo model
 
 ## Component inventory
 
@@ -148,11 +157,11 @@ fj-effects (33, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`
 Motion primitives: `packages/fj-effects/motion/{useReducedMotion,useInView,useTrigger,keyframes,types}.ts`.
 
 Documented on site (65): all 32 synced interactive components + 33 fj-effects — registry entries with
-playground controls, generated/custom snippets, examples, props, a11y notes, and a 4-format
-implementation switcher (JS/TS/CSS/Tailwind), grouped in `src/registry/entries/{button,card,badge,
+playground controls, generated/custom snippets, examples, props, a11y notes, and a language ×
+styling implementation switcher (JS/TS × CSS/Tailwind), grouped in `src/registry/entries/{button,card,badge,
 core-more,forms,navigation,feedback,overlay,data,effects,effects-text,effects-interaction,
 effects-surfaces,effects-backgrounds,effects-status,effects-motion}`.
-Engine: `src/registry/*` (types, snippet serializer, `impl/` 4-format raw-source loader),
+Engine: `src/registry/*` (types, snippet serializer, `impl/` variant raw-source loader),
 `src/docs/*` (Showcase w/ Replay, ImplementationBlock, ControlPanel, CodeBlock via fine-grained lazy
 shiki + JS regex engine, PropsTable, DocSection, CopyIconButton). Code-style store: `src/lib/codeStyle.tsx`.
 
@@ -233,6 +242,20 @@ shiki + JS regex engine, PropsTable, DocSection, CopyIconButton). Code-style sto
   didn't reach `matchMedia`); the Collapse unit test caught a real bug (content unmounted when
   closed with unmountOnExit off) which was fixed. Nothing under `packages/fj-ui/` was edited.
 
+- Phase C (2026-07-11): `pnpm typecheck` green · `pnpm check:impl` 96/96 ports strict-clean ·
+  `pnpm test` 42/42 · `pnpm build` green · `pnpm e2e` 15/15 against the production build.
+  Verified in preview: Button's four combos (TS+CSS shows Button.tsx + Button.css with the typed
+  class-based port; JS+CSS keeps the stylesheet and drops types; Tailwind collapses to one file
+  per language), CountUp's inert Style picker + reason note, both persisted axes surviving
+  navigation. Gotchas recorded: (1) a grid `.impl-block` needs `grid-template-columns:
+  minmax(0, 1fr)` or the wrap-flex picker bar computes its intrinsic width single-line and
+  overflows narrow viewports; (2) ts-blank-space leaves whitespace where types were — the gen
+  script tightens runs of 2+ spaces before closers only after a non-space char so indentation
+  survives; (3) `size`/`title` props on interfaces extending HTML attributes need `Omit<...>`
+  (caught by `pnpm check:impl`, which found real conflicts in Input/Select/EmptyState);
+  (4) Tailwind can't see runtime-composed class strings — tone/accent styling rides static
+  classes reading `--fj-*` custom properties set inline (fixed a latent `bg-[${t.bg}]` bug in
+  the old Alert tailwind port). Nothing under `packages/fj-ui/` was edited.
 - Audit pass (2026-07-08): full end-to-end review of every source file. Fixed: (1) Showcase knob
   state leaked between component pages (`/components/:id` keeps the page mounted — Showcase is now
   keyed by doc id); (2) RotatingText defined a shared `@keyframes` name per instance with
@@ -260,35 +283,52 @@ React Bits informed the product experience only — nothing was copied:
   flagship CTA treatment.
 All visuals, tokens, voice, and component APIs are Free Joy's own.
 
-## Implementation code (4 formats)
+## Implementation code (language × styling)
 
-Every documented component exposes its full implementation in four styles via a global
-code-style switcher (JavaScript / TypeScript / CSS / Tailwind), in a new "Implementation"
-DocSection on each component page. State lives in `src/lib/codeStyle.tsx` (React context +
-`localStorage('fj-code-style')`, default `ts`), rendered by `src/docs/ImplementationBlock.tsx`
-(FJ `SegmentedControl` + `CodeBlock` + notes + a not-applicable panel).
+Every documented component exposes its full implementation through two independent pickers —
+**Language** (JavaScript / TypeScript) and **Style** (CSS / Tailwind CSS) — that combine into one
+complete, copy-ready variant per combination (React Bits' switcher model, 2026-07-11 redesign).
+State lives in `src/lib/codeStyle.tsx` (React context + `localStorage('fj-code-lang')` +
+`localStorage('fj-code-styling')`, defaults `ts` + `css`, with a one-way migration from the old
+`fj-code-style` key), rendered by `src/docs/ImplementationBlock.tsx` (two FJ `SegmentedControl`s +
+file-named `CodeBlock`s + styling notes).
 
 - **Sources** are raw text, loaded lazily via `import.meta.glob(..., { query: '?raw' })` in
-  `src/registry/impl/index.ts`. Each `ComponentDoc.implementation = impl('<id>', opts?)`.
-- **JavaScript** = the real source. For `fj-ui` components it's the synced `.jsx` file itself
-  (glob over `packages/fj-ui/components/*/*.jsx`) — it can never drift. For `fj-effects`
-  components it's a generated type-stripped port under `src/registry/impl/generated/<id>.js.txt`
-  (esbuild `jsx:'preserve'`, produced by `scripts/gen-impl-js.mjs` via `pnpm gen:impl`, committed).
-- **TypeScript** = for `fj-ui`, a hand-authored port under `src/registry/impl/sources/<id>.ts.txt`
-  (the `.jsx` merged with its `.d.ts`); for `fj-effects`, the real `.tsx` source (glob).
-- **CSS** = a self-contained HTML+`<style>` reproduction, `sources/<id>.css.txt`, highlighted with
-  the Shiki `html` grammar. **Tailwind** = a JSX+utilities reproduction, `sources/<id>.tailwind.txt`,
-  referencing FJ token vars (`bg-[var(--accent)]`) so both themes work; an optional shared `@theme`
-  mapping (`sources/_tailwind-theme.txt`) is shown on the Installation page.
-- Sources are `.txt` so `tsc` doesn't type-check standalone ports (which import modules that don't
-  exist as compiled files). `registry.test.ts` + `impl/impl.test.ts` guard content instead.
-- Where CSS/Tailwind genuinely can't reproduce JS-driven behavior, `impl('<id>', { notApplicable })`
-  supplies a reason panel instead of code (e.g. CountUp — counting needs JS on scroll).
+  `src/registry/impl/index.ts`. Each `ComponentDoc.implementation = impl('<id>', opts?)` resolves
+  a `variants` record keyed `js-css | ts-css | js-tailwind | ts-tailwind`, each a list of files
+  (`{ name, lang, load }`).
+- **Authored, canonical (committed under `src/registry/impl/sources/`)**:
+  - `<id>.tsx-css.txt` — the TypeScript component styled by classes; it `import "./<Name>.css"`.
+  - `<id>.css.txt` — the stylesheet those classes live in (pure CSS, `fj-*` class convention,
+    custom-property hooks like `--fj-btn-accent` for prop-driven values, reduced-motion rules).
+    Shared **verbatim** by both languages, so component and stylesheet can never diverge.
+  - `<id>.tsx-tailwind.txt` — the TypeScript component styled by utilities referencing FJ token
+    vars (`bg-[var(--accent)]`). Keyframes that utilities can't express are documented in a
+    trailing "Add once to your global CSS" comment block.
+- **Generated (committed under `src/registry/impl/generated/`)**: `pnpm gen:impl`
+  (`scripts/gen-impl-js.mjs`) type-strips each TSX port with **ts-blank-space** (comments and
+  formatting survive, unlike esbuild) into `<id>.jsx-css.txt` / `<id>.jsx-tailwind.txt`, rewrites
+  the header's "TypeScript" to "JavaScript", drops a react import kept only for types, and deletes
+  stale outputs. The JS ports therefore can never drift from the TS ports.
+- **Styling-neutral components** (visuals computed in JS: CountUp, RotatingText, Magnetic,
+  TiltCard, Sparkles, ConfettiBurst, FadeSwitch, Ripple, ScrambleText, Typewriter) pass
+  `impl('<id>', { stylingNeutral: reason })`:
+  the Style picker renders inert with the reason shown, and both styling choices serve the real
+  per-language source (synced `.jsx` / authored `ts.txt` for fj-ui; generated `.js.txt` port /
+  real `.tsx` for fj-effects). The gen script's `STYLING_NEUTRAL_EFFECTS` list must match.
+- `"use client"` appears only in ports that use state, effects, refs, or attach event handlers —
+  so they drop into Next.js App Router untouched; Vite ignores the directive.
+- Sources are `.txt` so `tsc -b` doesn't type-check standalone ports, but `pnpm check:impl`
+  (`scripts/check-impl-ports.mjs`) stages every authored `.tsx-*.txt` as a real `.tsx` (with a
+  `.d.css.ts` shim for the stylesheet import) and runs one strict `tsc --noEmit` over all of them.
+  Run it after touching any port. `registry.test.ts` + `impl/impl.test.ts` guard content shape.
 
-**DesignSync drift rule**: the JS variant of an fj-ui component is the synced file, so it never
-drifts; the TS/CSS/Tailwind ports are hand-authored and *can*. After any DesignSync pull that
-touches `packages/fj-ui/components/`, run `pnpm test` (the registry drift canary asserts every
-documented prop name appears in the TS port) and re-verify the affected `sources/<id>.*.txt`.
+**DesignSync drift rule**: all four variants are now ports (the synced fj-ui source is no longer
+displayed verbatim except for styling-neutral fj-ui components), so after any DesignSync pull that
+touches `packages/fj-ui/components/`, run `pnpm test` (drift canary: every documented prop appears
+in both TS ports) and re-verify the affected `sources/<id>.*` triple. After editing any
+fj-effects `.tsx` that is styling-neutral, re-run `pnpm gen:impl` (staleness canary fails
+otherwise).
 
 ## Effects audit & motion policy
 
@@ -358,20 +398,23 @@ names, routes, and file names intentionally kept.
 ## Test topology
 
 - Vitest (jsdom): `src/registry/snippet.test.ts` (serializer), `src/registry/registry.test.ts`
-  (catalog integrity + 4-format completeness), `src/registry/impl/impl.test.ts` (Button source
-  markers + drift canary; fj-effects generated-JS staleness canary + TS source names),
-  `src/lib/codeStyle.test.tsx` (default/persist/restore), `src/docs/Showcase.test.tsx`,
+  (catalog integrity + four-combo completeness: every doc ships js/ts × css/tailwind variants or a
+  styling-neutral reason; CSS combos carry the stylesheet as file[1]),
+  `src/registry/impl/impl.test.ts` (Button four-variant markers + shared-stylesheet identity +
+  drift canary across both TS ports; registry-wide generated-JS staleness canary, no-TS-syntax
+  check, and stylesheet-import check), `src/lib/codeStyle.test.tsx` (two-axis default / persist /
+  restore / legacy-key migration), `src/docs/Showcase.test.tsx`,
   `src/test/effects/primitives.test.tsx` (useReducedMotion / useTrigger / ensureKeyframes / easeVar),
   `src/test/effects/behaviors.test.tsx` (Collapse open/close, FadeSwitch swap, SuccessCheck +
   Sparkles reduced-motion fallbacks, particle cap). Setup installs in-memory localStorage and mocks
-  matchMedia (per-test override for reduced motion) + IntersectionObserver. **38 tests**
-  (`theme.test.tsx` left with dark mode).
+  matchMedia (per-test override for reduced motion) + IntersectionObserver. **42 tests**.
 - Playwright (chromium, against `vite preview` of the production build): `site.spec.ts` (landing nav,
   playground → code tab, clipboard copy, catalog filter by "Text animations", ⌘K,
-  404, 375px drawer), `implementation.spec.ts` (default TS, format switch, copy + cross-page
-  persistence, n/a panel), `effects.spec.ts` (gallery render/filter/link, Replay remount),
+  404, 375px drawer), `implementation.spec.ts` (default TS+CSS with Button.tsx + Button.css,
+  combo switching, copy + cross-page persistence of both axes, styling-neutral inert panel),
+  `effects.spec.ts` (gallery render/filter/link, Replay remount),
   `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` — TextReveal plain text,
-  Sparkles zero particles, gallery still renders). **15 tests** (theme e2e left with dark mode).
+  Sparkles zero particles, gallery still renders). **15 tests**.
   Note: `page.emulateMedia({ reducedMotion })` (in a beforeEach) drives the JS `matchMedia` hook;
   the context-level `test.use({ reducedMotion })` did NOT reach `matchMedia` in this setup.
 

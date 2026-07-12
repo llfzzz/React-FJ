@@ -1,8 +1,12 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { useReducedMotion } from "../motion/useReducedMotion";
+
+/**
+ * Free Joy — FadeSwitch (effect)
+ * Crossfades between content when `switchKey` changes — tab panels, step
+ * screens, rotating quotes. Holds a fixed footprint by stacking the outgoing
+ * and incoming layers. Instant swap under reduced motion or when disabled.
+ */
 export function FadeSwitch({
   children,
   switchKey,
@@ -16,9 +20,10 @@ export function FadeSwitch({
   const instant = disabled || reduced;
   const [shown, setShown] = React.useState({
     key: switchKey,
-    node: children
+    node: children,
   });
   const [entering, setEntering] = React.useState(false);
+
   React.useEffect(() => {
     if (switchKey === shown.key) {
       setShown((s) => ({ ...s, node: children }));
@@ -32,17 +37,31 @@ export function FadeSwitch({
     setShown({ key: switchKey, node: children });
     const id = requestAnimationFrame(() => setEntering(false));
     return () => cancelAnimationFrame(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [switchKey, children, instant]);
-  const enter = mode === "slide-up" ? { opacity: 0, transform: "translateY(8px)" } : mode === "scale" ? { opacity: 0, transform: "scale(0.98)" } : { opacity: 0 };
-  return <div style={{ position: "relative", ...style }} {...rest}>
+
+  const enter =
+    mode === "slide-up"
+      ? { opacity: 0, transform: "translateY(8px)" }
+      : mode === "scale"
+        ? { opacity: 0, transform: "scale(0.98)" }
+        : { opacity: 0 };
+
+  return (
+    <div style={{ position: "relative", ...style }} {...rest}>
       <div
-    key={shown.key}
-    style={instant ? void 0 : {
-      ...entering ? enter : { opacity: 1, transform: "none" },
-      transition: `opacity ${duration}ms var(--ease-out), transform ${duration}ms var(--ease-out)`
-    }}
-  >
+        key={shown.key}
+        style={
+          instant
+            ? undefined
+            : {
+                ...(entering ? enter : { opacity: 1, transform: "none" }),
+                transition: `opacity ${duration}ms var(--ease-out), transform ${duration}ms var(--ease-out)`,
+              }
+        }
+      >
         {shown.node}
       </div>
-    </div>;
+    </div>
+  );
 }

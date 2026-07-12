@@ -1,21 +1,7 @@
-<!-- Free Joy — Skeleton, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Shapes: .fj-skel--text | --circle | --rect. The shimmer is one shared bg. -->
+/* Free Joy — Skeleton.css
+   Pairs with Skeleton.tsx / Skeleton.jsx. Requires the FJ tokens (tokens/*.css).
+   Shapes: .fj-skel--text | --circle | --rect. The shimmer is one shared bg. */
 
-<!-- Text (multiple lines: last one is shorter) -->
-<div class="fj-skel-stack">
-  <span class="fj-skel fj-skel--text"></span>
-  <span class="fj-skel fj-skel--text"></span>
-  <span class="fj-skel fj-skel--text fj-skel--short"></span>
-</div>
-
-<!-- Circle (avatar) -->
-<span class="fj-skel fj-skel--circle"></span>
-
-<!-- Rect (image / card) -->
-<span class="fj-skel fj-skel--rect"></span>
-
-<style>
 .fj-skel {
   /* Shared shimmer paint. */
   background: linear-gradient(90deg, var(--paper-2) 25%, var(--paper-3) 37%, var(--paper-2) 63%);
@@ -61,4 +47,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-skel { animation: none; background: var(--paper-2); }
 }
-</style>

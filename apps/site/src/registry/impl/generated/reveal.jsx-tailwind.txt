@@ -1,0 +1,100 @@
+// Free Joy — Reveal (effect) (JavaScript + Tailwind CSS)
+// Utilities reference the FJ tokens (arbitrary values), so every style stays token-driven.
+// The scroll trigger is JS (IntersectionObserver); the fade + rise is utilities
+// with the dynamic rise distance fed through inline transform.
+"use client";
+
+import * as React from "react";
+
+/** Live prefers-reduced-motion (shared inline so the file stays standalone). */
+function useReducedMotion() {
+  const [r, setR] = React.useState(
+    () => typeof window !== "undefined" && !!window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  React.useEffect(() => {
+    const m = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const f = () => setR(m.matches);
+    m.addEventListener("change", f);
+    return () => m.removeEventListener("change", f);
+  }, []);
+  return r;
+}
+
+/**
+ * Free Joy — Reveal (effect)
+ * Fade + rise for a section entering the viewport. `cascade` staggers direct
+ * children. No layout shift: only transform/opacity animate.
+ */
+export function Reveal({
+  delay = 0,
+  y = 14,
+  duration = 640,
+  once = true,
+  cascade = false,
+  stagger = 60,
+  threshold = 0.15,
+  className = "",
+  children,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const ref = React.useRef(null);
+  const [shown, setShown] = React.useState(false);
+
+  React.useEffect(() => {
+    if (reduced) {
+      setShown(true);
+      return;
+    }
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setShown(true);
+            if (once) io.disconnect();
+          } else if (!once) setShown(false);
+        });
+      },
+      { threshold },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [once, threshold, reduced]);
+
+  const item = (extraDelay) => ({
+    style: reduced
+      ? undefined
+      : {
+          transform: shown ? "translateY(0)" : `translateY(${y}px)`,
+          transitionDelay: `${delay + extraDelay}ms`,
+          transitionDuration: `${duration}ms`,
+        },
+    className: reduced
+      ? ""
+      : "transition-[transform,opacity] ease-[var(--ease-emphasized)] " + (shown ? "opacity-100" : "opacity-0"),
+  });
+
+  if (cascade) {
+    return (
+      <div ref={ref} className={className} {...rest}>
+        {React.Children.map(children, (child, i) => {
+          const p = item(i * stagger);
+          return (
+            <div style={p.style} className={p.className}>
+              {child}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  const p = item(0);
+  return (
+    <div ref={ref} style={p.style} className={`${p.className} ${className}`.trim()} {...rest}>
+      {children}
+    </div>
+  );
+}

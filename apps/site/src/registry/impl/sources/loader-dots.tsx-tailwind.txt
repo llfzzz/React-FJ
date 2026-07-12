@@ -1,0 +1,66 @@
+// Free Joy — LoaderDots (effect) (TypeScript + Tailwind CSS)
+// The staggered pulse keyframes can't be utilities — add the CSS block below to
+// your global stylesheet once. The dots then use utilities + fj-loader-dots.
+import * as React from "react";
+
+export interface LoaderDotsProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Dot diameter in px. @default 8 */
+  size?: number;
+  /** Gap between dots in px. @default 6 */
+  gap?: number;
+  /** Dot color. @default var(--accent) */
+  color?: string;
+  /** Speed multiplier (1 = default). Higher is faster. @default 1 */
+  speed?: number;
+  /** Accessible label. @default "Loading" */
+  label?: string;
+}
+
+/**
+ * Free Joy — LoaderDots (effect)
+ * Three dots that pulse in sequence — a calmer, more playful loader than the
+ * spinner for inline "working…" states. Reduced motion holds the dots steady.
+ */
+export function LoaderDots({
+  size = 8,
+  gap = 6,
+  color = "var(--accent)",
+  speed = 1,
+  label = "Loading",
+  className = "",
+  style,
+  ...rest
+}: LoaderDotsProps) {
+  const dur = 1400 / speed;
+  return (
+    <span
+      role="status"
+      aria-label={label}
+      style={{ gap, ...style }}
+      className={`inline-flex items-center ${className}`}
+      {...rest}
+    >
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          aria-hidden="true"
+          style={{
+            width: size,
+            height: size,
+            background: color,
+            animationDuration: `${dur}ms`,
+            animationDelay: `${(i * dur) / 6}ms`,
+          }}
+          className="rounded-full animate-[fj-loader-dots_var(--ease-in-out)_infinite] motion-reduce:animate-none motion-reduce:opacity-70"
+        />
+      ))}
+    </span>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-loader-dots {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+*/

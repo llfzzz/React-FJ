@@ -1,25 +1,8 @@
-<!-- Free Joy — Checkbox, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     The native checkbox is visually hidden; the sibling box is the styled
-     surface, and :checked drives its fill + tick (no JS needed). -->
+/* Free Joy — Checkbox.css
+   Pairs with Checkbox.tsx / Checkbox.jsx. Requires the FJ tokens (tokens/*.css).
+   The native checkbox is visually hidden; the sibling box is the styled
+   surface, and :checked drives its fill + tick. */
 
-<label class="fj-check">
-  <input class="fj-check-input" type="checkbox" checked />
-  <span class="fj-check-box" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-  </span>
-  <span class="fj-check-label">Email me set reminders</span>
-</label>
-
-<label class="fj-check">
-  <input class="fj-check-input" type="checkbox" />
-  <span class="fj-check-box" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-  </span>
-  <span class="fj-check-label">Follow new artists automatically</span>
-</label>
-
-<style>
 .fj-check {
   display: inline-flex;
   align-items: center;
@@ -79,4 +62,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-check-box, .fj-check-box svg { transition-duration: 0.01ms; }
 }
-</style>

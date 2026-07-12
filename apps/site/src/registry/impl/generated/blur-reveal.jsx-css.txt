@@ -1,0 +1,90 @@
+// Free Joy — BlurReveal (effect) (JavaScript + CSS)
+// Pairs with BlurReveal.css (imported below). Requires the FJ tokens (tokens/*.css).
+// Words sharpen out of a soft blur with a small lift, staggered by --fj-i; the
+// scroll trigger toggles .is-in via IntersectionObserver. Blur stays capped at
+// 12px. Reduced motion renders the text plainly (media query).
+"use client";
+
+import * as React from "react";
+import "./BlurReveal.css";
+
+const MAX_BLUR = 12; // motion-policy cap on animated blur
+
+/**
+ * Free Joy — BlurReveal (effect)
+ * Words sharpen out of a soft blur with a small lift, staggered left to right —
+ * an editorial entrance for section titles and hero lines.
+ */
+export function BlurReveal({
+  text,
+  trigger = "inview",
+  active,
+  duration = 480,
+  stagger = 60,
+  blur = 8,
+  lift = 6,
+  once = true,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [shown, setShown] = React.useState(trigger === "mount");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setShown(true);
+          if (once) io.disconnect();
+        } else if (!once) setShown(false);
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger, once]);
+
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {text}
+      </span>
+    );
+  }
+
+  const on = trigger === "manual" ? Boolean(active) : shown;
+  const units = text.split(/(\s+)/).filter(Boolean);
+  const vars = {
+    "--fj-stagger": `${stagger}ms`,
+    "--fj-duration": `${duration}ms`,
+    "--fj-blur": `${Math.min(blur, MAX_BLUR)}px`,
+    "--fj-lift": `${lift}px`,
+  };
+
+  return (
+    <span
+      ref={ref}
+      className={`fj-blur-reveal ${on ? "is-in " : ""}${className}`.trim()}
+      role="text"
+      aria-label={text}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      {units.map((u, i) => (
+        <span
+          key={i}
+          className="fj-blur-reveal-w"
+          aria-hidden="true"
+          style={{ "--fj-i": i }}
+        >
+          {u}
+        </span>
+      ))}
+    </span>
+  );
+}

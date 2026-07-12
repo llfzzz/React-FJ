@@ -1,18 +1,16 @@
-<!-- Free Joy — Float (effect), no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     A gentle levitation loop. Tune travel/speed with the custom properties.
-     Static under reduced motion. -->
+/* Free Joy — Float.css
+   Pairs with Float.tsx / Float.jsx. Requires the FJ tokens (tokens/*.css).
+   A gentle levitation loop. The component feeds --fj-distance, --fj-duration,
+   --fj-delay, and --fj-rotate; --off holds it static. Static under reduced
+   motion. */
 
-<div class="fj-float" style="--fj-distance: 8px; --fj-duration: 4s; --fj-rotate: 0deg">
-  <div class="fj-card" style="width: 120px; text-align: center">☁︎</div>
-</div>
-
-<style>
 .fj-float {
   display: inline-block;
-  animation: fj-float var(--fj-duration, 4s) var(--ease-in-out) infinite;
+  animation: fj-float var(--fj-duration, 4s) var(--ease-in-out) var(--fj-delay, 0s) infinite;
   will-change: transform;
 }
+
+.fj-float--off { animation: none; will-change: auto; }
 
 @keyframes fj-float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -22,4 +20,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-float { animation: none; }
 }
-</style>

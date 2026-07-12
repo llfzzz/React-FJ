@@ -1,0 +1,88 @@
+// Free Joy — Slider (TypeScript + CSS)
+// Pairs with Slider.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The visible track + fill are painted under a transparent native range input,
+// so the thumb stays draggable; the fill width rides the --fj-pct custom property.
+"use client";
+
+import * as React from "react";
+import "./Slider.css";
+
+export interface SliderProps {
+  /** Controlled value. */
+  value?: number;
+  /** Uncontrolled initial value. @default 50 */
+  defaultValue?: number;
+  /** @default 0 */
+  min?: number;
+  /** @default 100 */
+  max?: number;
+  /** @default 1 */
+  step?: number;
+  onChange?: (value: number) => void;
+  /** Fill + thumb color: a named accent or any CSS color. @default "coral" */
+  accent?: "coral" | "sun" | "bloom" | string;
+  /** Show the numeric value beside the track. @default false */
+  showValue?: boolean;
+  disabled?: boolean;
+  className?: string;
+}
+
+const ACC: Record<string, string> = {
+  coral: "var(--joy-500)",
+  sun: "var(--sun-500)",
+  bloom: "var(--bloom-500)",
+};
+
+/**
+ * Free Joy — Slider (range)
+ * Controlled single-thumb range with a filled track and optional value bubble.
+ * `accent` recolors the fill + thumb per-instance.
+ */
+export function Slider({
+  value,
+  defaultValue = 50,
+  min = 0,
+  max = 100,
+  step = 1,
+  onChange,
+  accent = "coral",
+  showValue = false,
+  disabled = false,
+  className = "",
+  ...rest
+}: SliderProps) {
+  const [internal, setInternal] = React.useState(defaultValue);
+  const val = value ?? internal;
+  const color = ACC[accent] || accent;
+  const pct = ((val - min) / (max - min)) * 100;
+
+  const handle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Number(e.target.value);
+    if (value === undefined) setInternal(v);
+    onChange && onChange(v);
+  };
+
+  return (
+    <div
+      className={`fj-slider ${className}`.trim()}
+      style={{ "--fj-pct": `${pct}%`, "--fj-thumb": color } as React.CSSProperties}
+    >
+      <div className="fj-slider-rail">
+        <div className="fj-slider-track" />
+        <div className="fj-slider-fill" />
+        <input
+          className="fj-slider-input"
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={val}
+          disabled={disabled}
+          onChange={handle}
+          {...rest}
+        />
+      </div>
+      {showValue && <span className="fj-slider-value">{val}</span>}
+    </div>
+  );
+}

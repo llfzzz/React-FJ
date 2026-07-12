@@ -1,0 +1,66 @@
+// Free Joy — GradientText (effect) (TypeScript + Tailwind CSS)
+// The moving-gradient keyframes can't be a utility — add the CSS block below to
+// your global stylesheet once. The span then uses utilities + fj-gradient-move.
+import * as React from "react";
+
+export interface GradientTextProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** The text (or nodes) to paint with the moving gradient. */
+  children?: React.ReactNode;
+  /** Gradient color stops (FJ tokens or any CSS colors). @default coral→bloom→sun */
+  colors?: string[];
+  /** Seconds per loop. @default 6 */
+  duration?: number;
+  /** Gradient angle in degrees. @default 100 */
+  angle?: number;
+  /** Keep the gradient animating. @default true */
+  loop?: boolean;
+  /** Render plain text with no gradient. @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — GradientText (effect)
+ * A word or heading painted with a slow-moving FJ gradient. Landing/hero
+ * surfaces. Under reduced motion (or disabled) the gradient holds still.
+ */
+export function GradientText({
+  children,
+  colors = ["var(--joy-500)", "var(--bloom-500)", "var(--sun-500)"],
+  duration = 6,
+  angle = 100,
+  loop = true,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: GradientTextProps) {
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {children}
+      </span>
+    );
+  }
+  const stops = [...colors, colors[0]].join(", ");
+  return (
+    <span
+      style={{
+        backgroundImage: `linear-gradient(${angle}deg, ${stops})`,
+        animationDuration: `${duration}s`,
+        ...style,
+      }}
+      className={
+        "bg-[length:200%_auto] bg-clip-text text-transparent " +
+        (loop ? "animate-[fj-gradient-move_linear_infinite] motion-reduce:animate-none " : "") +
+        className
+      }
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-gradient-move { to { background-position: 200% center; } }
+*/

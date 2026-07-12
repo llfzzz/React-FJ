@@ -1,0 +1,32 @@
+// Free Joy — Avatar (TypeScript + CSS)
+// Pairs with Avatar.css (imported below). Requires the FJ tokens (tokens/*.css).
+import * as React from "react";
+import "./Avatar.css";
+
+export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Image URL. Falls back to initials when absent. */
+  src?: string;
+  /** Full name — used for initials and alt text. */
+  name?: string;
+  /** @default "md" */
+  size?: "sm" | "md" | "lg";
+}
+
+/**
+ * Free Joy — Avatar
+ * Image or initials, circular. sizes: sm | md | lg
+ */
+export function Avatar({ src, name = "", size = "md", className = "", ...rest }: AvatarProps) {
+  const initials = name
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+  return (
+    <span className={`fj-avatar fj-avatar--${size} ${className}`.trim()} {...rest}>
+      {src ? <img src={src} alt={name} /> : initials || "?"}
+    </span>
+  );
+}

@@ -1,17 +1,22 @@
-// Free Joy — auto-generated JavaScript variant (from the .tsx source).
-// Do not edit by hand — run `pnpm gen:impl`.
-
 import * as React from "react";
 import { ensureKeyframes } from "../motion/keyframes";
 import { useReducedMotion } from "../motion/useReducedMotion";
 import { useTrigger } from "../motion/useTrigger";
+
 ensureKeyframes(
   "fj-caret",
   `@keyframes fj-caret {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
-  }`
+  }`,
 );
+
+/**
+ * Free Joy — Typewriter (effect)
+ * Types a string character by character with a blinking caret — hero taglines
+ * and playful one-liners. An invisible full-text ghost reserves the final box,
+ * so typing never shifts layout. Reduced motion shows the full text instantly.
+ */
 export function Typewriter({
   text,
   interval = 45,
@@ -29,6 +34,7 @@ export function Typewriter({
   const [count, setCount] = React.useState(0);
   const onDoneRef = React.useRef(onDone);
   onDoneRef.current = onDone;
+
   React.useEffect(() => {
     if (disabled) return;
     if (!on) {
@@ -57,41 +63,48 @@ export function Typewriter({
       if (tick) clearInterval(tick);
     };
   }, [on, reduced, disabled, text, interval, delay]);
+
   const done = count >= text.length && text.length > 0;
   React.useEffect(() => {
     if (done && !disabled) onDoneRef.current?.();
   }, [done, disabled]);
+
   if (disabled || reduced) {
-    return <span ref={ref} style={style} {...rest}>
+    return (
+      <span ref={ref} style={style} {...rest}>
         {text}
-      </span>;
+      </span>
+    );
   }
-  return <span
-    ref={ref}
-    role="text"
-    aria-label={text}
-    style={{ position: "relative", display: "inline-block", whiteSpace: "pre-wrap", ...style }}
-    {...rest}
-  >
-      {
-    /* Invisible ghost reserves the final box so typing never reflows. */
-  }
+
+  return (
+    <span
+      ref={ref}
+      role="text"
+      aria-label={text}
+      style={{ position: "relative", display: "inline-block", whiteSpace: "pre-wrap", ...style }}
+      {...rest}
+    >
+      {/* Invisible ghost reserves the final box so typing never reflows. */}
       <span aria-hidden="true" style={{ visibility: "hidden" }}>
         {text}
       </span>
       <span aria-hidden="true" style={{ position: "absolute", inset: 0 }}>
         {text.slice(0, count)}
-        {caret && on && !done && <span
-    style={{
-      display: "inline-block",
-      width: 2,
-      height: "1em",
-      verticalAlign: "-0.1em",
-      marginLeft: 1,
-      background: "currentColor",
-      animation: "fj-caret 1s steps(1) infinite"
-    }}
-  />}
+        {caret && on && !done && (
+          <span
+            style={{
+              display: "inline-block",
+              width: 2,
+              height: "1em",
+              verticalAlign: "-0.1em",
+              marginLeft: 1,
+              background: "currentColor",
+              animation: "fj-caret 1s steps(1) infinite",
+            }}
+          />
+        )}
       </span>
-    </span>;
+    </span>
+  );
 }

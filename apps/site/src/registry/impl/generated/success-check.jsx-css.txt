@@ -1,0 +1,76 @@
+// Free Joy — SuccessCheck (effect) (JavaScript + CSS)
+// Pairs with SuccessCheck.css (imported below). Requires the FJ tokens
+// (tokens/*.css). The checkmark draws itself via stroke-dashoffset and a soft
+// ring pulses out once when .is-drawn lands (mount / inview / manual).
+// Reduced motion shows the finished check instantly (media query).
+"use client";
+
+import * as React from "react";
+import "./SuccessCheck.css";
+
+/**
+ * Free Joy — SuccessCheck (effect)
+ * An SVG checkmark that draws itself in, with an optional soft ring — for
+ * confirmations and completed steps.
+ */
+export function SuccessCheck({
+  size = 48,
+  color = "var(--success-500)",
+  duration = 500,
+  ring = true,
+  trigger = "mount",
+  active,
+  label = "Success",
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [drawn, setDrawn] = React.useState(false);
+
+  React.useEffect(() => {
+    if (trigger === "mount") {
+      const id = requestAnimationFrame(() => setDrawn(true));
+      return () => cancelAnimationFrame(id);
+    }
+    if (trigger === "inview") {
+      const el = ref.current;
+      if (!el) return;
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting) {
+            setDrawn(true);
+            io.disconnect();
+          }
+        },
+        { threshold: 0.5 },
+      );
+      io.observe(el);
+      return () => io.disconnect();
+    }
+  }, [trigger]);
+
+  const on = trigger === "manual" ? Boolean(active) : drawn;
+  const vars = {
+    "--fj-size": `${size}px`,
+    "--fj-color": color,
+    "--fj-duration": `${duration}ms`,
+  };
+
+  return (
+    <span
+      ref={ref}
+      className={`fj-check ${on ? "is-drawn " : ""}${className}`.trim()}
+      role="img"
+      aria-label={label}
+      style={{ ...vars, ...style }}
+      {...rest}
+    >
+      {ring && <span className="fj-check-ring" aria-hidden="true" />}
+      <svg viewBox="0 0 52 52" aria-hidden="true">
+        <circle className="fj-check-circle" cx="26" cy="26" r="24" />
+        <path className="fj-check-mark" d="M14 27 L23 35 L38 18" />
+      </svg>
+    </span>
+  );
+}

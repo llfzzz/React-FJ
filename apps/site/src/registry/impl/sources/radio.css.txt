@@ -1,21 +1,7 @@
-<!-- Free Joy — Radio / RadioGroup, no-framework version.
-     Requires the FJ tokens (tokens/*.css).
-     Native radios are visually hidden; :checked scales in the inner dot. -->
+/* Free Joy — Radio.css
+   Pairs with Radio.tsx / Radio.jsx. Requires the FJ tokens (tokens/*.css).
+   Native radios are visually hidden; :checked scales in the inner dot. */
 
-<div class="fj-radiogroup" role="radiogroup" aria-label="Delivery">
-  <label class="fj-radio">
-    <input class="fj-radio-input" type="radio" name="delivery" value="standard" checked />
-    <span class="fj-radio-ring" aria-hidden="true"><span class="fj-radio-dot"></span></span>
-    <span class="fj-radio-label">Standard</span>
-  </label>
-  <label class="fj-radio">
-    <input class="fj-radio-input" type="radio" name="delivery" value="express" />
-    <span class="fj-radio-ring" aria-hidden="true"><span class="fj-radio-dot"></span></span>
-    <span class="fj-radio-label">Express</span>
-  </label>
-</div>
-
-<style>
 .fj-radiogroup {
   display: flex;
   flex-direction: column;
@@ -67,6 +53,7 @@
 }
 
 .fj-radio-input:disabled ~ * { opacity: 0.5; }
+.fj-radio:has(.fj-radio-input:disabled) { cursor: not-allowed; }
 
 .fj-radio-label {
   font-size: var(--text-base);
@@ -76,4 +63,3 @@
 @media (prefers-reduced-motion: reduce) {
   .fj-radio-ring, .fj-radio-dot { transition-duration: 0.01ms; }
 }
-</style>

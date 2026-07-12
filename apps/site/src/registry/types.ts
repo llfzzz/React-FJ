@@ -99,27 +99,55 @@ export interface NumberControl extends ControlBase {
 
 export type ControlDef = SelectControl | BooleanControl | TextControl | NumberControl;
 
-/** The four code styles the implementation switcher offers. */
-export type ImplFormat = 'js' | 'ts' | 'css' | 'tailwind';
+/**
+ * The two axes of the implementation switcher. A language (JavaScript or
+ * TypeScript) and a styling method (plain CSS or Tailwind) combine into one
+ * complete, copy-ready implementation.
+ */
+export type ImplLanguage = 'js' | 'ts';
+export type ImplStyling = 'css' | 'tailwind';
+export type ImplVariantKey = `${ImplLanguage}-${ImplStyling}`;
 
-export const IMPL_FORMAT_LABELS: Record<ImplFormat, string> = {
+export const IMPL_LANGUAGE_LABELS: Record<ImplLanguage, string> = {
   js: 'JavaScript',
   ts: 'TypeScript',
-  css: 'CSS',
-  tailwind: 'Tailwind',
 };
 
-export const IMPL_FORMAT_ORDER: ImplFormat[] = ['js', 'ts', 'css', 'tailwind'];
+export const IMPL_STYLING_LABELS: Record<ImplStyling, string> = {
+  css: 'CSS',
+  tailwind: 'Tailwind CSS',
+};
+
+export const IMPL_LANGUAGE_ORDER: ImplLanguage[] = ['js', 'ts'];
+export const IMPL_STYLING_ORDER: ImplStyling[] = ['css', 'tailwind'];
+
+/** One displayed file of a variant (component module, stylesheet, …). */
+export interface ImplFile {
+  /** Display file name, e.g. "Button.tsx" or "Button.css". */
+  name: string;
+  /** Shiki grammar for highlighting. */
+  lang: string;
+  /** Lazy raw-source loader (its own on-demand chunk). */
+  load: () => Promise<string>;
+}
+
+/** A complete implementation for one language + styling combination. */
+export interface ImplVariant {
+  /** Component file first; the shared stylesheet second (CSS styling only). */
+  files: ImplFile[];
+}
 
 export interface ImplementationDoc {
-  /** Lazy raw-source loaders; a missing css/tailwind key must have a notApplicable reason. */
-  sources: Partial<Record<ImplFormat, () => Promise<string>>>;
-  /** Shiki lang overrides (defaults: js/ts/tailwind → 'tsx', css → 'html'). */
-  langs?: Partial<Record<ImplFormat, string>>;
-  /** Short caveat rendered above the code for a format. */
-  notes?: Partial<Record<ImplFormat, string>>;
-  /** Why css/tailwind is intentionally absent (rendered instead of code). */
-  notApplicable?: Partial<Record<'css' | 'tailwind', string>>;
+  /** The four language × styling combinations (missing keys render a notice). */
+  variants: Partial<Record<ImplVariantKey, ImplVariant>>;
+  /** Short caveat rendered above the code for a styling method. */
+  notes?: Partial<Record<ImplStyling, string>>;
+  /**
+   * Set when the component draws its visuals in JavaScript, so CSS and
+   * Tailwind produce the identical source: the Style picker is inert and this
+   * reason is shown next to it.
+   */
+  stylingNeutral?: string;
 }
 
 export interface PropDef {
@@ -164,7 +192,7 @@ export interface ComponentDoc {
   props: PropDef[];
   /** Accessibility notes (rendered as a list). */
   a11y: string[];
-  /** Full implementation code per format (JS / TS / CSS / Tailwind). */
+  /** Full implementation code per language × styling combination. */
   implementation: ImplementationDoc;
   /** Effects: show a Replay button that remounts the preview. */
   replayable?: boolean;

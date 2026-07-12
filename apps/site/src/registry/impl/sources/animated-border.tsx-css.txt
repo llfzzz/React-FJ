@@ -1,0 +1,61 @@
+// Free Joy — AnimatedBorder (effect) (TypeScript + CSS)
+// Pairs with AnimatedBorder.css (imported below). Requires the FJ tokens
+// (tokens/*.css). Fully CSS: an animated @property angle drives a
+// conic-gradient border that sweeps around the panel; reduced motion holds it
+// still. Reserve for ONE flagship element per view.
+import * as React from "react";
+import "./AnimatedBorder.css";
+
+export interface AnimatedBorderProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Seconds per revolution. @default 8 */
+  speed?: number;
+  /** Border thickness in px. @default 1 */
+  width?: number;
+  /** @default "var(--radius-lg)" */
+  radius?: number | string;
+  /** Gradient stops between hairline segments. @default coral→lilac→sun */
+  colors?: string[];
+  /** Inner panel padding. @default "var(--space-5)" */
+  padding?: number | string;
+  /** Styles for the inner surface panel. */
+  contentStyle?: React.CSSProperties;
+}
+
+/**
+ * Free Joy — AnimatedBorder (effect)
+ * Hairline conic-gradient border that slowly sweeps around the panel.
+ */
+export function AnimatedBorder({
+  speed = 8,
+  width = 1,
+  radius = "var(--radius-lg)",
+  colors = ["var(--joy-400)", "var(--bloom-300)", "var(--sun-300)"],
+  padding = "var(--space-5)",
+  className = "",
+  style,
+  contentStyle,
+  children,
+  ...rest
+}: AnimatedBorderProps) {
+  const r = typeof radius === "number" ? `${radius}px` : radius;
+  const vars = {
+    "--fj-speed": `${speed}s`,
+    "--fj-width": `${width}px`,
+    "--fj-aborder-colors": colors.join(", "),
+  } as React.CSSProperties;
+
+  return (
+    <div
+      className={`fj-aborder ${className}`.trim()}
+      style={{ ...vars, borderRadius: r, ...style }}
+      {...rest}
+    >
+      <div
+        className="fj-aborder-inner"
+        style={{ borderRadius: `calc(${r} - ${width}px)`, padding, ...contentStyle }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}

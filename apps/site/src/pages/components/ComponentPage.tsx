@@ -51,8 +51,8 @@ export function ComponentPage() {
       {doc.implementation && (
         <DocSection id="implementation" title="Implementation">
           <p className="doc-note">
-            The full component source, ready to copy into your own project. Pick the style you
-            work in — the CSS and Tailwind versions reproduce the same look and states.
+            The full component source, ready to copy into your own project. Pick your language
+            and how you style — every combination is the same look, states, and behavior.
           </p>
           <ImplementationBlock doc={doc} />
         </DocSection>

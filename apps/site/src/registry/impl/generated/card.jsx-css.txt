@@ -1,0 +1,38 @@
+// Free Joy — Card (JavaScript + CSS)
+// Pairs with Card.css (imported below). Requires the FJ tokens (tokens/*.css),
+// including the glass tokens.
+import "./Card.css";
+
+/**
+ * Free Joy — Card
+ * Editorial surface: white, hairline border, generous padding, soft shadow on hover (optional).
+ * Set glass to render a frosted iOS-18-style translucent panel instead of solid white.
+ */
+export function Card({
+  interactive = false,
+  glass = false,
+  padding,
+  className = "",
+  style,
+  children,
+  ...rest
+}) {
+  const classes = [
+    "fj-card",
+    interactive && "fj-card--interactive",
+    glass && "fj-card--glass",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      style={padding !== undefined ? { padding, ...style } : style}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

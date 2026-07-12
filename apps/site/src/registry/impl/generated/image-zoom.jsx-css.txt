@@ -1,0 +1,49 @@
+// Free Joy — ImageZoom (effect) (JavaScript + CSS)
+// Pairs with ImageZoom.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The frame clips overflow; only the inner transform animates, so nothing
+// shifts layout. Default is hover zoom; mode="drift" runs a slow ken-burns
+// loop. Scale is capped at 1.15. Still under reduced motion (media query).
+"use client";
+
+import "./ImageZoom.css";
+
+const MAX_SCALE = 1.15; // keep the zoom subtle — motion-policy cap
+
+/**
+ * Free Joy — ImageZoom (effect)
+ * A gentle zoom inside a cropped frame — hover zoom for gallery cards, or a
+ * slow ken-burns drift for hero imagery.
+ */
+export function ImageZoom({
+  children,
+  mode = "hover",
+  scale = 1.06,
+  duration = 600,
+  speed = 1,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const effScale = Math.min(scale, MAX_SCALE);
+  const vars = {
+    "--fj-scale": effScale,
+    "--fj-duration": `${duration}ms`,
+    "--fj-drift-dur": `${16 / speed}s`,
+  };
+
+  const classes = [
+    "fj-image-zoom",
+    mode === "drift" && "fj-image-zoom--drift",
+    disabled && "fj-image-zoom--static",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={classes} style={{ ...vars, ...style }} {...rest}>
+      <div className="fj-image-zoom-inner">{children}</div>
+    </div>
+  );
+}

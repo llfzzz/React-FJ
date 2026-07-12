@@ -1,0 +1,62 @@
+// Free Joy — Float (effect) (TypeScript + Tailwind CSS)
+// The float keyframes depend on runtime distance/rotate, so add a parametric
+// keyframes rule to your global CSS (below) and drive it with CSS variables.
+import * as React from "react";
+
+export interface FloatProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+  /** Vertical travel in px (kept small). @default 8 */
+  distance?: number;
+  /** Seconds per loop. @default 4 */
+  duration?: number;
+  /** Lead-in delay in seconds. @default 0 */
+  delay?: number;
+  /** Degrees of gentle rotation at the extremes. @default 0 */
+  rotate?: number;
+  /** Disable (static). @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — Float (effect)
+ * Gentle levitation loop for illustrations, empty-state art, and hero props.
+ * Static under reduced motion or disabled.
+ */
+export function Float({
+  children,
+  distance = 8,
+  duration = 4,
+  delay = 0,
+  rotate = 0,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: FloatProps) {
+  return (
+    <div
+      style={{
+        "--fj-distance": `${distance}px`,
+        "--fj-rotate": `${rotate}deg`,
+        animationDuration: `${duration}s`,
+        animationDelay: `${delay}s`,
+        ...style,
+      } as React.CSSProperties}
+      className={
+        "inline-block will-change-transform " +
+        (disabled ? "" : "animate-[fj-float_var(--ease-in-out)_infinite] motion-reduce:animate-none ") +
+        className
+      }
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(calc(-1 * var(--fj-distance, 8px))) rotate(var(--fj-rotate, 0deg)); }
+}
+*/
