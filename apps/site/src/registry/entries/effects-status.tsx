@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ErrorShake, LoaderDots, PingDot, ProgressRing, SuccessCheck, type PingDotProps } from '@fj-effects';
-import { Button, Input } from '@fj';
+import { ErrorShake, LoaderDots, NumberTicker, PingDot, ProgressRing, SuccessCheck, type PingDotProps } from '@fj-effects';
+import { Button, Card, Input, Text } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
 
@@ -204,5 +204,46 @@ export const pingDotDoc: ComponentDoc = {
     'Exposes role="status" with an accessible label; the echo layer is aria-hidden.',
     'Under reduced motion (or disabled) the echo is gone but the solid dot keeps the meaning.',
     'Pair with a count or text for real notifications; for semantic status colors see StatusDot.',
+  ],
+};
+
+export const numberTickerDoc: ComponentDoc = {
+  id: 'number-ticker',
+  name: 'NumberTicker',
+  category: 'effects-status',
+  blurb: 'Odometer-style digit columns that roll to the value on change — live stats and scores.',
+  keywords: ['number', 'ticker', 'odometer', 'counter', 'stats', 'animation'],
+  importLine: "import { NumberTicker } from '@fj-effects';",
+  implementation: impl('number-ticker'),
+  // Not replayable on purpose: changing the value knob IS the demo — the
+  // columns roll in place (a remount would snap to the target).
+  controls: [
+    { type: 'number', prop: 'value', defaultValue: 1234, min: 0, max: 9999, step: 1 },
+    { type: 'number', prop: 'duration', defaultValue: 600, min: 200, max: 1200, step: 100 },
+    { type: 'number', prop: 'padTo', defaultValue: 4, min: 0, max: 6, step: 1 },
+  ],
+  render: (v) => (
+    <Card style={{ textAlign: 'center', minWidth: 180 }}>
+      <Text variant="small" as="p">
+        Plays this week
+      </Text>
+      <Text variant="h3" as="div">
+        <NumberTicker value={Number(v.value)} duration={Number(v.duration)} padTo={Number(v.padTo)} />
+      </Text>
+    </Card>
+  ),
+  code: (v) => `<NumberTicker value={plays}${v.duration !== 600 ? ` duration={${Number(v.duration)}}` : ''}${
+    Number(v.padTo) !== 0 ? ` padTo={${Number(v.padTo)}}` : ''
+  } />`,
+  props: [
+    { name: 'value', type: 'number', description: 'The number to display; changing it rolls the digits.' },
+    { name: 'duration', type: 'number', defaultValue: '600', description: 'ms per roll.' },
+    { name: 'padTo', type: 'number', defaultValue: '0', description: "Minimum digit count, left-padded with 0 so columns don't pop in." },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Plain text, no rolling columns.' },
+  ],
+  a11y: [
+    'The whole value is exposed as one accessible label; the rolling digit columns are aria-hidden.',
+    'Assistive tech never reads a mid-roll number — the label always carries the target value, and reduced motion snaps the columns to it.',
+    'Tabular numerals keep column widths fixed, so rolling digits never shift surrounding layout. (CountUp interpolates a value over time; NumberTicker rolls columns on change.)',
   ],
 };

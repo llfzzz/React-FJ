@@ -1,0 +1,102 @@
+import * as React from "react";
+import { ensureKeyframes } from "../motion/keyframes";
+import { useReducedMotion } from "../motion/useReducedMotion";
+
+ensureKeyframes(
+  "fj-click-spark",
+  `@keyframes fj-click-spark {
+    from { transform: rotate(var(--fj-spark-rot)) translateY(0) scaleY(1); opacity: 1; }
+    to { transform: rotate(var(--fj-spark-rot)) translateY(calc(var(--fj-spark-radius) * -1)) scaleY(0.3); opacity: 0; }
+  }`,
+);
+
+const SPARK_CAP = 12; // lines per burst
+const BURST_CAP = 4; // live bursts — rapid clicking never accumulates DOM
+
+export interface ClickSparkProps extends React.HTMLAttributes<HTMLSpanElement> {
+  children?: React.ReactNode;
+  /** Spark lines per burst (capped at 12). @default 8 */
+  count?: number;
+  /** Spark color (FJ token or CSS color). @default "var(--joy-500)" */
+  color?: string;
+  /** Travel radius in px. @default 24 */
+  radius?: number;
+  /** Spark lifetime in ms. @default 500 */
+  duration?: number;
+  /** No sparks, children unchanged. @default false */
+  disabled?: boolean;
+}
+
+interface Burst {
+  id: number;
+  x: number;
+  y: number;
+}
+
+/**
+ * Free Joy — ClickSpark (effect)
+ * Tiny spark lines radiate from the pointer on click — a wink of delight for
+ * buttons, likes, and toggles. Sparks live in an aria-hidden overlay and
+ * self-clean; nothing spawns under reduced motion.
+ */
+export function ClickSpark({
+  children,
+  count = 8,
+  color = "var(--joy-500)",
+  radius = 24,
+  duration = 500,
+  disabled = false,
+  style,
+  ...rest
+}: ClickSparkProps) {
+  const reduced = useReducedMotion();
+  const [bursts, setBursts] = React.useState<Burst[]>([]);
+  const nextId = React.useRef(0);
+  const sparks = Math.max(1, Math.min(count, SPARK_CAP));
+
+  const onPointerDown = (e: React.PointerEvent<HTMLSpanElement>) => {
+    if (disabled || reduced) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    setBursts((bs) => [
+      ...bs.slice(-(BURST_CAP - 1)),
+      { id: nextId.current++, x: e.clientX - rect.left, y: e.clientY - rect.top },
+    ]);
+  };
+
+  return (
+    <span
+      onPointerDown={onPointerDown}
+      style={{ position: "relative", display: "inline-block", ...style }}
+      {...rest}
+    >
+      {children}
+      {bursts.map((b) => (
+        <span
+          key={b.id}
+          aria-hidden="true"
+          style={{ position: "absolute", left: b.x, top: b.y, pointerEvents: "none" }}
+        >
+          {Array.from({ length: sparks }).map((_, i) => (
+            <span
+              key={i}
+              style={{
+                position: "absolute",
+                left: -1,
+                top: -10,
+                width: 2,
+                height: 10,
+                borderRadius: "var(--radius-pill)",
+                background: color,
+                transformOrigin: "center bottom",
+                ["--fj-spark-rot" as string]: `${(i * 360) / sparks}deg`,
+                ["--fj-spark-radius" as string]: `${radius}px`,
+                animation: `fj-click-spark ${duration}ms var(--ease-out) forwards`,
+              } as React.CSSProperties}
+              onAnimationEnd={i === 0 ? () => setBursts((bs) => bs.filter((p) => p.id !== b.id)) : undefined}
+            />
+          ))}
+        </span>
+      ))}
+    </span>
+  );
+}

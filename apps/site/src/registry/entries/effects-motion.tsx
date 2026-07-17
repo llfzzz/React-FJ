@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Collapse, FadeSwitch, ScrollProgress, StaggerList, ThemeTransition } from '@fj-effects';
+import { Collapse, FadeSwitch, ReorderList, ScrollProgress, StaggerList, ThemeTransition } from '@fj-effects';
 import { Button, Card, Grid, Stack, Text } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
@@ -197,6 +197,36 @@ function toggleTheme() {
   ],
 };
 
+export const reorderListDoc: ComponentDoc = {
+  id: 'reorder-list',
+  name: 'ReorderList',
+  category: 'effects-motion',
+  blurb: 'Glides items from their old spot to the new one when the order changes — sorting, ranking, filters.',
+  keywords: ['reorder', 'flip', 'sort', 'list', 'move', 'motion'],
+  importLine: "import { ReorderList } from '@fj-effects';",
+  implementation: impl('reorder-list', {
+    stylingNeutral:
+      'The move is measured and inverted per item in JavaScript (the FLIP technique) — there is no stylesheet or utility set to switch. CSS and Tailwind show the same source.',
+  }),
+  controls: [{ type: 'number', prop: 'duration', defaultValue: 400, min: 200, max: 800, step: 50 }],
+  render: (v) => <ReorderListDemo duration={Number(v.duration)} />,
+  code: (v) => `const [items, setItems] = useState(loaded);
+
+<ReorderList${v.duration !== 400 ? ` duration={${Number(v.duration)}}` : ''}>
+  {items.map((item) => <Card key={item.id}>{item.title}</Card>)}
+</ReorderList>`,
+  props: [
+    { name: 'children', type: 'ReactNode', description: 'The items; each child needs a stable key for FLIP tracking.' },
+    { name: 'duration', type: 'number', defaultValue: '400', description: 'ms per position transition.' },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Reorder instantly, no travel.' },
+  ],
+  a11y: [
+    'The DOM order is always the real order — transforms only bridge old → new visually, so screen readers and the tab order are never stale.',
+    'Reduced motion (or disabled) snaps items to their new positions instantly.',
+    'Transform-only motion: items glide without reflow, and surrounding layout never shifts.',
+  ],
+};
+
 // ---- Local interactive demos ----
 
 function ScrollProgressDemo({ height, position }: { height: number; position: 'top' | 'bottom' }) {
@@ -237,6 +267,34 @@ function FadeSwitchDemo({ mode, duration }: { mode: 'fade' | 'slide-up' | 'scale
           {panels[tab]}
         </Text>
       </FadeSwitch>
+    </Stack>
+  );
+}
+
+function ReorderListDemo({ duration }: { duration: number }) {
+  const [items, setItems] = useState(['Sketches', 'Notes', 'Circles', 'Sets']);
+  const shuffle = () =>
+    setItems((prev) => {
+      const next = [...prev];
+      for (let i = next.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [next[i], next[j]] = [next[j], next[i]];
+      }
+      // A no-op shuffle would look broken — rotate instead so something moves.
+      return next.every((t, i) => t === prev[i]) ? [...prev.slice(1), prev[0]] : next;
+    });
+  return (
+    <Stack gap={12} align="center">
+      <Button variant="secondary" size="sm" onClick={shuffle}>
+        Shuffle
+      </Button>
+      <ReorderList duration={duration} style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 200 }}>
+        {items.map((t) => (
+          <Card key={t}>
+            <Text variant="small">{t}</Text>
+          </Card>
+        ))}
+      </ReorderList>
     </Stack>
   );
 }

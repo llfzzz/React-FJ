@@ -128,6 +128,12 @@ pnpm workspace
   synchronized `tsx-css` / `css` / `tsx-tailwind` triples (10 JS-drawn effects marked
   styling-neutral, incl. Phase B5's Ripple / ScrambleText / Typewriter), ts-blank-space generator
   + `pnpm check:impl` strict harness, tests + e2e rewritten for the combo model
+- [x] Phase D (2026-07-16) — 7 more effects (fj-effects 33 → 40): WaveText (text); FlipCard,
+  CardStack (surfaces); ClickSpark, Dock (interaction); NumberTicker (status); ReorderList
+  (motion) — with registry docs, css/tailwind ports (FlipCard, WaveText, NumberTicker) or
+  styling-neutral reasons (CardStack, ClickSpark, Dock, ReorderList), and behavior tests.
+  Parallax was considered and rejected: the published motion policy bans it (ReorderList took
+  the motion slot instead)
 
 ## Component inventory
 
@@ -146,17 +152,17 @@ Synced components (49 .jsx files):
 - effects (7, synced fj-ui): TextReveal, Reveal, CountUp, SpotlightCard, AnimatedBorder, Glow, AmbientBackground
 Local barrel: `packages/fj-ui/index.ts` (local addition — upstream has no barrel).
 
-fj-effects (33, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`):
-- effects-text (7): GradientText, RotatingText, AnimatedUnderline, Highlighter, Typewriter,
-  ScrambleText, BlurReveal
-- effects-interaction (5): Magnetic, TiltCard, Tactile, CursorSpotlight, Ripple
-- effects-surfaces (4): Shimmer, Float, Marquee, ImageZoom
+fj-effects (40, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`):
+- effects-text (8): GradientText, RotatingText, AnimatedUnderline, Highlighter, Typewriter,
+  ScrambleText, BlurReveal, WaveText
+- effects-interaction (7): Magnetic, TiltCard, Tactile, CursorSpotlight, Ripple, ClickSpark, Dock
+- effects-surfaces (6): Shimmer, Float, Marquee, ImageZoom, FlipCard, CardStack
 - effects-backgrounds (7): Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst, Orbs, Waves
-- effects-status (5): SuccessCheck, ErrorShake, LoaderDots, ProgressRing, PingDot
-- effects-motion (5): StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition (+ runThemeTransition)
+- effects-status (6): SuccessCheck, ErrorShake, LoaderDots, ProgressRing, PingDot, NumberTicker
+- effects-motion (6): StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition (+ runThemeTransition), ReorderList
 Motion primitives: `packages/fj-effects/motion/{useReducedMotion,useInView,useTrigger,keyframes,types}.ts`.
 
-Documented on site (65): all 32 synced interactive components + 33 fj-effects — registry entries with
+Documented on site (72): all 32 synced interactive components + 40 fj-effects — registry entries with
 playground controls, generated/custom snippets, examples, props, a11y notes, and a language ×
 styling implementation switcher (JS/TS × CSS/Tailwind), grouped in `src/registry/entries/{button,card,badge,
 core-more,forms,navigation,feedback,overlay,data,effects,effects-text,effects-interaction,
@@ -311,8 +317,8 @@ file-named `CodeBlock`s + styling notes).
   the header's "TypeScript" to "JavaScript", drops a react import kept only for types, and deletes
   stale outputs. The JS ports therefore can never drift from the TS ports.
 - **Styling-neutral components** (visuals computed in JS: CountUp, RotatingText, Magnetic,
-  TiltCard, Sparkles, ConfettiBurst, FadeSwitch, Ripple, ScrambleText, Typewriter) pass
-  `impl('<id>', { stylingNeutral: reason })`:
+  TiltCard, Sparkles, ConfettiBurst, FadeSwitch, Ripple, ScrambleText, Typewriter, CardStack,
+  ClickSpark, Dock, ReorderList) pass `impl('<id>', { stylingNeutral: reason })`:
   the Style picker renders inert with the reason shown, and both styling choices serve the real
   per-language source (synced `.jsx` / authored `ts.txt` for fj-ui; generated `.js.txt` port /
   real `.tsx` for fj-effects). The gen script's `STYLING_NEUTRAL_EFFECTS` list must match.
@@ -348,14 +354,14 @@ AnimatedBorder, Glow, AmbientBackground; plus built-in micro-motion in Spinner, 
 Drawer (slide), card lifts, button/press scales, the site's CopyIconButton copy-feedback, and the
 theme toggle.
 
-Additions (33, in six IA sub-categories — see `EFFECT_CATEGORIES` in `registry/types.ts`):
+Additions (40, in six IA sub-categories — see `EFFECT_CATEGORIES` in `registry/types.ts`):
 - **effects-text**: GradientText, RotatingText, AnimatedUnderline, Highlighter, Typewriter,
-  ScrambleText, BlurReveal
-- **effects-interaction**: Magnetic, TiltCard, Tactile, CursorSpotlight, Ripple
-- **effects-surfaces**: Shimmer, Float, Marquee, ImageZoom
+  ScrambleText, BlurReveal, WaveText
+- **effects-interaction**: Magnetic, TiltCard, Tactile, CursorSpotlight, Ripple, ClickSpark, Dock
+- **effects-surfaces**: Shimmer, Float, Marquee, ImageZoom, FlipCard, CardStack
 - **effects-backgrounds**: Aurora, GridPattern, NoiseOverlay, Sparkles, ConfettiBurst, Orbs, Waves
-- **effects-status**: SuccessCheck, ErrorShake, LoaderDots, ProgressRing, PingDot
-- **effects-motion**: StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition
+- **effects-status**: SuccessCheck, ErrorShake, LoaderDots, ProgressRing, PingDot, NumberTicker
+- **effects-motion**: StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition, ReorderList
 
 **Performance rules**: animate `transform`/`opacity` only (no layout-shifting properties); no
 parallax, no flashing; blur radii and particle counts are hard-capped; `performance="lite"` has a
@@ -389,7 +395,7 @@ no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
 
 Landing `/` · Get started `/docs/{introduction,installation,usage}` · Tokens
 `/docs/tokens/{colors,typography,spacing,motion}` · Animation gallery `/effects` · Animation
-guide `/docs/effects-guide` · Catalog `/components` (+ 65 component pages) · `/playground` · styled
+guide `/docs/effects-guide` · Catalog `/components` (+ 72 component pages) · `/playground` · styled
 404 · app-level ErrorBoundary · skip link. The site is **light-only** (dark mode removed
 2026-07-04); the topbar has a GitHub button with a live star count (localStorage-cached, refetched
 daily). User-facing naming is "Animation" (renamed from "Effects"/"Motion" 2026-07-08); package
@@ -406,8 +412,10 @@ names, routes, and file names intentionally kept.
   restore / legacy-key migration), `src/docs/Showcase.test.tsx`,
   `src/test/effects/primitives.test.tsx` (useReducedMotion / useTrigger / ensureKeyframes / easeVar),
   `src/test/effects/behaviors.test.tsx` (Collapse open/close, FadeSwitch swap, SuccessCheck +
-  Sparkles reduced-motion fallbacks, particle cap). Setup installs in-memory localStorage and mocks
-  matchMedia (per-test override for reduced motion) + IntersectionObserver. **42 tests**.
+  Sparkles reduced-motion fallbacks, particle cap; Phase D: FlipCard face swap, WaveText label,
+  ClickSpark/Dock caps, NumberTicker columns, CardStack advance, ReorderList order — all with
+  reduced-motion fallbacks). Setup installs in-memory localStorage and mocks
+  matchMedia (per-test override for reduced motion) + IntersectionObserver. **72 tests**.
 - Playwright (chromium, against `vite preview` of the production build): `site.spec.ts` (landing nav,
   playground → code tab, clipboard copy, catalog filter by "Text animations", ⌘K,
   404, 375px drawer), `implementation.spec.ts` (default TS+CSS with Button.tsx + Button.css,

@@ -1,0 +1,46 @@
+/* Free Joy — FlipCard.css
+   Pairs with FlipCard.tsx / FlipCard.jsx. Requires the FJ tokens (tokens/*.css).
+   The inner box turns in 3D between two backface-hidden faces. The hidden face
+   stays visible through the first half of the turn, then winks out — it is
+   aria-hidden and unreachable. Reduced motion swaps faces instantly. */
+
+.fj-flip-card {
+  display: inline-block;
+  perspective: 1000px;
+}
+
+.fj-flip-card--click { cursor: pointer; }
+
+.fj-flip-card__inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--fj-duration, 600ms) var(--ease-emphasized);
+}
+
+.fj-flip-card--flipped .fj-flip-card__inner { transform: rotateY(180deg); }
+.fj-flip-card--vertical.fj-flip-card--flipped .fj-flip-card__inner { transform: rotateX(180deg); }
+
+.fj-flip-card__face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* The hidden face winks out halfway through the turn. */
+  transition: visibility 0s calc(var(--fj-duration, 600ms) / 2);
+}
+
+.fj-flip-card__face--hidden { visibility: hidden; }
+
+.fj-flip-card__face--back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+.fj-flip-card--vertical .fj-flip-card__face--back { transform: rotateX(180deg); }
+
+/* Reduced motion: no 3D turn — faces swap instantly. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-flip-card__inner,
+  .fj-flip-card__face {
+    transition: none;
+  }
+}

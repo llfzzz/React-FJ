@@ -1,0 +1,99 @@
+// Free Joy — FlipCard (effect) (TypeScript + Tailwind CSS)
+// 3D flip via arbitrary properties ([transform-style:preserve-3d], backface
+// visibility). Durations ride CSS vars so motion-reduce: variants can win —
+// reduced motion swaps faces instantly.
+import * as React from "react";
+
+export interface FlipCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
+  /** Face shown at rest. */
+  front: React.ReactNode;
+  /** Face revealed by the flip. */
+  back: React.ReactNode;
+  /** What flips the card. @default "hover" */
+  trigger?: "hover" | "click";
+  /** Flip axis. @default "horizontal" (rotates around Y) */
+  direction?: "horizontal" | "vertical";
+  /** Flip duration in ms. @default 600 */
+  duration?: number;
+  /** Show only the front face, no flip. @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — FlipCard (effect)
+ * A two-faced card that flips in 3D to reveal its back — feature reveals,
+ * pricing hovers, playful "about" tiles. Only one face is ever exposed to
+ * assistive tech and the tab order.
+ */
+export function FlipCard({
+  front,
+  back,
+  trigger = "hover",
+  direction = "horizontal",
+  duration = 600,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: FlipCardProps) {
+  const [flipped, setFlipped] = React.useState(false);
+
+  if (disabled) {
+    return (
+      <div className={className} style={style} {...rest}>
+        {front}
+      </div>
+    );
+  }
+
+  const bind: React.HTMLAttributes<HTMLDivElement> =
+    trigger === "click"
+      ? {
+          role: "button",
+          tabIndex: 0,
+          "aria-pressed": flipped,
+          onClick: () => setFlipped((f) => !f),
+          onKeyDown: (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFlipped((f) => !f);
+            }
+          },
+        }
+      : {
+          onMouseEnter: () => setFlipped(true),
+          onMouseLeave: () => setFlipped(false),
+          onFocus: () => setFlipped(true),
+          onBlur: () => setFlipped(false),
+        };
+
+  const turn = direction === "vertical" ? "[transform:rotateX(180deg)]" : "[transform:rotateY(180deg)]";
+  const face =
+    "[backface-visibility:hidden] transition-[visibility] duration-0 delay-[var(--fj-half)] motion-reduce:delay-0";
+
+  return (
+    <div
+      className={`inline-block [perspective:1000px] ${trigger === "click" ? "cursor-pointer " : ""}${className}`}
+      style={{
+        ...({ "--fj-duration": `${duration}ms`, "--fj-half": `${duration / 2}ms` } as React.CSSProperties),
+        ...style,
+      }}
+      {...bind}
+      {...rest}
+    >
+      <div
+        className={
+          "relative [transform-style:preserve-3d] transition-transform duration-[var(--fj-duration)] " +
+          `ease-[var(--ease-emphasized)] motion-reduce:transition-none ${flipped ? turn : ""}`
+        }
+      >
+        <div aria-hidden={flipped} className={`${face} ${flipped ? "invisible" : ""}`}>
+          {front}
+        </div>
+        <div aria-hidden={!flipped} className={`absolute inset-0 ${turn} ${face} ${flipped ? "" : "invisible"}`}>
+          {back}
+        </div>
+      </div>
+    </div>
+  );
+}
