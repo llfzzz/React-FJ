@@ -46,6 +46,8 @@ export { ScrambleText } from "./components/ScrambleText";
 export type { ScrambleTextProps } from "./components/ScrambleText";
 export { BlurReveal } from "./components/BlurReveal";
 export type { BlurRevealProps } from "./components/BlurReveal";
+export { WaveText } from "./components/WaveText";
+export type { WaveTextProps } from "./components/WaveText";
 
 // Surface effects
 export { Shimmer } from "./components/Shimmer";
@@ -56,6 +58,10 @@ export { Marquee } from "./components/Marquee";
 export type { MarqueeProps } from "./components/Marquee";
 export { ImageZoom } from "./components/ImageZoom";
 export type { ImageZoomProps } from "./components/ImageZoom";
+export { FlipCard } from "./components/FlipCard";
+export type { FlipCardProps } from "./components/FlipCard";
+export { CardStack } from "./components/CardStack";
+export type { CardStackProps } from "./components/CardStack";
 
 // Interaction effects
 export { Magnetic } from "./components/Magnetic";
@@ -68,6 +74,10 @@ export { CursorSpotlight } from "./components/CursorSpotlight";
 export type { CursorSpotlightProps } from "./components/CursorSpotlight";
 export { Ripple } from "./components/Ripple";
 export type { RippleProps } from "./components/Ripple";
+export { ClickSpark } from "./components/ClickSpark";
+export type { ClickSparkProps } from "./components/ClickSpark";
+export { Dock } from "./components/Dock";
+export type { DockProps } from "./components/Dock";
 
 // Status effects
 export { SuccessCheck } from "./components/SuccessCheck";
@@ -80,6 +90,8 @@ export { ProgressRing } from "./components/ProgressRing";
 export type { ProgressRingProps } from "./components/ProgressRing";
 export { PingDot } from "./components/PingDot";
 export type { PingDotProps } from "./components/PingDot";
+export { NumberTicker } from "./components/NumberTicker";
+export type { NumberTickerProps } from "./components/NumberTicker";
 
 // Background effects
 export { Aurora } from "./components/Aurora";
@@ -108,3 +120,5 @@ export { Collapse } from "./components/Collapse";
 export type { CollapseProps } from "./components/Collapse";
 export { ThemeTransition, runThemeTransition } from "./components/ThemeTransition";
 export type { ThemeTransitionProps } from "./components/ThemeTransition";
+export { ReorderList } from "./components/ReorderList";
+export type { ReorderListProps } from "./components/ReorderList";

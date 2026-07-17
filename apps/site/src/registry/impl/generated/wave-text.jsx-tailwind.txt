@@ -1,0 +1,90 @@
+// Free Joy — WaveText (effect) (JavaScript + Tailwind CSS)
+// The rise keyframes can't be a utility — add the CSS block below to your
+// global stylesheet once. Each character then runs fj-wave-rise with an
+// inline stagger; motion-reduce:animate-none holds the wave still.
+import * as React from "react";
+
+/**
+ * Free Joy — WaveText (effect)
+ * Characters take turns rising in a gentle wave — playful hero words and
+ * section accents.
+ */
+export function WaveText({
+  text,
+  trigger = "loop",
+  distance = 6,
+  duration = 1200,
+  stagger = 60,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [inView, setInView] = React.useState(trigger !== "inview");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger]);
+
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {text}
+      </span>
+    );
+  }
+
+  return (
+    <span
+      ref={ref}
+      role="text"
+      aria-label={text}
+      className={`inline-block ${className}`}
+      style={{ ...({ "--fj-wave-distance": `${distance}px` }), ...style }}
+      {...rest}
+    >
+      <span aria-hidden="true">
+        {Array.from(text).map((ch, i) => (
+          <span
+            key={i}
+            className={`inline-block whitespace-pre ${inView ? "animate-[fj-wave-rise] motion-reduce:animate-none" : ""}`}
+            style={{
+              animationDuration: `${duration}ms`,
+              animationDelay: `${i * stagger}ms`,
+              animationTimingFunction: "var(--ease-in-out)",
+              animationIterationCount: trigger === "loop" ? "infinite" : 1,
+            }}
+          >
+            {ch}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+/* Add once to your global CSS:
+@keyframes fj-wave-rise {
+  0%, 100% { transform: none; }
+  50% { transform: translateY(calc(var(--fj-wave-distance, 6px) * -1)); }
+}
+*/

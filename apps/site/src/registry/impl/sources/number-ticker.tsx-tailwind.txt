@@ -1,0 +1,92 @@
+// Free Joy — NumberTicker (effect) (TypeScript + Tailwind CSS)
+// Each digit is an overflow-hidden 1em window over a 0–9 strip that slides to
+// the digit. Duration rides a CSS var so motion-reduce:transition-none can
+// win — reduced motion snaps the columns.
+import * as React from "react";
+
+const DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+export interface NumberTickerProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  /** The number to display; changing it rolls the digits. */
+  value: number;
+  /** ms per roll. @default 600 */
+  duration?: number;
+  /** Minimum digit count, left-padded with 0 so columns don't pop in. @default 0 */
+  padTo?: number;
+  /** Plain text, no rolling columns. @default false */
+  disabled?: boolean;
+}
+
+/** "1234.5" → chars, integer part left-padded to `padTo` digits. */
+function formatValue(value: number, padTo: number): string {
+  const sign = value < 0 ? "-" : "";
+  const [int, frac] = String(Math.abs(value)).split(".");
+  return sign + int.padStart(padTo, "0") + (frac !== undefined ? `.${frac}` : "");
+}
+
+/**
+ * Free Joy — NumberTicker (effect)
+ * Odometer-style digit columns that roll to the value on change — live stats,
+ * scores, counters. The whole value is one accessible label.
+ */
+export function NumberTicker({
+  value,
+  duration = 600,
+  padTo = 0,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: NumberTickerProps) {
+  const display = formatValue(value, padTo);
+
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {display}
+      </span>
+    );
+  }
+
+  return (
+    <span
+      role="text"
+      aria-label={String(value)}
+      className={`inline-block leading-none tabular-nums ${className}`}
+      style={{ ...({ "--fj-duration": `${duration}ms` } as React.CSSProperties), ...style }}
+      {...rest}
+    >
+      <span aria-hidden="true" className="inline-flex">
+        {Array.from(display).map((ch, i) => {
+          // Keyed from the right so the ones column keeps its identity as
+          // digit count grows (padTo avoids the pop-in entirely).
+          const key = display.length - i;
+          if (!/[0-9]/.test(ch)) {
+            return (
+              <span key={`s${key}`} className="inline-block">
+                {ch}
+              </span>
+            );
+          }
+          return (
+            <span key={key} className="inline-block h-[1em] overflow-hidden">
+              <span
+                className={
+                  "block transition-transform duration-[var(--fj-duration)] ease-[var(--ease-emphasized)] " +
+                  "motion-reduce:transition-none"
+                }
+                style={{ transform: `translateY(${-Number(ch)}em)` }}
+              >
+                {DIGITS.map((d) => (
+                  <span key={d} className="block h-[1em]">
+                    {d}
+                  </span>
+                ))}
+              </span>
+            </span>
+          );
+        })}
+      </span>
+    </span>
+  );
+}

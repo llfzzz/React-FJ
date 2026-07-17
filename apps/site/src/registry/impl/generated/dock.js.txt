@@ -1,0 +1,74 @@
+import * as React from "react";
+import { useReducedMotion } from "../motion/useReducedMotion";
+
+const SCALE_CAP = 1.6; // hard cap, whatever magnification asks for
+
+/**
+ * Free Joy — Dock (effect)
+ * A row of items that swell as the pointer sweeps near — the classic dock
+ * magnification for launchers and toolbars. Transform-only, so the row never
+ * reflows; keyboard focus and reduced motion leave it a plain static row.
+ */
+export function Dock({
+  children,
+  magnification = 1.35,
+  radius = 80,
+  restDuration = 300,
+  gap = 8,
+  disabled = false,
+  style,
+  ...rest
+}) {
+  const reduced = useReducedMotion();
+  const items = React.Children.toArray(children);
+  const refs = React.useRef([]);
+  const [scales, setScales] = React.useState([]);
+  const inactive = disabled || reduced;
+  const peak = Math.min(Math.max(magnification, 1), SCALE_CAP);
+
+  const onMouseMove = (e) => {
+    if (inactive) return;
+    setScales(
+      items.map((_, i) => {
+        const el = refs.current[i];
+        if (!el) return 1;
+        const r = el.getBoundingClientRect();
+        const d = Math.abs(e.clientX - (r.left + r.width / 2));
+        if (d >= radius) return 1;
+        // Cosine falloff: full swell under the pointer, easing to 1 at the radius.
+        return 1 + (peak - 1) * (Math.cos((d / radius) * Math.PI) + 1) / 2;
+      }),
+    );
+  };
+
+  const tracking = scales.some((s) => s !== 1);
+
+  return (
+    <div
+      onMouseMove={inactive ? undefined : onMouseMove}
+      onMouseLeave={inactive ? undefined : () => setScales([])}
+      style={{ display: "inline-flex", alignItems: "flex-end", gap, ...style }}
+      {...rest}
+    >
+      {items.map((item, i) => (
+        <span
+          key={(React.isValidElement(item) && item.key) || i}
+          ref={(el) => {
+            refs.current[i] = el;
+          }}
+          style={{
+            display: "inline-flex",
+            transform: `scale(${scales[i] ?? 1})`,
+            transformOrigin: "bottom center",
+            transition: tracking
+              ? "transform 120ms var(--ease-out)"
+              : `transform ${restDuration}ms var(--ease-spring)`,
+            willChange: inactive ? undefined : "transform",
+          }}
+        >
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}

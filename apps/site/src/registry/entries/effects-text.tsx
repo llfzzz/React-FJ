@@ -6,13 +6,16 @@ import {
   RotatingText,
   ScrambleText,
   Typewriter,
+  WaveText,
   type AnimatedUnderlineProps,
   type BlurRevealProps,
   type HighlighterProps,
   type RotatingTextProps,
   type ScrambleTextProps,
   type TypewriterProps,
+  type WaveTextProps,
 } from '@fj-effects';
+import { Text } from '@fj';
 import type { ComponentDoc, ControlValues } from '../types';
 import { impl } from '../impl';
 
@@ -328,5 +331,50 @@ export const blurRevealDoc: ComponentDoc = {
     'Words are aria-hidden fragments under a root that carries the full text as an aria-label.',
     'Reduced motion renders one plain span of text — no fragments, no filter.',
     'The animated blur is hard-capped at 12px — the sanctioned capped-blur exception to transform/opacity-only motion.',
+  ],
+};
+
+export const waveTextDoc: ComponentDoc = {
+  id: 'wave-text',
+  name: 'WaveText',
+  category: 'effects-text',
+  blurb: 'Characters take turns rising in a gentle wave — playful hero words and accents.',
+  keywords: ['wave', 'text', 'characters', 'bounce', 'stagger', 'animation'],
+  importLine: "import { WaveText } from '@fj-effects';",
+  implementation: impl('wave-text'),
+  replayable: true,
+  controls: [
+    { type: 'select', prop: 'trigger', options: ['loop', 'mount', 'inview'], defaultValue: 'loop' },
+    { type: 'text', prop: 'text', defaultValue: 'Make it joyful' },
+    { type: 'number', prop: 'distance', defaultValue: 6, min: 2, max: 12, step: 1 },
+    { type: 'number', prop: 'stagger', defaultValue: 60, min: 20, max: 150, step: 10 },
+  ],
+  render: (v) => (
+    <span key={replayKey(v)}>
+      <Text variant="h3" as="div">
+        <WaveText
+          text={String(v.text)}
+          trigger={v.trigger as WaveTextProps['trigger']}
+          distance={Number(v.distance)}
+          stagger={Number(v.stagger)}
+        />
+      </Text>
+    </span>
+  ),
+  code: (v) => `<WaveText text="${String(v.text)}"${v.trigger !== 'loop' ? ` trigger="${String(v.trigger)}"` : ''}${
+    v.distance !== 6 ? ` distance={${Number(v.distance)}}` : ''
+  }${v.stagger !== 60 ? ` stagger={${Number(v.stagger)}}` : ''} />`,
+  props: [
+    { name: 'text', type: 'string', description: 'The text to animate, split per character.' },
+    { name: 'trigger', type: '"loop" | "mount" | "inview"', defaultValue: '"loop"', description: 'When the wave plays.' },
+    { name: 'distance', type: 'number', defaultValue: '6', description: 'Rise height in px (kept small).' },
+    { name: 'duration', type: 'number', defaultValue: '1200', description: 'ms per character cycle.' },
+    { name: 'stagger', type: 'number', defaultValue: '60', description: 'ms stagger between adjacent characters.' },
+    { name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Plain text, no wave.' },
+  ],
+  a11y: [
+    'The full string stays readable as one aria-label; the per-character spans are aria-hidden.',
+    'Reduced motion renders the plain string — no splitting, no rise.',
+    'Keep the rise small (default 6px) so lines never collide; loop it in heroes, not body copy.',
   ],
 };

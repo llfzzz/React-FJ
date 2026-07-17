@@ -1,0 +1,101 @@
+// Free Joy — FlipCard (effect) (TypeScript + CSS)
+// Pairs with FlipCard.css (imported below). Requires the FJ tokens (tokens/*.css).
+// A two-faced card that flips in 3D; the hidden face is aria-hidden and
+// unreachable. Reduced motion swaps faces instantly (see the CSS media query).
+import * as React from "react";
+import "./FlipCard.css";
+
+export interface FlipCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
+  /** Face shown at rest. */
+  front: React.ReactNode;
+  /** Face revealed by the flip. */
+  back: React.ReactNode;
+  /** What flips the card. @default "hover" */
+  trigger?: "hover" | "click";
+  /** Flip axis. @default "horizontal" (rotates around Y) */
+  direction?: "horizontal" | "vertical";
+  /** Flip duration in ms. @default 600 */
+  duration?: number;
+  /** Show only the front face, no flip. @default false */
+  disabled?: boolean;
+}
+
+/**
+ * Free Joy — FlipCard (effect)
+ * A two-faced card that flips in 3D to reveal its back — feature reveals,
+ * pricing hovers, playful "about" tiles. Only one face is ever exposed to
+ * assistive tech and the tab order.
+ */
+export function FlipCard({
+  front,
+  back,
+  trigger = "hover",
+  direction = "horizontal",
+  duration = 600,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}: FlipCardProps) {
+  const [flipped, setFlipped] = React.useState(false);
+
+  if (disabled) {
+    return (
+      <div className={className} style={style} {...rest}>
+        {front}
+      </div>
+    );
+  }
+
+  const bind: React.HTMLAttributes<HTMLDivElement> =
+    trigger === "click"
+      ? {
+          role: "button",
+          tabIndex: 0,
+          "aria-pressed": flipped,
+          onClick: () => setFlipped((f) => !f),
+          onKeyDown: (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFlipped((f) => !f);
+            }
+          },
+        }
+      : {
+          onMouseEnter: () => setFlipped(true),
+          onMouseLeave: () => setFlipped(false),
+          onFocus: () => setFlipped(true),
+          onBlur: () => setFlipped(false),
+        };
+
+  const classes = [
+    "fj-flip-card",
+    flipped && "fj-flip-card--flipped",
+    direction === "vertical" && "fj-flip-card--vertical",
+    trigger === "click" && "fj-flip-card--click",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={classes}
+      style={{ ...({ "--fj-duration": `${duration}ms` } as React.CSSProperties), ...style }}
+      {...bind}
+      {...rest}
+    >
+      <div className="fj-flip-card__inner">
+        <div aria-hidden={flipped} className={`fj-flip-card__face${flipped ? " fj-flip-card__face--hidden" : ""}`}>
+          {front}
+        </div>
+        <div
+          aria-hidden={!flipped}
+          className={`fj-flip-card__face fj-flip-card__face--back${flipped ? "" : " fj-flip-card__face--hidden"}`}
+        >
+          {back}
+        </div>
+      </div>
+    </div>
+  );
+}

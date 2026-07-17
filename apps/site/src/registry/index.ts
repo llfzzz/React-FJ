@@ -42,10 +42,20 @@ import {
   rotatingTextDoc,
   scrambleTextDoc,
   typewriterDoc,
+  waveTextDoc,
 } from './entries/effects-text';
-import { floatDoc, imageZoomDoc, marqueeDoc, shimmerDoc } from './entries/effects-surfaces';
 import {
+  cardStackDoc,
+  flipCardDoc,
+  floatDoc,
+  imageZoomDoc,
+  marqueeDoc,
+  shimmerDoc,
+} from './entries/effects-surfaces';
+import {
+  clickSparkDoc,
   cursorSpotlightDoc,
+  dockDoc,
   magneticDoc,
   rippleDoc,
   tactileDoc,
@@ -54,6 +64,7 @@ import {
 import {
   errorShakeDoc,
   loaderDotsDoc,
+  numberTickerDoc,
   pingDotDoc,
   progressRingDoc,
   successCheckDoc,
@@ -70,6 +81,7 @@ import {
 import {
   collapseDoc,
   fadeSwitchDoc,
+  reorderListDoc,
   scrollProgressDoc,
   staggerListDoc,
   themeTransitionDoc,
@@ -116,20 +128,26 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   typewriterDoc,
   scrambleTextDoc,
   blurRevealDoc,
+  waveTextDoc,
   shimmerDoc,
   floatDoc,
   marqueeDoc,
   imageZoomDoc,
+  flipCardDoc,
+  cardStackDoc,
   magneticDoc,
   tiltCardDoc,
   tactileDoc,
   cursorSpotlightDoc,
   rippleDoc,
+  clickSparkDoc,
+  dockDoc,
   successCheckDoc,
   errorShakeDoc,
   loaderDotsDoc,
   progressRingDoc,
   pingDotDoc,
+  numberTickerDoc,
   auroraDoc,
   gridPatternDoc,
   noiseOverlayDoc,
@@ -142,6 +160,7 @@ export const REGISTRY: ComponentDoc[] = sortByCategory([
   fadeSwitchDoc,
   collapseDoc,
   themeTransitionDoc,
+  reorderListDoc,
 ]);
 
 function sortByCategory(docs: ComponentDoc[]): ComponentDoc[] {

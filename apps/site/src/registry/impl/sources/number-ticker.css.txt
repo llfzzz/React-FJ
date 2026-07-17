@@ -1,0 +1,38 @@
+/* Free Joy — NumberTicker.css
+   Pairs with NumberTicker.tsx / NumberTicker.jsx. Requires the FJ tokens
+   (tokens/*.css). Each digit is a 1em overflow-hidden window over a 0–9
+   strip; the component feeds --fj-digit per column and --fj-duration.
+   Tabular numerals keep column widths fixed, so rolling never shifts
+   layout. Reduced motion snaps the strips to the target digit. */
+
+.fj-number-ticker {
+  display: inline-block;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.fj-number-ticker__row { display: inline-flex; }
+
+.fj-number-ticker__cell {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+}
+
+.fj-number-ticker__strip {
+  display: block;
+  transform: translateY(calc(var(--fj-digit, 0) * -1em));
+  transition: transform var(--fj-duration, 600ms) var(--ease-emphasized);
+}
+
+.fj-number-ticker__strip > span {
+  display: block;
+  height: 1em;
+}
+
+.fj-number-ticker__sep { display: inline-block; }
+
+/* Reduced motion: snap to the target digit. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-number-ticker__strip { transition: none; }
+}

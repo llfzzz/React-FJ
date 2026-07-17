@@ -1,0 +1,84 @@
+// Free Joy — WaveText (effect) (JavaScript + CSS)
+// Pairs with WaveText.css (imported below). Requires the FJ tokens (tokens/*.css).
+// The string splits into aria-hidden per-character spans that take turns
+// rising; the root keeps the full text as one aria-label. Reduced motion
+// holds the wave still (see the CSS media query).
+import * as React from "react";
+import "./WaveText.css";
+
+/**
+ * Free Joy — WaveText (effect)
+ * Characters take turns rising in a gentle wave — playful hero words and
+ * section accents.
+ */
+export function WaveText({
+  text,
+  trigger = "loop",
+  distance = 6,
+  duration = 1200,
+  stagger = 60,
+  disabled = false,
+  className = "",
+  style,
+  ...rest
+}) {
+  const ref = React.useRef(null);
+  const [inView, setInView] = React.useState(trigger !== "inview");
+
+  React.useEffect(() => {
+    if (trigger !== "inview") return;
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            io.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [trigger]);
+
+  if (disabled) {
+    return (
+      <span className={className} style={style} {...rest}>
+        {text}
+      </span>
+    );
+  }
+
+  const classes = [
+    "fj-wave-text",
+    trigger !== "loop" && "fj-wave-text--once",
+    !inView && "fj-wave-text--waiting",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const vars = {
+    "--fj-wave-distance": `${distance}px`,
+    "--fj-duration": `${duration}ms`,
+    "--fj-stagger": `${stagger}ms`,
+  };
+
+  return (
+    <span ref={ref} role="text" aria-label={text} className={classes} style={{ ...vars, ...style }} {...rest}>
+      <span aria-hidden="true">
+        {Array.from(text).map((ch, i) => (
+          <span key={i} className="fj-wave-text__char" style={{ "--fj-i": i }}>
+            {ch}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}

@@ -42,6 +42,10 @@ const STYLING_NEUTRAL_EFFECTS = [
   "Ripple",
   "ScrambleText",
   "Typewriter",
+  "CardStack",
+  "ClickSpark",
+  "Dock",
+  "ReorderList",
 ];
 
 /** "GradientText.tsx" → "gradient-text" (matches registry ids). */

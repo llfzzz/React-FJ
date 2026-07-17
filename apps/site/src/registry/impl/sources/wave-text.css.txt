@@ -1,0 +1,29 @@
+/* Free Joy — WaveText.css
+   Pairs with WaveText.tsx / WaveText.jsx. Requires the FJ tokens (tokens/*.css).
+   Each character rises on a shared keyframe, staggered by its index (--fj-i).
+   The component feeds --fj-wave-distance, --fj-duration, and --fj-stagger;
+   --once plays a single pass, --waiting holds until the text scrolls into
+   view. Reduced motion holds the wave still — the text stays readable. */
+
+.fj-wave-text { display: inline-block; }
+
+.fj-wave-text__char {
+  display: inline-block;
+  white-space: pre;
+  animation: fj-wave-rise var(--fj-duration, 1200ms) var(--ease-in-out)
+    calc(var(--fj-i, 0) * var(--fj-stagger, 60ms)) infinite;
+}
+
+.fj-wave-text--once .fj-wave-text__char { animation-iteration-count: 1; }
+
+.fj-wave-text--waiting .fj-wave-text__char { animation: none; }
+
+@keyframes fj-wave-rise {
+  0%, 100% { transform: none; }
+  50% { transform: translateY(calc(var(--fj-wave-distance, 6px) * -1)); }
+}
+
+/* Reduced motion: hold every character still. */
+@media (prefers-reduced-motion: reduce) {
+  .fj-wave-text__char { animation: none; }
+}
