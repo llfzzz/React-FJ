@@ -134,6 +134,9 @@ pnpm workspace
   styling-neutral reasons (CardStack, ClickSpark, Dock, ReorderList), and behavior tests.
   Parallax was considered and rejected: the published motion policy bans it (ReorderList took
   the motion slot instead)
+- [x] 2026-07-18 — implementation picker redesign: the two `SegmentedControl`s (which rendered as
+  four flat buttons) replaced by two `ImplSelect` dropdowns (Language / Style) with format badges
+  and a selected dot; `implementation.spec.ts` reworked for the dropdown interaction
 
 ## Component inventory
 
@@ -296,8 +299,12 @@ Every documented component exposes its full implementation through two independe
 complete, copy-ready variant per combination (React Bits' switcher model, 2026-07-11 redesign).
 State lives in `src/lib/codeStyle.tsx` (React context + `localStorage('fj-code-lang')` +
 `localStorage('fj-code-styling')`, defaults `ts` + `css`, with a one-way migration from the old
-`fj-code-style` key), rendered by `src/docs/ImplementationBlock.tsx` (two FJ `SegmentedControl`s +
-file-named `CodeBlock`s + styling notes).
+`fj-code-style` key), rendered by `src/docs/ImplementationBlock.tsx` (two dropdown selects +
+file-named `CodeBlock`s + styling notes). Each axis is a `src/docs/ImplSelect.tsx` — a site-local
+button-plus-listbox dropdown (pill trigger with a mono format badge + chevron; menu options carry
+the badge and a coral selected dot; arrows/Enter/Escape/outside-click all handled; the Tailwind
+badge is an inline logomark SVG). Redesigned 2026-07-18 from two `SegmentedControl`s — four flat
+buttons in a row read as four independent formats instead of two × two axes.
 
 - **Sources** are raw text, loaded lazily via `import.meta.glob(..., { query: '?raw' })` in
   `src/registry/impl/index.ts`. Each `ComponentDoc.implementation = impl('<id>', opts?)` resolves
