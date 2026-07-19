@@ -1565,25 +1565,61 @@ html {
   text-transform: uppercase;
 }
 
-/* Animation index — one vertical stack of entries, newest first */
+/* Index — one vertical stack of every item (components + animations), newest first */
 
-.anim-index {
+.index-stack {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
   margin-top: var(--space-5);
 }
 
-.anim-entry {
+/* The whole entry is one click target, via two links to the same page: the
+   preview column is wrapped in its own link (so demos keep their z-indexes and
+   hover life, and clicks bubble into navigation), and the name link's ::after
+   stretches over the text body. */
+.index-entry {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
   overflow: hidden;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
-.anim-entry-preview {
+.index-entry:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* The link box dissolves; the preview itself stays the grid's first column. */
+.index-entry-preview-wrap {
+  display: contents;
+}
+
+.index-entry-anchor {
+  color: inherit;
+}
+.index-entry-anchor:hover {
+  text-decoration: none;
+}
+.index-entry-anchor::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+/* Ring the whole card, not just the heading text, on keyboard focus. */
+.index-entry-anchor:focus-visible {
+  box-shadow: none;
+}
+.index-entry:has(.index-entry-anchor:focus-visible) {
+  box-shadow: var(--ring);
+}
+
+.index-entry-preview {
   position: relative;
   display: grid;
   place-items: center;
@@ -1595,11 +1631,13 @@ html {
   border-right: 1px solid var(--border);
   overflow: hidden;
 }
-.anim-entry-preview > * {
+.index-entry-preview > * {
   max-width: 100%;
 }
 
-.anim-entry-body {
+/* Positioned: the name link's stretched ::after anchors to this box. */
+.index-entry-body {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1607,14 +1645,14 @@ html {
   padding: var(--space-4) var(--space-5);
 }
 
-.anim-entry-head {
+.index-entry-head {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.anim-entry-name {
+.index-entry-name {
   margin: 0;
   font-family: var(--font-display);
   font-weight: var(--weight-semibold);
@@ -1622,20 +1660,24 @@ html {
   color: var(--text);
 }
 
-.anim-entry-date {
+.index-entry-date {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-subtle);
 }
 
-.anim-entry-blurb {
+.index-entry-blurb {
   margin: 0;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text-muted);
 }
 
-.anim-entry-install {
+/* Raised above the stretched link so copying (button or text selection)
+   keeps working inside the clickable card. */
+.index-entry-install {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -1645,7 +1687,7 @@ html {
   border-radius: var(--radius-md);
   background: var(--bg-sunken);
 }
-.anim-entry-install code {
+.index-entry-install code {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text);
@@ -1653,22 +1695,11 @@ html {
   white-space: nowrap;
 }
 
-.anim-entry-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: auto;
-  padding-top: var(--space-2);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--accent);
-}
-
 @media (max-width: 760px) {
-  .anim-entry {
+  .index-entry {
     grid-template-columns: minmax(0, 1fr);
   }
-  .anim-entry-preview {
+  .index-entry-preview {
     height: 150px;
     border-right: none;
     border-bottom: 1px solid var(--border);

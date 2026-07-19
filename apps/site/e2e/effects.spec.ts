@@ -1,35 +1,48 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('animation index', () => {
-  test('stacks every animation newest-first and links to its page', async ({ page }) => {
+test.describe('index', () => {
+  test('stacks every item newest-first and links to its page', async ({ page }) => {
     await page.goto('/animation');
-    await expect(page.getByRole('heading', { name: 'Animation index' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Index', exact: true })).toBeVisible();
 
-    // Every animation is one stacked entry — nothing hidden behind tabs.
-    const entries = page.locator('.anim-entry');
-    expect(await entries.count()).toBeGreaterThan(40);
+    // Components and animations alike are one flat stack — nothing behind tabs.
+    const entries = page.locator('.index-entry');
+    expect(await entries.count()).toBeGreaterThan(70);
 
     // Newest first: the top entry comes from the latest batch and carries the
     // "New" badge, its category, its added date, and a copyable import line.
     const first = entries.first();
-    await expect(first.getByRole('heading', { name: 'CardStack' })).toBeVisible();
+    await expect(first.getByRole('link', { name: 'CardStack' })).toBeVisible();
     await expect(first.getByText('New', { exact: true })).toBeVisible();
     await expect(first.getByText('Added Jul 17, 2026')).toBeVisible();
     await expect(first.locator('code')).toContainText("import { CardStack } from '@fj-effects';");
-    await first.getByRole('link', { name: 'View documentation' }).click();
+    // The whole card is the click target — clicking body whitespace (not the
+    // name link itself) lands on the stretched overlay and opens the page.
+    await first.click({ position: { x: 400, y: 170 } });
     await expect(page).toHaveURL(/\/animation\/card-stack/);
     await expect(page.getByRole('heading', { name: 'CardStack', exact: true })).toBeVisible();
+
+    // The preview column is a click target too.
+    await page.goBack();
+    await entries.first().click({ position: { x: 20, y: 20 } });
+    await expect(page).toHaveURL(/\/animation\/card-stack/);
   });
 
   test('category chips filter without breaking newest-first order', async ({ page }) => {
     await page.goto('/animation');
     await page.getByRole('button', { name: 'Entrance & scroll', exact: true }).click();
-    const entries = page.locator('.anim-entry');
+    const entries = page.locator('.index-entry');
     await expect(entries).toHaveCount(3);
     // 07-04 batch (Reveal is 07-03) — StaggerList before ScrollProgress by name.
     await expect(entries.nth(0).getByRole('heading', { name: 'ScrollProgress' })).toBeVisible();
     await expect(entries.nth(1).getByRole('heading', { name: 'StaggerList' })).toBeVisible();
     await expect(entries.nth(2).getByRole('heading', { name: 'Reveal' })).toBeVisible();
+
+    // A component category filters to components — the Index spans both modules.
+    await page.getByRole('button', { name: 'Navigation', exact: true }).click();
+    await expect(entries).toHaveCount(2);
+    await expect(entries.nth(0).getByRole('heading', { name: 'SegmentedControl' })).toBeVisible();
+    await expect(entries.nth(1).getByRole('heading', { name: 'Tabs' })).toBeVisible();
   });
 
   test('retired gallery and guide routes redirect to the index', async ({ page }) => {
