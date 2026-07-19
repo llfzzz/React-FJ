@@ -1,4 +1,4 @@
-import type { AnimationCategory, ComponentCategory, ComponentDoc } from './types';
+import type { AnimationCategory, Category, ComponentCategory, ComponentDoc } from './types';
 import {
   ANIMATION_CATEGORIES,
   CATEGORY_LABELS,
@@ -218,36 +218,45 @@ export function presentAnimationCategories(): AnimationCategory[] {
   return ANIMATION_CATEGORIES.filter((category) => present.has(category));
 }
 
+/** Every category with at least one doc — component and animation, canonical order. */
+export function presentIndexCategories(): Category[] {
+  const present = new Set(REGISTRY.map((doc) => doc.category));
+  return CATEGORY_ORDER.filter((category) => present.has(category));
+}
+
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function hasValidAddedAt(doc: ComponentDoc): boolean {
   return Boolean(doc.addedAt && ISO_DATE.test(doc.addedAt));
 }
 
+/** Newest `addedAt` first, name as the stable tiebreaker; invalid dates last. */
+function byNewestFirst(a: ComponentDoc, b: ComponentDoc): number {
+  const aValid = hasValidAddedAt(a);
+  const bValid = hasValidAddedAt(b);
+  if (aValid !== bValid) return aValid ? -1 : 1;
+  if (aValid && bValid && a.addedAt !== b.addedAt) {
+    return a.addedAt! < b.addedAt! ? 1 : -1;
+  }
+  return a.name.localeCompare(b.name);
+}
+
 /**
- * The animation index order: newest `addedAt` first, name as the stable
- * tiebreaker. The date is explicit metadata on each doc — never inferred from
- * file mtimes or git. Docs with a missing/malformed date sort last and warn
- * in development so the gap is caught before it ships.
+ * The Index order: every documented item — components and animations alike —
+ * newest `addedAt` first, name as the stable tiebreaker. The date is explicit
+ * metadata on each doc, never inferred from file mtimes or git. Docs with a
+ * missing/malformed date sort last and warn in development so the gap is caught
+ * before it ships.
  */
-export function animationIndexDocs(): ComponentDoc[] {
-  const docs = effectDocs();
+export function indexDocs(): ComponentDoc[] {
   if (import.meta.env.DEV) {
-    for (const doc of docs) {
+    for (const doc of REGISTRY) {
       if (!hasValidAddedAt(doc)) {
-        console.warn(`[registry] ${doc.id}: missing or invalid addedAt (${doc.addedAt ?? 'unset'}) — sorted last on the animation index`);
+        console.warn(`[registry] ${doc.id}: missing or invalid addedAt (${doc.addedAt ?? 'unset'}) — sorted last on the Index`);
       }
     }
   }
-  return [...docs].sort((a, b) => {
-    const aValid = hasValidAddedAt(a);
-    const bValid = hasValidAddedAt(b);
-    if (aValid !== bValid) return aValid ? -1 : 1;
-    if (aValid && bValid && a.addedAt !== b.addedAt) {
-      return a.addedAt! < b.addedAt! ? 1 : -1;
-    }
-    return a.name.localeCompare(b.name);
-  });
+  return [...REGISTRY].sort(byNewestFirst);
 }
 
 export { CATEGORY_LABELS };

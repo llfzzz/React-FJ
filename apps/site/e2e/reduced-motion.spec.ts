@@ -36,9 +36,9 @@ test.describe('reduced motion', () => {
     await expect(stage.getByText('Design tokens')).toHaveCount(1);
   });
 
-  test('the effects gallery still renders fully', async ({ page }) => {
+  test('the Index still renders fully', async ({ page }) => {
     await page.goto('/animation');
-    await expect(page.getByRole('heading', { name: 'Animation index' })).toBeVisible();
-    expect(await page.locator('.anim-entry').count()).toBeGreaterThan(40);
+    await expect(page.getByRole('heading', { name: 'Index', exact: true })).toBeVisible();
+    expect(await page.locator('.index-entry').count()).toBeGreaterThan(70);
   });
 });

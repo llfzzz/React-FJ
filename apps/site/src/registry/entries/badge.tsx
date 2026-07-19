@@ -6,6 +6,7 @@ export const badgeDoc: ComponentDoc = {
   id: 'badge',
   name: 'Badge',
   category: 'content',
+  addedAt: '2026-07-02',
   blurb: 'A small status pill. Soft tints by default; solid fills when it must carry more weight.',
   keywords: ['status', 'pill', 'count', 'label'],
   importLine: "import { Badge } from '@fj';",

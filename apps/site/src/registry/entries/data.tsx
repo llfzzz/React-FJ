@@ -28,6 +28,7 @@ export const tableDoc: ComponentDoc = {
   id: 'table',
   name: 'Table',
   category: 'content',
+  addedAt: '2026-07-03',
   blurb: 'A quiet data table — hairline rows, mono headers, no drama.',
   keywords: ['data', 'rows', 'columns', 'grid'],
   importLine: "import { Table } from '@fj';",

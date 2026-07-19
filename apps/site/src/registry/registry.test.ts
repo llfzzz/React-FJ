@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   adjacentDocs,
-  animationIndexDocs,
   componentDocs,
   docPath,
   effectDocs,
   getComponentDoc,
+  indexDocs,
   presentCategories,
   REGISTRY,
 } from './index';
@@ -109,16 +109,16 @@ describe('registry integrity', () => {
     }
   });
 
-  it('gives every animation an explicit, valid addedAt date', () => {
-    for (const doc of effectDocs()) {
+  it('gives every doc an explicit, valid addedAt date', () => {
+    for (const doc of REGISTRY) {
       expect(doc.addedAt, `${doc.id}: addedAt missing`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(Number.isNaN(new Date(`${doc.addedAt}T00:00:00`).getTime()), doc.id).toBe(false);
     }
   });
 
-  it('orders the animation index newest first with a stable name tiebreaker', () => {
-    const docs = animationIndexDocs();
-    expect(docs.length).toBe(effectDocs().length);
+  it('orders the Index over every doc, newest first with a stable name tiebreaker', () => {
+    const docs = indexDocs();
+    expect(docs.length).toBe(REGISTRY.length);
     for (let i = 1; i < docs.length; i += 1) {
       const prev = docs[i - 1];
       const curr = docs[i];

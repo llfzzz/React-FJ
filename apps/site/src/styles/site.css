@@ -1565,16 +1565,16 @@ html {
   text-transform: uppercase;
 }
 
-/* Animation index — one vertical stack of entries, newest first */
+/* Index — one vertical stack of every item (components + animations), newest first */
 
-.anim-index {
+.index-stack {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
   margin-top: var(--space-5);
 }
 
-.anim-entry {
+.index-entry {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
   border: 1px solid var(--border);
@@ -1583,7 +1583,7 @@ html {
   overflow: hidden;
 }
 
-.anim-entry-preview {
+.index-entry-preview {
   position: relative;
   display: grid;
   place-items: center;
@@ -1595,11 +1595,11 @@ html {
   border-right: 1px solid var(--border);
   overflow: hidden;
 }
-.anim-entry-preview > * {
+.index-entry-preview > * {
   max-width: 100%;
 }
 
-.anim-entry-body {
+.index-entry-body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1607,14 +1607,14 @@ html {
   padding: var(--space-4) var(--space-5);
 }
 
-.anim-entry-head {
+.index-entry-head {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.anim-entry-name {
+.index-entry-name {
   margin: 0;
   font-family: var(--font-display);
   font-weight: var(--weight-semibold);
@@ -1622,20 +1622,20 @@ html {
   color: var(--text);
 }
 
-.anim-entry-date {
+.index-entry-date {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text-subtle);
 }
 
-.anim-entry-blurb {
+.index-entry-blurb {
   margin: 0;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text-muted);
 }
 
-.anim-entry-install {
+.index-entry-install {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -1645,7 +1645,7 @@ html {
   border-radius: var(--radius-md);
   background: var(--bg-sunken);
 }
-.anim-entry-install code {
+.index-entry-install code {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--text);
@@ -1653,7 +1653,7 @@ html {
   white-space: nowrap;
 }
 
-.anim-entry-link {
+.index-entry-link {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1665,10 +1665,10 @@ html {
 }
 
 @media (max-width: 760px) {
-  .anim-entry {
+  .index-entry {
     grid-template-columns: minmax(0, 1fr);
   }
-  .anim-entry-preview {
+  .index-entry-preview {
     height: 150px;
     border-right: none;
     border-bottom: 1px solid var(--border);

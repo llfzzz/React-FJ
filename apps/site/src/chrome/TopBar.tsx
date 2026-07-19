@@ -6,8 +6,6 @@ import logoMark from '@fj/assets/logo-mark.svg';
 
 const NAV = [
   { label: 'Docs', to: '/docs/introduction', match: '/docs' },
-  { label: 'Components', to: '/components', match: '/components' },
-  { label: 'Animation', to: '/animation', match: '/animation' },
   { label: 'Playground', to: '/playground', match: '/playground' },
 ];
 
