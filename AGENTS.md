@@ -1,7 +1,8 @@
 # FJ — Free Joy design system website
 
-Last updated: 2026-07-19 (IA restructure: Components/Animation as top-level modules, 13
-categories → 5, Design-tokens doc pages removed, animation pages moved to /animation/:id)
+Last updated: 2026-07-19 (Animation index: gallery + guide pages replaced by a newest-first
+stacked Index at /animation; animations re-split into 6 broad categories with explicit addedAt
+metadata; Index entry added under Get started)
 Repo: `github.com/llfzzz/React-FJ` · Live: `https://reactfreejoy.top` (served from the
 `/var/www/React-FJ` deploy clone — see "Deployment" below)
 
@@ -150,6 +151,23 @@ pnpm workspace
   `adjacentDocs()`; `presentCategories()` now returns component categories only. Gallery lost its
   family filter (single category); catalog lists components only. Tests updated (74 unit / 18 e2e,
   incl. new module-split invariants and old-URL redirect coverage).
+- [x] 2026-07-19 (later) — Animation index (owner request): the Gallery page and the Animation
+  guide page are GONE (`EffectsGalleryPage`, `EffectsGuidePage`; `/docs/effects-guide` and the
+  pre-split `/effects` both redirect to `/animation`). `/animation` now serves
+  `pages/animation/AnimationIndexPage.tsx` — every animation stacked vertically, newest first,
+  each entry with live lazy preview / blurb / category / added date / status badge / copyable
+  import line / link to its `/animation/:id` page. Sidebar "Get started" gained an **Index** item
+  (→ /animation); the Animation section lists items directly under 6 broad categories (the
+  single 'animation' category from the morning's IA pass was re-split same-day):
+  `anim-entrance` (Entrance & scroll, 3) / `anim-text` (Text, 9) / `anim-interaction`
+  (Interaction, 11) / `anim-ambient` (Ambient & loop, 12) / `anim-transition` (Transition, 4) /
+  `anim-status` (Status & feedback, 8). ComponentDoc gained canonical metadata: `addedAt`
+  (explicit ISO date, from git authoring history: 20× 2026-07-03, 10× 07-04, 10× 07-10,
+  7× 07-17), `updatedAt?`, `status?` ('new' on the 07-17 batch). `animationIndexDocs()` sorts
+  addedAt desc + name asc, invalid dates last with a DEV warning — never file mtimes or runtime
+  git. Index previews lazy-mount via IntersectionObserver (±300px, unmount when far → rAF/timer
+  loops pause; fixed-height slots prevent CLS; ~5 of 47 mounted at any time, verified). No
+  package/alias/import-path changes (FJ ships as source; no npm publish or CLI exists).
 
 ## Component inventory
 
@@ -181,8 +199,9 @@ Motion primitives: `packages/fj-effects/motion/{useReducedMotion,useInView,useTr
 Documented on site (72): 25 UI components + 47 animations (7 synced fj-ui effects + 40 fj-effects)
 — registry entries with playground controls, generated/custom snippets, examples, props, a11y
 notes, and a language × styling implementation switcher (JS/TS × CSS/Tailwind). Categories
-(2026-07-19 IA): components use `inputs` / `navigation` / `content` / `feedback`; every animation
-is `animation` ("Animation types"). Entry files keep their historical names
+(2026-07-19 IA): components use `inputs` / `navigation` / `content` / `feedback`; animations use
+the six `anim-*` categories (Entrance & scroll / Text / Interaction / Ambient & loop /
+Transition / Status & feedback). Entry files keep their historical names
 (`src/registry/entries/{button,card,badge,core-more,forms,navigation,feedback,overlay,data,
 effects,effects-text,effects-interaction,effects-surfaces,effects-backgrounds,effects-status,
 effects-motion}`) — file layout ≠ category.
@@ -416,13 +435,15 @@ no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
 
 ## Site pages
 
-Landing `/` · Get started `/docs/{introduction,installation,usage}` · Animation gallery
-`/animation` (+ 47 animation pages `/animation/:id`) · Animation guide `/docs/effects-guide` ·
-Catalog `/components` (+ 25 component pages `/components/:id`) · `/playground` · styled 404 ·
-app-level ErrorBoundary · skip link. Old URLs redirect: `/effects` → `/animation`, and a doc
-opened under the wrong module prefix (e.g. pre-split `/components/aurora`) canonicalizes via
-`docPath()`. The Design-tokens doc pages were removed 2026-07-19 (`/docs/tokens/*` now 404s;
-the token CSS itself is untouched). The site is **light-only** (dark mode removed 2026-07-04);
+Landing `/` · Get started `/docs/{introduction,installation,usage}` + the animation **Index**
+nav item · Animation index `/animation` (stacked, newest-first; + 47 animation pages
+`/animation/:id`) · Catalog `/components` (+ 25 component pages `/components/:id`) ·
+`/playground` · styled 404 · app-level ErrorBoundary · skip link. Old URLs redirect:
+`/effects` → `/animation`, `/docs/effects-guide` → `/animation` (both pages retired
+2026-07-19), and a doc opened under the wrong module prefix (e.g. pre-split
+`/components/aurora`) canonicalizes via `docPath()`. The Design-tokens doc pages were removed
+2026-07-19 (`/docs/tokens/*` now 404s; the token CSS itself is untouched). The site is
+**light-only** (dark mode removed 2026-07-04);
 the topbar has a GitHub button with a live star count (localStorage-cached, refetched daily).
 User-facing naming is "Animation" (renamed from "Effects"/"Motion" 2026-07-08); package names
 and file names intentionally keep the effects-* convention.
@@ -441,15 +462,17 @@ and file names intentionally keep the effects-* convention.
   Sparkles reduced-motion fallbacks, particle cap; Phase D: FlipCard face swap, WaveText label,
   ClickSpark/Dock caps, NumberTicker columns, CardStack advance, ReorderList order — all with
   reduced-motion fallbacks; IA: module-split invariants — componentDocs/effectDocs partition,
-  docPath routing, module-scoped pager). Setup installs in-memory localStorage and mocks
-  matchMedia (per-test override for reduced motion) + IntersectionObserver. **74 tests**.
+  docPath routing, module-scoped pager, addedAt presence/format, newest-first index order).
+  Setup installs in-memory localStorage and mocks matchMedia (per-test override for reduced
+  motion) + IntersectionObserver. **76 tests**.
 - Playwright (chromium, against `vite preview` of the production build): `site.spec.ts` (landing nav,
   playground → code tab, clipboard copy, catalog filter by "Content & data", ⌘K,
   404, 375px drawer), `implementation.spec.ts` (default TS+CSS with Button.tsx + Button.css,
   combo switching via the two dropdowns, copy + cross-page persistence, styling-neutral inert
-  panel at /animation/count-up), `effects.spec.ts` (gallery render/link, old-URL redirects,
-  Replay remount), `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` —
-  TextReveal plain text, Sparkles zero particles, gallery still renders). **18 tests**.
+  panel at /animation/count-up), `effects.spec.ts` (index stack newest-first with New badge +
+  date + import line, chip filter preserving order, gallery/guide redirects, Replay remount),
+  `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` — TextReveal plain
+  text, Sparkles zero particles, index still renders). **19 tests**.
   Note: `page.emulateMedia({ reducedMotion })` (in a beforeEach) drives the JS `matchMedia` hook;
   the context-level `test.use({ reducedMotion })` did NOT reach `matchMedia` in this setup.
 

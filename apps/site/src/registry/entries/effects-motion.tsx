@@ -9,7 +9,8 @@ const replayKey = (values: ControlValues) => JSON.stringify(values);
 export const staggerListDoc: ComponentDoc = {
   id: 'stagger-list',
   name: 'StaggerList',
-  category: 'animation',
+  category: 'anim-entrance',
+  addedAt: '2026-07-04',
   blurb: 'Reveals its children one after another as the list scrolls into view.',
   keywords: ['stagger', 'list', 'grid', 'scroll', 'entrance', 'motion'],
   importLine: "import { StaggerList } from '@fj-effects';",
@@ -54,7 +55,8 @@ export const staggerListDoc: ComponentDoc = {
 export const scrollProgressDoc: ComponentDoc = {
   id: 'scroll-progress',
   name: 'ScrollProgress',
-  category: 'animation',
+  category: 'anim-entrance',
+  addedAt: '2026-07-04',
   blurb: 'A thin reading-progress bar that fills as the page (or a container) scrolls.',
   keywords: ['scroll', 'progress', 'reading', 'bar', 'indicator'],
   importLine: "import { ScrollProgress } from '@fj-effects';",
@@ -88,7 +90,8 @@ export const scrollProgressDoc: ComponentDoc = {
 export const fadeSwitchDoc: ComponentDoc = {
   id: 'fade-switch',
   name: 'FadeSwitch',
-  category: 'animation',
+  category: 'anim-transition',
+  addedAt: '2026-07-04',
   blurb: 'Crossfades between content when a key changes — tab panels, steps, rotating quotes.',
   keywords: ['fade', 'switch', 'crossfade', 'transition', 'tabs'],
   importLine: "import { FadeSwitch } from '@fj-effects';",
@@ -122,7 +125,8 @@ export const fadeSwitchDoc: ComponentDoc = {
 export const collapseDoc: ComponentDoc = {
   id: 'collapse',
   name: 'Collapse',
-  category: 'animation',
+  category: 'anim-transition',
+  addedAt: '2026-07-04',
   blurb: 'Smoothly expands and collapses to its content’s natural height — accordions, panels.',
   keywords: ['collapse', 'accordion', 'expand', 'height', 'disclosure'],
   importLine: "import { Collapse } from '@fj-effects';",
@@ -154,7 +158,8 @@ export const collapseDoc: ComponentDoc = {
 export const themeTransitionDoc: ComponentDoc = {
   id: 'theme-transition',
   name: 'ThemeTransition',
-  category: 'animation',
+  category: 'anim-transition',
+  addedAt: '2026-07-04',
   blurb: 'A gentle crossfade when the theme flips — via the View Transitions API in production.',
   keywords: ['theme', 'transition', 'dark mode', 'crossfade', 'view-transition'],
   importLine: "import { ThemeTransition, runThemeTransition } from '@fj-effects';",
@@ -200,7 +205,9 @@ function toggleTheme() {
 export const reorderListDoc: ComponentDoc = {
   id: 'reorder-list',
   name: 'ReorderList',
-  category: 'animation',
+  category: 'anim-transition',
+  addedAt: '2026-07-17',
+  status: 'new',
   blurb: 'Glides items from their old spot to the new one when the order changes — sorting, ranking, filters.',
   keywords: ['reorder', 'flip', 'sort', 'list', 'move', 'motion'],
   importLine: "import { ReorderList } from '@fj-effects';",

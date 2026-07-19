@@ -38,7 +38,7 @@ test.describe('reduced motion', () => {
 
   test('the effects gallery still renders fully', async ({ page }) => {
     await page.goto('/animation');
-    await expect(page.getByRole('heading', { name: 'Animation gallery' })).toBeVisible();
-    expect(await page.locator('.effect-card').count()).toBeGreaterThan(30);
+    await expect(page.getByRole('heading', { name: 'Animation index' })).toBeVisible();
+    expect(await page.locator('.anim-entry').count()).toBeGreaterThan(40);
   });
 });

@@ -10,8 +10,7 @@ import { UsagePage } from '../pages/docs/UsagePage';
 import { ComponentsIndexPage } from '../pages/components/ComponentsIndexPage';
 import { ComponentPage } from '../pages/components/ComponentPage';
 import { PlaygroundPage } from '../pages/playground/PlaygroundPage';
-import { EffectsGalleryPage } from '../pages/effects/EffectsGalleryPage';
-import { EffectsGuidePage } from '../pages/docs/EffectsGuidePage';
+import { AnimationIndexPage } from '../pages/animation/AnimationIndexPage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -34,13 +33,14 @@ export function App() {
               <Route path="docs/introduction" element={<IntroductionPage />} />
               <Route path="docs/installation" element={<InstallationPage />} />
               <Route path="docs/usage" element={<UsagePage />} />
-              <Route path="docs/effects-guide" element={<EffectsGuidePage />} />
               <Route path="components" element={<ComponentsIndexPage />} />
               <Route path="components/:id" element={<ComponentPage />} />
-              <Route path="animation" element={<EffectsGalleryPage />} />
+              <Route path="animation" element={<AnimationIndexPage />} />
               <Route path="animation/:id" element={<ComponentPage />} />
-              {/* The gallery lived at /effects before the Animation module split. */}
+              {/* Removed pages redirect to the animation index: the pre-split
+                  /effects gallery and the retired animation guide. */}
               <Route path="effects" element={<Navigate to="/animation" replace />} />
+              <Route path="docs/effects-guide" element={<Navigate to="/animation" replace />} />
               <Route path="playground" element={<PlaygroundPage />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />

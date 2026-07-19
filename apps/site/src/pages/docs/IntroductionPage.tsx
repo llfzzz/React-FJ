@@ -1,7 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Badge, PageHeader, Stack, Text } from '@fj';
 import { DocSection } from '../../docs/DocSection';
-import { CATEGORY_LABELS, componentDocs, effectDocs, presentCategories } from '../../registry';
+import {
+  CATEGORY_LABELS,
+  componentDocs,
+  effectDocs,
+  presentAnimationCategories,
+  presentCategories,
+} from '../../registry';
 import { usePageTitle } from '../../lib/usePageTitle';
 
 export function IntroductionPage() {
@@ -52,16 +58,15 @@ export function IntroductionPage() {
           </p>
         </div>
         <Stack direction="row" gap={10} wrap style={{ marginTop: 'var(--space-3)' }}>
-          {presentCategories().map((category) => (
+          {[...presentCategories(), ...presentAnimationCategories()].map((category) => (
             <Badge key={category} tone="accent">
               {CATEGORY_LABELS[category]}
             </Badge>
           ))}
-          <Badge tone="accent">{CATEGORY_LABELS.animation}</Badge>
         </Stack>
         <Text variant="small" style={{ marginTop: 'var(--space-4)' }}>
           Head to the <Link to="/components">catalog</Link> or the{' '}
-          <Link to="/animation">animation gallery</Link> to browse them all, or continue to{' '}
+          <Link to="/animation">animation index</Link> to browse them all, or continue to{' '}
           <Link to="/docs/installation">installation</Link>.
         </Text>
       </DocSection>

@@ -1,33 +1,53 @@
 import type { ReactNode } from 'react';
 
 /**
- * The site's two top-level modules — Components and Animation — split into a
- * handful of broad categories. Components use four; every animation belongs to
- * the single 'animation' category ("Animation types").
+ * The site's two top-level modules — Components and Animation — each split
+ * into a handful of broad categories. Animation categories carry an `anim-`
+ * prefix so the two modules can never collide.
  */
-export type Category = 'inputs' | 'navigation' | 'content' | 'feedback' | 'animation';
+export type ComponentCategory = 'inputs' | 'navigation' | 'content' | 'feedback';
+export type AnimationCategory =
+  | 'anim-entrance'
+  | 'anim-text'
+  | 'anim-interaction'
+  | 'anim-ambient'
+  | 'anim-transition'
+  | 'anim-status';
+export type Category = ComponentCategory | AnimationCategory;
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   inputs: 'Inputs & actions',
   navigation: 'Navigation',
   content: 'Content & data',
   feedback: 'Feedback & overlays',
-  animation: 'Animation types',
+  'anim-entrance': 'Entrance & scroll',
+  'anim-text': 'Text',
+  'anim-interaction': 'Interaction',
+  'anim-ambient': 'Ambient & loop',
+  'anim-transition': 'Transition',
+  'anim-status': 'Status & feedback',
 };
 
-export const CATEGORY_ORDER: Category[] = [
+export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   'inputs',
   'navigation',
   'content',
   'feedback',
-  'animation',
 ];
 
-/** The Components module's categories — everything except 'animation'. */
-export const COMPONENT_CATEGORIES: Category[] = ['inputs', 'navigation', 'content', 'feedback'];
+export const ANIMATION_CATEGORIES: AnimationCategory[] = [
+  'anim-entrance',
+  'anim-text',
+  'anim-interaction',
+  'anim-ambient',
+  'anim-transition',
+  'anim-status',
+];
 
-export function isEffectCategory(category: Category): boolean {
-  return category === 'animation';
+export const CATEGORY_ORDER: Category[] = [...COMPONENT_CATEGORIES, ...ANIMATION_CATEGORIES];
+
+export function isEffectCategory(category: Category): category is AnimationCategory {
+  return category.startsWith('anim-');
 }
 
 /** Values a playground control can produce. */
@@ -141,6 +161,17 @@ export interface ComponentDoc {
   /** Display name, e.g. "Button". */
   name: string;
   category: Category;
+  /**
+   * ISO date (YYYY-MM-DD) the item was documented — the canonical, explicit
+   * value behind newest-first ordering on the animation index. Never inferred
+   * from file mtimes or git at runtime. Required for animation docs (enforced
+   * by registry tests); missing/invalid dates sort last with a dev warning.
+   */
+  addedAt?: string;
+  /** ISO date of the last substantial revision, when one happened. */
+  updatedAt?: string;
+  /** Lifecycle badge shown on the animation index. Absent means stable. */
+  status?: 'stable' | 'new' | 'updated' | 'experimental';
   /** One-sentence summary in FJ voice. */
   blurb: string;
   /** Extra search keywords. */

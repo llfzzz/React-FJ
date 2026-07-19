@@ -1,23 +1,41 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('animation gallery', () => {
-  test('renders every animation type and links to its page', async ({ page }) => {
+test.describe('animation index', () => {
+  test('stacks every animation newest-first and links to its page', async ({ page }) => {
     await page.goto('/animation');
-    await expect(page.getByRole('heading', { name: 'Animation gallery' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Animation index' })).toBeVisible();
 
-    // One broad category: every animation type renders in the single grid.
-    const cards = page.locator('.effect-card');
-    expect(await cards.count()).toBeGreaterThan(40);
+    // Every animation is one stacked entry — nothing hidden behind tabs.
+    const entries = page.locator('.anim-entry');
+    expect(await entries.count()).toBeGreaterThan(40);
 
-    // Clicking a card opens its animation page. (Pin by id: Orbs' blurb also
-    // mentions Aurora, so a hasText filter would be ambiguous.)
-    await page.locator('.effect-card[data-effect="aurora"]').click();
-    await expect(page).toHaveURL(/\/animation\/aurora/);
-    await expect(page.getByRole('heading', { name: 'Aurora', exact: true })).toBeVisible();
+    // Newest first: the top entry comes from the latest batch and carries the
+    // "New" badge, its category, its added date, and a copyable import line.
+    const first = entries.first();
+    await expect(first.getByRole('heading', { name: 'CardStack' })).toBeVisible();
+    await expect(first.getByText('New', { exact: true })).toBeVisible();
+    await expect(first.getByText('Added Jul 17, 2026')).toBeVisible();
+    await expect(first.locator('code')).toContainText("import { CardStack } from '@fj-effects';");
+    await first.getByRole('link', { name: 'View documentation' }).click();
+    await expect(page).toHaveURL(/\/animation\/card-stack/);
+    await expect(page.getByRole('heading', { name: 'CardStack', exact: true })).toBeVisible();
   });
 
-  test('old effect URLs redirect into the animation module', async ({ page }) => {
+  test('category chips filter without breaking newest-first order', async ({ page }) => {
+    await page.goto('/animation');
+    await page.getByRole('button', { name: 'Entrance & scroll', exact: true }).click();
+    const entries = page.locator('.anim-entry');
+    await expect(entries).toHaveCount(3);
+    // 07-04 batch (Reveal is 07-03) — StaggerList before ScrollProgress by name.
+    await expect(entries.nth(0).getByRole('heading', { name: 'ScrollProgress' })).toBeVisible();
+    await expect(entries.nth(1).getByRole('heading', { name: 'StaggerList' })).toBeVisible();
+    await expect(entries.nth(2).getByRole('heading', { name: 'Reveal' })).toBeVisible();
+  });
+
+  test('retired gallery and guide routes redirect to the index', async ({ page }) => {
     await page.goto('/effects');
+    await expect(page).toHaveURL(/\/animation$/);
+    await page.goto('/docs/effects-guide');
     await expect(page).toHaveURL(/\/animation$/);
     await page.goto('/components/aurora');
     await expect(page).toHaveURL(/\/animation\/aurora/);
