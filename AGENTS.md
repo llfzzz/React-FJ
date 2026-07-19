@@ -1,7 +1,7 @@
 # FJ — Free Joy design system website
 
-Last updated: 2026-07-11 (Phase C: language × styling implementation switcher — two-axis code
-picker, all 48 ported components re-authored as synchronized TSX/CSS/Tailwind triples)
+Last updated: 2026-07-19 (IA restructure: Components/Animation as top-level modules, 13
+categories → 5, Design-tokens doc pages removed, animation pages moved to /animation/:id)
 Repo: `github.com/llfzzz/React-FJ` · Live: `https://reactfreejoy.top` (served from the
 `/var/www/React-FJ` deploy clone — see "Deployment" below)
 
@@ -137,6 +137,19 @@ pnpm workspace
 - [x] 2026-07-18 — implementation picker redesign: the two `SegmentedControl`s (which rendered as
   four flat buttons) replaced by two `ImplSelect` dropdowns (Language / Style) with format badges
   and a selected dot; `implementation.spec.ts` reworked for the dropdown interaction
+- [x] 2026-07-19 — IA restructure (owner request): (1) Design-tokens doc pages removed
+  (`pages/tokens/`, `/docs/tokens/*` routes, sidebar group, ⌘K entries — token CSS files untouched);
+  (2) Components and Animation are separate top-level modules — sidebar sections with headers,
+  topbar/footer links, animation detail pages moved `/components/:id` → `/animation/:id` and the
+  gallery `/effects` → `/animation` (old URLs redirect via `docPath()` canonicalization in
+  ComponentPage + an `/effects` route redirect); (3) all 47 animations live in ONE category
+  `animation` ("Animation types") — the six effects-* categories are gone (entry FILES keep their
+  names); (4) component categories collapsed 7 → 4 broad groups: `inputs` (Inputs & actions, 9),
+  `navigation` (Navigation, 2), `content` (Content & data, 5), `feedback` (Feedback & overlays, 9).
+  New registry API: `componentDocs()` / `effectDocs()` / `docPath()` / module-scoped
+  `adjacentDocs()`; `presentCategories()` now returns component categories only. Gallery lost its
+  family filter (single category); catalog lists components only. Tests updated (74 unit / 18 e2e,
+  incl. new module-split invariants and old-URL redirect coverage).
 
 ## Component inventory
 
@@ -165,11 +178,14 @@ fj-effects (40, LOCAL package `packages/fj-effects/`, consumed via `@fj-effects`
 - effects-motion (6): StaggerList, ScrollProgress, FadeSwitch, Collapse, ThemeTransition (+ runThemeTransition), ReorderList
 Motion primitives: `packages/fj-effects/motion/{useReducedMotion,useInView,useTrigger,keyframes,types}.ts`.
 
-Documented on site (72): all 32 synced interactive components + 40 fj-effects — registry entries with
-playground controls, generated/custom snippets, examples, props, a11y notes, and a language ×
-styling implementation switcher (JS/TS × CSS/Tailwind), grouped in `src/registry/entries/{button,card,badge,
-core-more,forms,navigation,feedback,overlay,data,effects,effects-text,effects-interaction,
-effects-surfaces,effects-backgrounds,effects-status,effects-motion}`.
+Documented on site (72): 25 UI components + 47 animations (7 synced fj-ui effects + 40 fj-effects)
+— registry entries with playground controls, generated/custom snippets, examples, props, a11y
+notes, and a language × styling implementation switcher (JS/TS × CSS/Tailwind). Categories
+(2026-07-19 IA): components use `inputs` / `navigation` / `content` / `feedback`; every animation
+is `animation` ("Animation types"). Entry files keep their historical names
+(`src/registry/entries/{button,card,badge,core-more,forms,navigation,feedback,overlay,data,
+effects,effects-text,effects-interaction,effects-surfaces,effects-backgrounds,effects-status,
+effects-motion}`) — file layout ≠ category.
 Engine: `src/registry/*` (types, snippet serializer, `impl/` variant raw-source loader),
 `src/docs/*` (Showcase w/ Replay, ImplementationBlock, ControlPanel, CodeBlock via fine-grained lazy
 shiki + JS regex engine, PropsTable, DocSection, CopyIconButton). Code-style store: `src/lib/codeStyle.tsx`.
@@ -400,13 +416,16 @@ no drift). Reduced-motion fallbacks are covered by a dedicated Playwright spec.
 
 ## Site pages
 
-Landing `/` · Get started `/docs/{introduction,installation,usage}` · Tokens
-`/docs/tokens/{colors,typography,spacing,motion}` · Animation gallery `/effects` · Animation
-guide `/docs/effects-guide` · Catalog `/components` (+ 72 component pages) · `/playground` · styled
-404 · app-level ErrorBoundary · skip link. The site is **light-only** (dark mode removed
-2026-07-04); the topbar has a GitHub button with a live star count (localStorage-cached, refetched
-daily). User-facing naming is "Animation" (renamed from "Effects"/"Motion" 2026-07-08); package
-names, routes, and file names intentionally kept.
+Landing `/` · Get started `/docs/{introduction,installation,usage}` · Animation gallery
+`/animation` (+ 47 animation pages `/animation/:id`) · Animation guide `/docs/effects-guide` ·
+Catalog `/components` (+ 25 component pages `/components/:id`) · `/playground` · styled 404 ·
+app-level ErrorBoundary · skip link. Old URLs redirect: `/effects` → `/animation`, and a doc
+opened under the wrong module prefix (e.g. pre-split `/components/aurora`) canonicalizes via
+`docPath()`. The Design-tokens doc pages were removed 2026-07-19 (`/docs/tokens/*` now 404s;
+the token CSS itself is untouched). The site is **light-only** (dark mode removed 2026-07-04);
+the topbar has a GitHub button with a live star count (localStorage-cached, refetched daily).
+User-facing naming is "Animation" (renamed from "Effects"/"Motion" 2026-07-08); package names
+and file names intentionally keep the effects-* convention.
 
 ## Test topology
 
@@ -421,15 +440,16 @@ names, routes, and file names intentionally kept.
   `src/test/effects/behaviors.test.tsx` (Collapse open/close, FadeSwitch swap, SuccessCheck +
   Sparkles reduced-motion fallbacks, particle cap; Phase D: FlipCard face swap, WaveText label,
   ClickSpark/Dock caps, NumberTicker columns, CardStack advance, ReorderList order — all with
-  reduced-motion fallbacks). Setup installs in-memory localStorage and mocks
-  matchMedia (per-test override for reduced motion) + IntersectionObserver. **72 tests**.
+  reduced-motion fallbacks; IA: module-split invariants — componentDocs/effectDocs partition,
+  docPath routing, module-scoped pager). Setup installs in-memory localStorage and mocks
+  matchMedia (per-test override for reduced motion) + IntersectionObserver. **74 tests**.
 - Playwright (chromium, against `vite preview` of the production build): `site.spec.ts` (landing nav,
-  playground → code tab, clipboard copy, catalog filter by "Text animations", ⌘K,
+  playground → code tab, clipboard copy, catalog filter by "Content & data", ⌘K,
   404, 375px drawer), `implementation.spec.ts` (default TS+CSS with Button.tsx + Button.css,
-  combo switching, copy + cross-page persistence of both axes, styling-neutral inert panel),
-  `effects.spec.ts` (gallery render/filter/link, Replay remount),
-  `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` — TextReveal plain text,
-  Sparkles zero particles, gallery still renders). **15 tests**.
+  combo switching via the two dropdowns, copy + cross-page persistence, styling-neutral inert
+  panel at /animation/count-up), `effects.spec.ts` (gallery render/link, old-URL redirects,
+  Replay remount), `reduced-motion.spec.ts` (`page.emulateMedia({ reducedMotion: 'reduce' })` —
+  TextReveal plain text, Sparkles zero particles, gallery still renders). **18 tests**.
   Note: `page.emulateMedia({ reducedMotion })` (in a beforeEach) drives the JS `matchMedia` hook;
   the context-level `test.use({ reducedMotion })` did NOT reach `matchMedia` in this setup.
 

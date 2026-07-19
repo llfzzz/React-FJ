@@ -1,61 +1,31 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
-import { Badge, PageHeader } from '@fj';
-import type { Category } from '../../registry/types';
-import { CATEGORY_LABELS, effectDocs } from '../../registry';
+import { PageHeader } from '@fj';
+import { docPath, effectDocs } from '../../registry';
 import { defaultValues } from '../../registry/snippet';
 import { usePageTitle } from '../../lib/usePageTitle';
 
 /**
- * The animation gallery: a filterable grid of live mini-previews. Each card
- * renders the animation at its default settings and links to the full
- * component page (playground, props, language × styling code, a11y notes).
+ * The animation gallery: a grid of live mini-previews, one card per animation
+ * type. Each card renders the animation at its default settings and links to
+ * its full page (playground, props, language × styling code, a11y notes).
  */
 export function EffectsGalleryPage() {
   usePageTitle('Animation');
   const docs = useMemo(() => effectDocs(), []);
-  const categories = useMemo(() => {
-    const present = new Set(docs.map((d) => d.category));
-    return Array.from(present) as Category[];
-  }, [docs]);
-  const [filter, setFilter] = useState<Category | 'all'>('all');
-
-  const visible = filter === 'all' ? docs : docs.filter((d) => d.category === filter);
 
   return (
     <article>
       <PageHeader
         eyebrow="Animation"
         title="Animation gallery"
-        description="Reusable, token-driven animations for hero and showcase surfaces. Preview them live, then open any one for its playground, props, code, and accessibility notes."
+        description={`All ${docs.length} animation types in one place — reusable, token-driven animations for hero and showcase surfaces. Preview them live, then open any one for its playground, props, code, and accessibility notes.`}
       />
 
-      <div className="control-chips catalog-filter" role="group" aria-label="Filter by animation family">
-        <button
-          type="button"
-          className="control-chip"
-          aria-pressed={filter === 'all'}
-          onClick={() => setFilter('all')}
-        >
-          All
-        </button>
-        {categories.map((category) => (
-          <button
-            key={category}
-            type="button"
-            className="control-chip"
-            aria-pressed={filter === category}
-            onClick={() => setFilter(category)}
-          >
-            {CATEGORY_LABELS[category]}
-          </button>
-        ))}
-      </div>
-
       <div className="effects-gallery">
-        {visible.map((doc) => (
-          <Link key={doc.id} to={`/components/${doc.id}`} className="effect-card" data-effect={doc.id}>
+        {docs.map((doc) => (
+          <Link key={doc.id} to={docPath(doc)} className="effect-card" data-effect={doc.id}>
             <div className="effect-card-preview" aria-hidden="true">
               {doc.render(defaultValues(doc.controls))}
             </div>
@@ -65,7 +35,6 @@ export function EffectsGalleryPage() {
                 <ArrowUpRight size={15} aria-hidden />
               </div>
               <p className="effect-card-blurb">{doc.blurb}</p>
-              <Badge tone="accent">{CATEGORY_LABELS[doc.category]}</Badge>
             </div>
           </Link>
         ))}

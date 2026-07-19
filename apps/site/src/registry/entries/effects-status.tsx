@@ -9,7 +9,7 @@ const replayKey = (values: ControlValues) => JSON.stringify(values);
 export const successCheckDoc: ComponentDoc = {
   id: 'success-check',
   name: 'SuccessCheck',
-  category: 'effects-status',
+  category: 'animation',
   blurb: 'An SVG checkmark that draws itself in, with a soft ring — for confirmations.',
   keywords: ['success', 'check', 'confirm', 'complete', 'animation'],
   importLine: "import { SuccessCheck } from '@fj-effects';",
@@ -45,7 +45,7 @@ export const successCheckDoc: ComponentDoc = {
 export const errorShakeDoc: ComponentDoc = {
   id: 'error-shake',
   name: 'ErrorShake',
-  category: 'effects-status',
+  category: 'animation',
   blurb: 'A short shake (error) or warning pulse, played when a value flips to invalid.',
   keywords: ['error', 'shake', 'warning', 'invalid', 'form', 'animation'],
   importLine: "import { ErrorShake } from '@fj-effects';",
@@ -92,7 +92,7 @@ function ErrorShakeDemo({ mode, intensity }: { mode: 'error' | 'warning'; intens
 export const loaderDotsDoc: ComponentDoc = {
   id: 'loader-dots',
   name: 'LoaderDots',
-  category: 'effects-status',
+  category: 'animation',
   blurb: 'Three dots that pulse in sequence — a calmer, playful loader for inline states.',
   keywords: ['loader', 'dots', 'loading', 'spinner', 'animation'],
   importLine: "import { LoaderDots } from '@fj-effects';",
@@ -122,7 +122,7 @@ export const loaderDotsDoc: ComponentDoc = {
 export const progressRingDoc: ComponentDoc = {
   id: 'progress-ring',
   name: 'ProgressRing',
-  category: 'effects-status',
+  category: 'animation',
   blurb: 'A circular progress ring that sweeps to its value — goals, scores, upload completion.',
   keywords: ['progress', 'ring', 'circular', 'percent', 'gauge', 'animation'],
   importLine: "import { ProgressRing } from '@fj-effects';",
@@ -166,7 +166,7 @@ const PING_TONES: Record<string, string> = {
 export const pingDotDoc: ComponentDoc = {
   id: 'ping-dot',
   name: 'PingDot',
-  category: 'effects-status',
+  category: 'animation',
   blurb: 'A notification dot with a radiating echo, pinned to a corner — “something new here”.',
   keywords: ['ping', 'dot', 'notification', 'badge', 'pulse', 'animation'],
   importLine: "import { PingDot } from '@fj-effects';",
@@ -210,7 +210,7 @@ export const pingDotDoc: ComponentDoc = {
 export const numberTickerDoc: ComponentDoc = {
   id: 'number-ticker',
   name: 'NumberTicker',
-  category: 'effects-status',
+  category: 'animation',
   blurb: 'Odometer-style digit columns that roll to the value on change — live stats and scores.',
   keywords: ['number', 'ticker', 'odometer', 'counter', 'stats', 'animation'],
   importLine: "import { NumberTicker } from '@fj-effects';",

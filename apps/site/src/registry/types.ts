@@ -1,64 +1,33 @@
 import type { ReactNode } from 'react';
 
-export type Category =
-  | 'core'
-  | 'layout'
-  | 'forms'
-  | 'feedback'
-  | 'overlay'
-  | 'navigation'
-  | 'data'
-  | 'effects-text'
-  | 'effects-interaction'
-  | 'effects-surfaces'
-  | 'effects-backgrounds'
-  | 'effects-status'
-  | 'effects-motion';
+/**
+ * The site's two top-level modules — Components and Animation — split into a
+ * handful of broad categories. Components use four; every animation belongs to
+ * the single 'animation' category ("Animation types").
+ */
+export type Category = 'inputs' | 'navigation' | 'content' | 'feedback' | 'animation';
 
 export const CATEGORY_LABELS: Record<Category, string> = {
-  core: 'Core',
-  layout: 'Layout',
-  forms: 'Forms',
-  feedback: 'Feedback',
-  overlay: 'Overlay',
+  inputs: 'Inputs & actions',
   navigation: 'Navigation',
-  data: 'Data',
-  'effects-text': 'Text animations',
-  'effects-interaction': 'Interaction',
-  'effects-surfaces': 'Surfaces',
-  'effects-backgrounds': 'Backgrounds',
-  'effects-status': 'Status animations',
-  'effects-motion': 'Animation & transitions',
+  content: 'Content & data',
+  feedback: 'Feedback & overlays',
+  animation: 'Animation types',
 };
 
 export const CATEGORY_ORDER: Category[] = [
-  'core',
-  'layout',
-  'forms',
-  'feedback',
-  'overlay',
+  'inputs',
   'navigation',
-  'data',
-  'effects-text',
-  'effects-interaction',
-  'effects-surfaces',
-  'effects-backgrounds',
-  'effects-status',
-  'effects-motion',
+  'content',
+  'feedback',
+  'animation',
 ];
 
-/** Categories that make up the Animation section. */
-export const EFFECT_CATEGORIES: Category[] = [
-  'effects-text',
-  'effects-interaction',
-  'effects-surfaces',
-  'effects-backgrounds',
-  'effects-status',
-  'effects-motion',
-];
+/** The Components module's categories — everything except 'animation'. */
+export const COMPONENT_CATEGORIES: Category[] = ['inputs', 'navigation', 'content', 'feedback'];
 
 export function isEffectCategory(category: Category): boolean {
-  return EFFECT_CATEGORIES.includes(category);
+  return category === 'animation';
 }
 
 /** Values a playground control can produce. */

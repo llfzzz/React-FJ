@@ -33,7 +33,7 @@ function ModalDemo({ values }: { values: ControlValues }) {
 export const modalDoc: ComponentDoc = {
   id: 'modal',
   name: 'Modal',
-  category: 'overlay',
+  category: 'feedback',
   blurb: 'A centered dialog for one focused decision — traps focus, restores it on close.',
   keywords: ['dialog', 'popup', 'confirm'],
   importLine: "import { Modal } from '@fj';",
@@ -144,7 +144,7 @@ function DrawerDemo({ values }: { values: ControlValues }) {
 export const drawerDoc: ComponentDoc = {
   id: 'drawer',
   name: 'Drawer',
-  category: 'overlay',
+  category: 'feedback',
   blurb: 'A panel that slides in from an edge — room for details without losing the page.',
   keywords: ['panel', 'slide', 'sheet'],
   importLine: "import { Drawer } from '@fj';",

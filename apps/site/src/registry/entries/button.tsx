@@ -6,7 +6,7 @@ import { impl } from '../impl';
 export const buttonDoc: ComponentDoc = {
   id: 'button',
   name: 'Button',
-  category: 'core',
+  category: 'inputs',
   blurb: 'The pill-shaped action. One vivid fill for the primary path; quiet variants for everything else.',
   keywords: ['action', 'cta', 'submit', 'press'],
   importLine: "import { Button } from '@fj';",

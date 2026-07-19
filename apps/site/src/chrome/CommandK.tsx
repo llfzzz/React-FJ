@@ -1,17 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CommandMenu, type Command } from '@fj';
-import { CATEGORY_LABELS, REGISTRY } from '../registry';
+import { CATEGORY_LABELS, docPath, REGISTRY } from '../registry';
 
 const CATEGORY_ICONS: Record<string, string> = {
-  core: 'square',
-  layout: 'layout',
-  forms: 'text-cursor-input',
-  feedback: 'bell',
-  overlay: 'layers',
+  inputs: 'text-cursor-input',
   navigation: 'compass',
-  data: 'table',
-  effects: 'sparkles',
+  content: 'table',
+  feedback: 'bell',
+  animation: 'sparkles',
 };
 
 const PAGES: Array<{ label: string; to: string; icon: string; hint: string }> = [
@@ -19,11 +16,9 @@ const PAGES: Array<{ label: string; to: string; icon: string; hint: string }> = 
   { label: 'Introduction', to: '/docs/introduction', icon: 'book-open', hint: 'Get started' },
   { label: 'Installation', to: '/docs/installation', icon: 'book-open', hint: 'Get started' },
   { label: 'Usage', to: '/docs/usage', icon: 'book-open', hint: 'Get started' },
-  { label: 'Color tokens', to: '/docs/tokens/colors', icon: 'palette', hint: 'Tokens' },
-  { label: 'Typography tokens', to: '/docs/tokens/typography', icon: 'type', hint: 'Tokens' },
-  { label: 'Spacing tokens', to: '/docs/tokens/spacing', icon: 'ruler', hint: 'Tokens' },
-  { label: 'Animation tokens', to: '/docs/tokens/motion', icon: 'wind', hint: 'Tokens' },
   { label: 'Component catalog', to: '/components', icon: 'layout-grid', hint: 'Page' },
+  { label: 'Animation gallery', to: '/animation', icon: 'sparkles', hint: 'Page' },
+  { label: 'Animation guide', to: '/docs/effects-guide', icon: 'book-open', hint: 'Page' },
   { label: 'Theme playground', to: '/playground', icon: 'sliders-horizontal', hint: 'Page' },
 ];
 
@@ -60,7 +55,7 @@ export function CommandK({ open, onClose }: { open: boolean; onClose: () => void
         hint: CATEGORY_LABELS[doc.category],
         icon: CATEGORY_ICONS[doc.category],
         group: `${CATEGORY_LABELS[doc.category]} ${doc.keywords?.join(' ') ?? ''} ${doc.blurb}`,
-        onRun: () => navigate(`/components/${doc.id}`),
+        onRun: () => navigate(docPath(doc)),
       })),
     ],
     [navigate],
@@ -70,7 +65,7 @@ export function CommandK({ open, onClose }: { open: boolean; onClose: () => void
       open={open}
       onClose={onClose}
       commands={commands}
-      placeholder="Search components, docs, tokens…"
+      placeholder="Search components, animations, docs…"
     />
   );
 }

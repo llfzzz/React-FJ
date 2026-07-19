@@ -20,7 +20,7 @@ const replayKey = (values: ControlValues) => JSON.stringify(values);
 export const shimmerDoc: ComponentDoc = {
   id: 'shimmer',
   name: 'Shimmer',
-  category: 'effects-surfaces',
+  category: 'animation',
   blurb: 'A soft light sheen sweeps across a surface — badges, chips, freshly loaded cards.',
   keywords: ['shimmer', 'sheen', 'shine', 'loading', 'animation'],
   importLine: "import { Shimmer } from '@fj-effects';",
@@ -67,7 +67,7 @@ export const shimmerDoc: ComponentDoc = {
 export const floatDoc: ComponentDoc = {
   id: 'float',
   name: 'Float',
-  category: 'effects-surfaces',
+  category: 'animation',
   blurb: 'A gentle levitation loop for illustrations, empty-state art, and hero props.',
   keywords: ['float', 'levitate', 'hover', 'bob', 'animation'],
   importLine: "import { Float } from '@fj-effects';",
@@ -113,7 +113,7 @@ const STRIP = ['Design tokens', 'Motion', 'A11y', 'Effects', 'Playground', 'Type
 export const marqueeDoc: ComponentDoc = {
   id: 'marquee',
   name: 'Marquee',
-  category: 'effects-surfaces',
+  category: 'animation',
   blurb: 'An infinite, seamless ticker for decorative streams — logo walls, tag clouds.',
   keywords: ['marquee', 'ticker', 'scroll', 'loop', 'logos', 'animation'],
   importLine: "import { Marquee } from '@fj-effects';",
@@ -162,7 +162,7 @@ export const marqueeDoc: ComponentDoc = {
 export const imageZoomDoc: ComponentDoc = {
   id: 'image-zoom',
   name: 'ImageZoom',
-  category: 'effects-surfaces',
+  category: 'animation',
   blurb: 'A gentle zoom inside a cropped frame — hover zoom for gallery cards, slow drift for heroes.',
   keywords: ['image', 'zoom', 'ken burns', 'hover', 'photo', 'animation'],
   importLine: "import { ImageZoom } from '@fj-effects';",
@@ -221,7 +221,7 @@ const flipFace: CSSProperties = { width: 200, height: 120, display: 'grid', plac
 export const flipCardDoc: ComponentDoc = {
   id: 'flip-card',
   name: 'FlipCard',
-  category: 'effects-surfaces',
+  category: 'animation',
   blurb: 'A two-faced card that flips in 3D to reveal its back — feature reveals, playful tiles.',
   keywords: ['flip', 'card', '3d', 'rotate', 'reveal', 'animation'],
   importLine: "import { FlipCard } from '@fj-effects';",
@@ -285,7 +285,7 @@ const STACK_TIPS = [
 export const cardStackDoc: ComponentDoc = {
   id: 'card-stack',
   name: 'CardStack',
-  category: 'effects-surfaces',
+  category: 'animation',
   blurb: 'A tappable deck of stacked cards — the top card flings aside and tucks in at the back.',
   keywords: ['stack', 'deck', 'cards', 'cycle', 'swipe', 'animation'],
   importLine: "import { CardStack } from '@fj-effects';",

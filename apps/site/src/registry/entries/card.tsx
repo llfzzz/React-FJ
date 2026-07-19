@@ -17,7 +17,7 @@ function SampleContent() {
 export const cardDoc: ComponentDoc = {
   id: 'card',
   name: 'Card',
-  category: 'core',
+  category: 'content',
   blurb: "The system's signature container — hairline border, 18px radius, generous padding.",
   keywords: ['surface', 'panel', 'container', 'glass'],
   importLine: "import { Card } from '@fj';",

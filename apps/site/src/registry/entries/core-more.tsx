@@ -6,7 +6,7 @@ import { impl } from '../impl';
 export const iconButtonDoc: ComponentDoc = {
   id: 'icon-button',
   name: 'IconButton',
-  category: 'core',
+  category: 'inputs',
   blurb: 'A quiet square for a single icon action. Always labeled, never mysterious.',
   keywords: ['icon', 'action', 'toolbar'],
   importLine: "import { IconButton } from '@fj';",
@@ -77,7 +77,7 @@ export const iconButtonDoc: ComponentDoc = {
 export const tagDoc: ComponentDoc = {
   id: 'tag',
   name: 'Tag',
-  category: 'core',
+  category: 'content',
   blurb: 'A compact chip for topics and filters — with an optional dot, icon, or remove affordance.',
   keywords: ['chip', 'filter', 'topic', 'label'],
   importLine: "import { Tag } from '@fj';",
@@ -130,7 +130,7 @@ export const tagDoc: ComponentDoc = {
 export const avatarDoc: ComponentDoc = {
   id: 'avatar',
   name: 'Avatar',
-  category: 'core',
+  category: 'content',
   blurb: 'A circular portrait with warm initials when no image exists.',
   keywords: ['user', 'profile', 'portrait', 'initials'],
   importLine: "import { Avatar } from '@fj';",
