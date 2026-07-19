@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Badge, PageHeader, Stack, Text } from '@fj';
 import { DocSection } from '../../docs/DocSection';
-import { CATEGORY_LABELS, presentCategories, REGISTRY } from '../../registry';
+import { CATEGORY_LABELS, componentDocs, effectDocs, presentCategories } from '../../registry';
 import { usePageTitle } from '../../lib/usePageTitle';
 
 export function IntroductionPage() {
@@ -42,12 +42,13 @@ export function IntroductionPage() {
         </ul>
       </DocSection>
 
-      <DocSection id="families" title="Component families">
+      <DocSection id="families" title="Components and animation">
         <div className="doc-prose">
           <p>
-            {REGISTRY.length} components are documented so far, organized by family. The catalog
-            grows steadily — undocumented upstream components are pulled in as their pages are
-            written.
+            {componentDocs().length} components are documented across {presentCategories().length}{' '}
+            broad groups, and {effectDocs().length} animation types live in their own module. The
+            catalog grows steadily — undocumented upstream components are pulled in as their pages
+            are written.
           </p>
         </div>
         <Stack direction="row" gap={10} wrap style={{ marginTop: 'var(--space-3)' }}>
@@ -56,9 +57,11 @@ export function IntroductionPage() {
               {CATEGORY_LABELS[category]}
             </Badge>
           ))}
+          <Badge tone="accent">{CATEGORY_LABELS.animation}</Badge>
         </Stack>
         <Text variant="small" style={{ marginTop: 'var(--space-4)' }}>
-          Head to the <Link to="/components">catalog</Link> to browse them all, or continue to{' '}
+          Head to the <Link to="/components">catalog</Link> or the{' '}
+          <Link to="/animation">animation gallery</Link> to browse them all, or continue to{' '}
           <Link to="/docs/installation">installation</Link>.
         </Text>
       </DocSection>

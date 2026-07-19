@@ -27,7 +27,7 @@ const ROWS = [
 export const tableDoc: ComponentDoc = {
   id: 'table',
   name: 'Table',
-  category: 'data',
+  category: 'content',
   blurb: 'A quiet data table — hairline rows, mono headers, no drama.',
   keywords: ['data', 'rows', 'columns', 'grid'],
   importLine: "import { Table } from '@fj';",

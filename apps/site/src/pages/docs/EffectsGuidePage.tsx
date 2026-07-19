@@ -45,7 +45,7 @@ export function EffectsGuidePage() {
         <div className="doc-prose">
           <p>
             Richer animation is welcome on the landing page, hero sections, the{' '}
-            <Link to="/effects">animation gallery</Link>, empty states, onboarding, and a few
+            <Link to="/animation">animation gallery</Link>, empty states, onboarding, and a few
             featured cards. Business-like documentation — props tables, search results, dense
             content — stays restrained. The goal is a site that feels alive without ever getting in
             the way of reading or getting work done.
@@ -59,7 +59,7 @@ export function EffectsGuidePage() {
             The <strong>fj-effects</strong> package adds {40} configurable animations on top of the
             seven original FJ animations and the built-in micro-motion already in components like
             Spinner, Progress, Skeleton, Toast, and Modal. They’re grouped into six families —
-            browse them all in the <Link to="/effects">gallery</Link>.
+            browse them all in the <Link to="/animation">gallery</Link>.
           </p>
           <Stack direction="row" gap={8} wrap>
             <Badge tone="accent">Text animations</Badge>

@@ -1,5 +1,10 @@
 import type { ComponentDoc, Category } from './types';
-import { CATEGORY_LABELS, CATEGORY_ORDER, isEffectCategory } from './types';
+import {
+  CATEGORY_LABELS,
+  CATEGORY_ORDER,
+  COMPONENT_CATEGORIES,
+  isEffectCategory,
+} from './types';
 import { buttonDoc } from './entries/button';
 import { cardDoc } from './entries/card';
 import { badgeDoc } from './entries/badge';
@@ -176,21 +181,34 @@ export function getComponentDoc(id: string): ComponentDoc | undefined {
   return byId.get(id);
 }
 
-export function adjacentDocs(id: string): { prev?: ComponentDoc; next?: ComponentDoc } {
-  const index = REGISTRY.findIndex((doc) => doc.id === id);
-  if (index === -1) return {};
-  return { prev: REGISTRY[index - 1], next: REGISTRY[index + 1] };
+/** The Components module: every documented UI component (not animations). */
+export function componentDocs(): ComponentDoc[] {
+  return REGISTRY.filter((doc) => !isEffectCategory(doc.category));
 }
 
-/** Categories that actually have documented components, in canonical order. */
-export function presentCategories(): Category[] {
-  const present = new Set(REGISTRY.map((doc) => doc.category));
-  return CATEGORY_ORDER.filter((category) => present.has(category));
-}
-
-/** Every documented animation, in sidebar order — powers the /effects gallery. */
+/** The Animation module: every documented animation, in sidebar order. */
 export function effectDocs(): ComponentDoc[] {
   return REGISTRY.filter((doc) => isEffectCategory(doc.category));
+}
+
+/** The detail-page route for a doc — animations live under /animation. */
+export function docPath(doc: ComponentDoc): string {
+  return isEffectCategory(doc.category) ? `/animation/${doc.id}` : `/components/${doc.id}`;
+}
+
+/** Previous/next within the doc's own module — the pager never crosses modules. */
+export function adjacentDocs(id: string): { prev?: ComponentDoc; next?: ComponentDoc } {
+  const doc = byId.get(id);
+  if (!doc) return {};
+  const module = isEffectCategory(doc.category) ? effectDocs() : componentDocs();
+  const index = module.findIndex((entry) => entry.id === id);
+  return { prev: module[index - 1], next: module[index + 1] };
+}
+
+/** Component categories that actually have documented docs, in canonical order. */
+export function presentCategories(): Category[] {
+  const present = new Set(componentDocs().map((doc) => doc.category));
+  return COMPONENT_CATEGORIES.filter((category) => present.has(category));
 }
 
 export { CATEGORY_LABELS };

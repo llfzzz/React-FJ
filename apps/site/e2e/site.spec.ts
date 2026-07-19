@@ -35,11 +35,13 @@ test.describe('component docs', () => {
     expect(clip).toContain("import { Badge } from '@fj';");
   });
 
-  test('catalog filters by family', async ({ page }) => {
+  test('catalog filters by group', async ({ page }) => {
     await page.goto('/components');
     await expect(page.getByRole('heading', { name: 'Components' })).toBeVisible();
-    await page.getByRole('button', { name: 'Text animations', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'TextReveal' })).toBeVisible();
+    // The catalog lists only UI components — animations live in their own module.
+    await expect(page.getByRole('heading', { name: 'TextReveal' })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Content & data', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Table' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Button', exact: true })).toHaveCount(0);
   });
 });
@@ -72,8 +74,8 @@ test.describe('states and small screens', () => {
     await page.getByRole('button', { name: 'Browse docs' }).click();
     const drawer = page.getByRole('dialog', { name: 'Free Joy docs' });
     await expect(drawer).toBeVisible();
-    await drawer.getByRole('link', { name: 'Colors' }).click();
-    await expect(page).toHaveURL(/\/docs\/tokens\/colors/);
+    await drawer.getByRole('link', { name: 'Introduction' }).click();
+    await expect(page).toHaveURL(/\/docs\/introduction/);
     await expect(drawer).not.toBeVisible();
   });
 });

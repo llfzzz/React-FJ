@@ -18,7 +18,7 @@ const heroBox: CSSProperties = {
 export const auroraDoc: ComponentDoc = {
   id: 'aurora',
   name: 'Aurora',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'Slow, soft aurora ribbons behind hero content — heroes and section headers only.',
   keywords: ['aurora', 'background', 'gradient', 'hero', 'ambient'],
   importLine: "import { Aurora } from '@fj-effects';",
@@ -65,7 +65,7 @@ export const auroraDoc: ComponentDoc = {
 export const gridPatternDoc: ComponentDoc = {
   id: 'grid-pattern',
   name: 'GridPattern',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'A subtle dot or line grid with a radial fade — a quiet, static background texture.',
   keywords: ['grid', 'dots', 'pattern', 'background', 'texture'],
   importLine: "import { GridPattern } from '@fj-effects';",
@@ -109,7 +109,7 @@ export const gridPatternDoc: ComponentDoc = {
 export const noiseOverlayDoc: ComponentDoc = {
   id: 'noise-overlay',
   name: 'NoiseOverlay',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'A fine, static film-grain overlay that adds tactile texture to flat surfaces.',
   keywords: ['noise', 'grain', 'texture', 'film', 'background'],
   importLine: "import { NoiseOverlay } from '@fj-effects';",
@@ -149,7 +149,7 @@ export const noiseOverlayDoc: ComponentDoc = {
 export const sparklesDoc: ComponentDoc = {
   id: 'sparkles',
   name: 'Sparkles',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'A capped scatter of gently twinkling particles behind hero content (≤ 24 nodes).',
   keywords: ['sparkles', 'particles', 'twinkle', 'hero', 'background'],
   importLine: "import { Sparkles } from '@fj-effects';",
@@ -199,7 +199,7 @@ export const sparklesDoc: ComponentDoc = {
 export const confettiBurstDoc: ComponentDoc = {
   id: 'confetti-burst',
   name: 'ConfettiBurst',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'A one-shot celebration burst for success moments — pieces are capped and auto-clean.',
   keywords: ['confetti', 'celebration', 'success', 'burst', 'particles'],
   importLine: "import { ConfettiBurst } from '@fj-effects';",
@@ -238,7 +238,7 @@ export const confettiBurstDoc: ComponentDoc = {
 export const orbsDoc: ComponentDoc = {
   id: 'orbs',
   name: 'Orbs',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'Soft gradient blobs drifting slowly behind hero content — a rounder, calmer Aurora.',
   keywords: ['orbs', 'blobs', 'gradient', 'background', 'ambient', 'hero'],
   importLine: "import { Orbs } from '@fj-effects';",
@@ -286,7 +286,7 @@ export const orbsDoc: ComponentDoc = {
 export const wavesDoc: ComponentDoc = {
   id: 'waves',
   name: 'Waves',
-  category: 'effects-backgrounds',
+  category: 'animation',
   blurb: 'Slow wave lines drifting across the container’s bottom edge — heroes and footers.',
   keywords: ['waves', 'lines', 'water', 'background', 'ambient', 'footer'],
   importLine: "import { Waves } from '@fj-effects';",

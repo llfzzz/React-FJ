@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { adjacentDocs, getComponentDoc, presentCategories, REGISTRY } from './index';
+import {
+  adjacentDocs,
+  componentDocs,
+  docPath,
+  effectDocs,
+  getComponentDoc,
+  presentCategories,
+  REGISTRY,
+} from './index';
 import { CATEGORY_ORDER, type ImplVariantKey } from './types';
 
 const VARIANT_KEYS: ImplVariantKey[] = ['js-css', 'ts-css', 'js-tailwind', 'ts-tailwind'];
@@ -81,9 +89,30 @@ describe('registry integrity', () => {
     expect(next?.id).toBe(REGISTRY[2].id);
   });
 
-  it('reports only categories that exist', () => {
+  it('reports only component categories that exist', () => {
     for (const category of presentCategories()) {
+      expect(category).not.toBe('animation');
       expect(REGISTRY.some((doc) => doc.category === category)).toBe(true);
     }
+  });
+
+  it('splits the registry into the Components and Animation modules', () => {
+    expect(componentDocs().length + effectDocs().length).toBe(REGISTRY.length);
+    for (const doc of componentDocs()) {
+      expect(doc.category, doc.id).not.toBe('animation');
+      expect(docPath(doc)).toBe(`/components/${doc.id}`);
+    }
+    for (const doc of effectDocs()) {
+      expect(doc.category, doc.id).toBe('animation');
+      expect(docPath(doc)).toBe(`/animation/${doc.id}`);
+    }
+  });
+
+  it('keeps the pager inside a module', () => {
+    const components = componentDocs();
+    const effects = effectDocs();
+    // The last component has no next; the first animation has no previous.
+    expect(adjacentDocs(components[components.length - 1].id).next).toBeUndefined();
+    expect(adjacentDocs(effects[0].id).prev).toBeUndefined();
   });
 });

@@ -1,7 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Badge, PageHeader } from '@fj';
-import { adjacentDocs, CATEGORY_LABELS, getComponentDoc } from '../../registry';
+import { adjacentDocs, CATEGORY_LABELS, docPath, getComponentDoc } from '../../registry';
 import { Showcase } from '../../docs/Showcase';
 import { CodeBlock } from '../../docs/CodeBlock';
 import { ImplementationBlock } from '../../docs/ImplementationBlock';
@@ -9,15 +9,15 @@ import { PropsTable } from '../../docs/PropsTable';
 import { DocSection } from '../../docs/DocSection';
 import { usePageTitle } from '../../lib/usePageTitle';
 
-function UnknownComponent({ id }: { id: string }) {
-  usePageTitle('Component not found');
+function UnknownComponent({ id, animation }: { id: string; animation: boolean }) {
+  usePageTitle(animation ? 'Animation not found' : 'Component not found');
   return (
     <div className="placeholder-page">
       <span className="notfound-code">Not documented</span>
-      <h1>No component called “{id}”.</h1>
+      <h1>{animation ? `No animation called “${id}”.` : `No component called “${id}”.`}</h1>
       <p>It may not be documented yet — the catalog grows steadily.</p>
-      <Link to="/components" className="btn btn-primary">
-        Browse the catalog
+      <Link to={animation ? '/animation' : '/components'} className="btn btn-primary">
+        {animation ? 'Browse the gallery' : 'Browse the catalog'}
       </Link>
     </div>
   );
@@ -25,9 +25,16 @@ function UnknownComponent({ id }: { id: string }) {
 
 export function ComponentPage() {
   const { id = '' } = useParams();
+  const { pathname } = useLocation();
+  const onAnimationPath = pathname.startsWith('/animation/');
   const doc = getComponentDoc(id);
   usePageTitle(doc?.name);
-  if (!doc) return <UnknownComponent id={id} />;
+  if (!doc) return <UnknownComponent id={id} animation={onAnimationPath} />;
+
+  // Docs live under their module's route; the other prefix redirects (old
+  // pre-split /components/<animation> links keep working).
+  const canonical = docPath(doc);
+  if (canonical !== pathname) return <Navigate to={canonical} replace />;
 
   const { prev, next } = adjacentDocs(doc.id);
 
@@ -78,9 +85,9 @@ export function ComponentPage() {
         </ul>
       </DocSection>
 
-      <nav className="pager" aria-label="Component pagination">
+      <nav className="pager" aria-label={onAnimationPath ? 'Animation pagination' : 'Component pagination'}>
         {prev ? (
-          <Link to={`/components/${prev.id}`} className="pager-link">
+          <Link to={docPath(prev)} className="pager-link">
             <ArrowLeft size={15} aria-hidden />
             <span>
               <small>Previous</small>
@@ -91,7 +98,7 @@ export function ComponentPage() {
           <span />
         )}
         {next ? (
-          <Link to={`/components/${next.id}`} className="pager-link pager-next">
+          <Link to={docPath(next)} className="pager-link pager-next">
             <span>
               <small>Next</small>
               {next.name}

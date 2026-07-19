@@ -62,7 +62,7 @@ test.describe('implementation code switcher', () => {
   });
 
   test('styling-neutral effects serve one source with an inert Style picker', async ({ page }) => {
-    await page.goto('/components/count-up');
+    await page.goto('/animation/count-up');
     const impl = page.locator('.impl-block');
     await expect(impl.locator('.impl-note')).toContainText('Counting runs in JavaScript');
     await expect(impl.locator('.impl-picker--inert')).toBeVisible();

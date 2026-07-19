@@ -25,7 +25,7 @@ const replayKey = (values: ControlValues) => JSON.stringify(values);
 export const gradientTextDoc: ComponentDoc = {
   id: 'gradient-text',
   name: 'GradientText',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'A heading painted with a slow-moving FJ gradient — for hero words, not body copy.',
   keywords: ['gradient', 'text', 'animation', 'hero', 'motion'],
   importLine: "import { GradientText } from '@fj-effects';",
@@ -65,7 +65,7 @@ export const gradientTextDoc: ComponentDoc = {
 export const rotatingTextDoc: ComponentDoc = {
   id: 'rotating-text',
   name: 'RotatingText',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'Cycles a slot of words with a gentle slide or fade — “Build something ___”.',
   keywords: ['rotating', 'words', 'cycle', 'animation', 'hero'],
   importLine: "import { RotatingText } from '@fj-effects';",
@@ -113,7 +113,7 @@ export const rotatingTextDoc: ComponentDoc = {
 export const animatedUnderlineDoc: ComponentDoc = {
   id: 'animated-underline',
   name: 'AnimatedUnderline',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'A restrained underline that draws in on hover or scroll — safe for docs links.',
   keywords: ['underline', 'link', 'hover', 'animation'],
   importLine: "import { AnimatedUnderline } from '@fj-effects';",
@@ -159,7 +159,7 @@ export const animatedUnderlineDoc: ComponentDoc = {
 export const highlighterDoc: ComponentDoc = {
   id: 'highlighter',
   name: 'Highlighter',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'A marker swipe fills in behind a phrase as it scrolls into view.',
   keywords: ['highlight', 'marker', 'emphasis', 'scroll', 'animation'],
   importLine: "import { Highlighter } from '@fj-effects';",
@@ -205,7 +205,7 @@ export const highlighterDoc: ComponentDoc = {
 export const typewriterDoc: ComponentDoc = {
   id: 'typewriter',
   name: 'Typewriter',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'Types a line character by character with a blinking caret — hero taglines, playful one-liners.',
   keywords: ['typewriter', 'typing', 'caret', 'terminal', 'text', 'animation'],
   importLine: "import { Typewriter } from '@fj-effects';",
@@ -251,7 +251,7 @@ export const typewriterDoc: ComponentDoc = {
 export const scrambleTextDoc: ComponentDoc = {
   id: 'scramble-text',
   name: 'ScrambleText',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'Reveals a short display string left to right out of a churn of random characters.',
   keywords: ['scramble', 'decrypt', 'shuffle', 'glitch', 'text', 'animation'],
   importLine: "import { ScrambleText } from '@fj-effects';",
@@ -294,7 +294,7 @@ export const scrambleTextDoc: ComponentDoc = {
 export const blurRevealDoc: ComponentDoc = {
   id: 'blur-reveal',
   name: 'BlurReveal',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'Words sharpen out of a soft blur with a small lift — an editorial entrance for titles.',
   keywords: ['blur', 'reveal', 'focus', 'stagger', 'text', 'animation'],
   importLine: "import { BlurReveal } from '@fj-effects';",
@@ -337,7 +337,7 @@ export const blurRevealDoc: ComponentDoc = {
 export const waveTextDoc: ComponentDoc = {
   id: 'wave-text',
   name: 'WaveText',
-  category: 'effects-text',
+  category: 'animation',
   blurb: 'Characters take turns rising in a gentle wave — playful hero words and accents.',
   keywords: ['wave', 'text', 'characters', 'bounce', 'stagger', 'animation'],
   importLine: "import { WaveText } from '@fj-effects';",

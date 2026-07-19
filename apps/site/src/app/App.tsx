@@ -9,10 +9,6 @@ import { InstallationPage } from '../pages/docs/InstallationPage';
 import { UsagePage } from '../pages/docs/UsagePage';
 import { ComponentsIndexPage } from '../pages/components/ComponentsIndexPage';
 import { ComponentPage } from '../pages/components/ComponentPage';
-import { ColorsPage } from '../pages/tokens/ColorsPage';
-import { TypographyPage } from '../pages/tokens/TypographyPage';
-import { SpacingPage } from '../pages/tokens/SpacingPage';
-import { MotionPage } from '../pages/tokens/MotionPage';
 import { PlaygroundPage } from '../pages/playground/PlaygroundPage';
 import { EffectsGalleryPage } from '../pages/effects/EffectsGalleryPage';
 import { EffectsGuidePage } from '../pages/docs/EffectsGuidePage';
@@ -38,14 +34,13 @@ export function App() {
               <Route path="docs/introduction" element={<IntroductionPage />} />
               <Route path="docs/installation" element={<InstallationPage />} />
               <Route path="docs/usage" element={<UsagePage />} />
-              <Route path="docs/tokens/colors" element={<ColorsPage />} />
-              <Route path="docs/tokens/typography" element={<TypographyPage />} />
-              <Route path="docs/tokens/spacing" element={<SpacingPage />} />
-              <Route path="docs/tokens/motion" element={<MotionPage />} />
               <Route path="docs/effects-guide" element={<EffectsGuidePage />} />
               <Route path="components" element={<ComponentsIndexPage />} />
               <Route path="components/:id" element={<ComponentPage />} />
-              <Route path="effects" element={<EffectsGalleryPage />} />
+              <Route path="animation" element={<EffectsGalleryPage />} />
+              <Route path="animation/:id" element={<ComponentPage />} />
+              {/* The gallery lived at /effects before the Animation module split. */}
+              <Route path="effects" element={<Navigate to="/animation" replace />} />
               <Route path="playground" element={<PlaygroundPage />} />
             </Route>
             <Route path="*" element={<NotFoundPage />} />

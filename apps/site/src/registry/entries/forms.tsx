@@ -17,7 +17,7 @@ import { impl } from '../impl';
 export const inputDoc: ComponentDoc = {
   id: 'input',
   name: 'Input',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'A labeled text field with hint and error states — calm until it needs your attention.',
   keywords: ['text', 'field', 'form'],
   importLine: "import { Input } from '@fj';",
@@ -76,7 +76,7 @@ export const inputDoc: ComponentDoc = {
 export const textareaDoc: ComponentDoc = {
   id: 'textarea',
   name: 'Textarea',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'The multi-line sibling of Input — same calm labels, hints, and error states.',
   keywords: ['multiline', 'text', 'form'],
   importLine: "import { Textarea } from '@fj';",
@@ -110,7 +110,7 @@ export const textareaDoc: ComponentDoc = {
 export const selectDoc: ComponentDoc = {
   id: 'select',
   name: 'Select',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'A native select in Free Joy clothing — dependable keyboard behavior, quiet chevron.',
   keywords: ['dropdown', 'options', 'form'],
   importLine: "import { Select } from '@fj';",
@@ -163,7 +163,7 @@ function CheckboxDemo({ values }: { values: ControlValues }) {
 export const checkboxDoc: ComponentDoc = {
   id: 'checkbox',
   name: 'Checkbox',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'A crisp check for independent yes/no choices.',
   keywords: ['check', 'toggle', 'form'],
   importLine: "import { Checkbox } from '@fj';",
@@ -208,7 +208,7 @@ function RadioDemo({ values }: { values: ControlValues }) {
 export const radioDoc: ComponentDoc = {
   id: 'radio',
   name: 'Radio',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'One choice from a short list — RadioGroup keeps the set tidy.',
   keywords: ['choice', 'group', 'form'],
   importLine: "import { Radio, RadioGroup } from '@fj';",
@@ -249,7 +249,7 @@ function SwitchDemo({ values }: { values: ControlValues }) {
 export const switchDoc: ComponentDoc = {
   id: 'switch',
   name: 'Switch',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'An instant on/off toggle — for settings that apply the moment you flip them.',
   keywords: ['toggle', 'setting', 'on', 'off'],
   importLine: "import { Switch } from '@fj';",
@@ -293,7 +293,7 @@ function SliderDemo({ values }: { values: ControlValues }) {
 export const sliderDoc: ComponentDoc = {
   id: 'slider',
   name: 'Slider',
-  category: 'forms',
+  category: 'inputs',
   blurb: 'A single-thumb range with a filled track — for values you feel more than type.',
   keywords: ['range', 'value', 'form'],
   importLine: "import { Slider } from '@fj';",

@@ -1,4 +1,4 @@
-import { CATEGORY_LABELS, presentCategories, REGISTRY } from './index';
+import { CATEGORY_LABELS, docPath, effectDocs, presentCategories, componentDocs } from './index';
 
 export interface NavItem {
   label: string;
@@ -10,6 +10,12 @@ export interface NavGroup {
   items: NavItem[];
 }
 
+/** A top-level module of the sidebar. Untitled sections render groups only. */
+export interface NavSection {
+  label?: string;
+  groups: NavGroup[];
+}
+
 const GET_STARTED: NavGroup = {
   label: 'Get started',
   items: [
@@ -19,32 +25,34 @@ const GET_STARTED: NavGroup = {
   ],
 };
 
-const TOKENS: NavGroup = {
-  label: 'Design tokens',
-  items: [
-    { label: 'Colors', to: '/docs/tokens/colors' },
-    { label: 'Typography', to: '/docs/tokens/typography' },
-    { label: 'Spacing & elevation', to: '/docs/tokens/spacing' },
-    { label: 'Animation', to: '/docs/tokens/motion' },
-  ],
-};
-
-const EFFECTS: NavGroup = {
-  label: 'Animation',
-  items: [
-    { label: 'Gallery', to: '/effects' },
-    { label: 'Animation guide', to: '/docs/effects-guide' },
-  ],
-};
-
-/** Sidebar structure: get-started chapters, tokens, animation, then one group per category. */
-export function buildNavGroups(): NavGroup[] {
+/**
+ * Sidebar structure — three sections: get-started chapters, the Components
+ * module (one group per broad category), and the Animation module (overview
+ * pages + every animation under the single "Animation types" group).
+ */
+export function buildNavSections(): NavSection[] {
   const componentGroups: NavGroup[] = presentCategories().map((category) => ({
     label: CATEGORY_LABELS[category],
-    items: REGISTRY.filter((doc) => doc.category === category).map((doc) => ({
-      label: doc.name,
-      to: `/components/${doc.id}`,
-    })),
+    items: componentDocs()
+      .filter((doc) => doc.category === category)
+      .map((doc) => ({ label: doc.name, to: docPath(doc) })),
   }));
-  return [GET_STARTED, TOKENS, EFFECTS, ...componentGroups];
+  const animationGroups: NavGroup[] = [
+    {
+      label: 'Overview',
+      items: [
+        { label: 'Gallery', to: '/animation' },
+        { label: 'Animation guide', to: '/docs/effects-guide' },
+      ],
+    },
+    {
+      label: CATEGORY_LABELS.animation,
+      items: effectDocs().map((doc) => ({ label: doc.name, to: docPath(doc) })),
+    },
+  ];
+  return [
+    { groups: [GET_STARTED] },
+    { label: 'Components', groups: componentGroups },
+    { label: 'Animation', groups: animationGroups },
+  ];
 }

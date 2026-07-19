@@ -22,12 +22,12 @@ import {
 } from '@fj';
 import { GradientText, GridPattern, Magnetic } from '@fj-effects';
 import { usePageTitle } from '../../lib/usePageTitle';
-import { effectDocs, presentCategories, REGISTRY } from '../../registry';
+import { componentDocs, effectDocs, presentCategories } from '../../registry';
 
 const STATS = [
-  { value: REGISTRY.length, label: 'documented components' },
-  { value: presentCategories().length, label: 'component families' },
-  { value: effectDocs().length, label: 'animations' },
+  { value: componentDocs().length, label: 'documented components' },
+  { value: presentCategories().length, label: 'component groups' },
+  { value: effectDocs().length, label: 'animation types' },
 ];
 
 const PRINCIPLES = [
@@ -223,7 +223,7 @@ export function LandingPage() {
                   Start with the docs.
                 </Text>
                 <Text variant="small">
-                  Installation, tokens, theming, and a playground for every component.
+                  Installation, usage, animation, and a playground for every component.
                 </Text>
               </Stack>
               <Link to="/docs/installation" className="btn btn-primary">

@@ -2,21 +2,22 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Card, Grid, PageHeader, Stack, Text } from '@fj';
 import type { Category } from '../../registry/types';
-import { CATEGORY_LABELS, presentCategories, REGISTRY } from '../../registry';
+import { CATEGORY_LABELS, componentDocs, docPath, presentCategories } from '../../registry';
 import { usePageTitle } from '../../lib/usePageTitle';
 
 export function ComponentsIndexPage() {
   usePageTitle('Components');
   const [filter, setFilter] = useState<Category | 'all'>('all');
+  const docs = componentDocs();
   const categories = presentCategories();
-  const visible = filter === 'all' ? REGISTRY : REGISTRY.filter((doc) => doc.category === filter);
+  const visible = filter === 'all' ? docs : docs.filter((doc) => doc.category === filter);
 
   return (
     <div>
       <PageHeader
         eyebrow="Catalog"
         title="Components"
-        description={`${REGISTRY.length} documented components, one calm voice. Filter by family or browse the lot.`}
+        description={`${docs.length} documented components, one calm voice. Filter by group or browse the lot.`}
       />
       <div className="control-chips catalog-filter" role="group" aria-label="Filter by category">
         <button
@@ -41,7 +42,7 @@ export function ComponentsIndexPage() {
       </div>
       <Grid min={250} gap={16}>
         {visible.map((doc) => (
-          <Link key={doc.id} to={`/components/${doc.id}`} className="peek-link">
+          <Link key={doc.id} to={docPath(doc)} className="peek-link">
             <Card interactive style={{ height: '100%' }}>
               <Stack gap={10}>
                 <Stack direction="row" gap={10} align="center" justify="space-between">
