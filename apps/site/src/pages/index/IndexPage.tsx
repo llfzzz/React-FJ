@@ -55,25 +55,18 @@ function LazyPreview({ doc }: { doc: ComponentDoc }) {
 }
 
 /**
- * One entry of the stack. The whole card is the click target, split across
- * two links to the same page: the preview column is wrapped in its own link
- * (demos stay hover-live inside it, and their clicks bubble up into
- * navigation), while the name link's ::after stretches over the text body.
- * The copy button sits above that overlay and keeps working on its own.
+ * One entry of the stack, split into two zones. The preview column is a live,
+ * interactive demo you can play with — its own clicks and hovers stay inside
+ * it, so nothing navigates away. The text body is the link to the item's full
+ * page: the name link's ::after stretches over the body (which is positioned),
+ * so clicking anywhere in it opens the page. The copy button sits above that
+ * overlay and keeps working on its own.
  */
 function IndexEntry({ doc }: { doc: ComponentDoc }) {
   const added = formatAdded(doc.addedAt);
   return (
     <article className="index-entry" data-doc={doc.id}>
-      {/* Duplicate of the name link for pointers only — hidden from AT/tabs. */}
-      <Link
-        to={docPath(doc)}
-        className="index-entry-preview-wrap"
-        tabIndex={-1}
-        aria-hidden="true"
-      >
-        <LazyPreview doc={doc} />
-      </Link>
+      <LazyPreview doc={doc} />
       <div className="index-entry-body">
         <div className="index-entry-head">
           <h2 className="index-entry-name">

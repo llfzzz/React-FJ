@@ -1574,10 +1574,9 @@ html {
   margin-top: var(--space-5);
 }
 
-/* The whole entry is one click target, via two links to the same page: the
-   preview column is wrapped in its own link (so demos keep their z-indexes and
-   hover life, and clicks bubble into navigation), and the name link's ::after
-   stretches over the text body. */
+/* Two zones: the preview column is a live, interactive demo (no link), and the
+   text body is the click target — the name link's ::after stretches over the
+   body only (it's the nearest positioned ancestor), never over the preview. */
 .index-entry {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -1593,11 +1592,6 @@ html {
 .index-entry:hover {
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
-}
-
-/* The link box dissolves; the preview itself stays the grid's first column. */
-.index-entry-preview-wrap {
-  display: contents;
 }
 
 .index-entry-anchor {

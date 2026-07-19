@@ -16,16 +16,18 @@ test.describe('index', () => {
     await expect(first.getByText('New', { exact: true })).toBeVisible();
     await expect(first.getByText('Added Jul 17, 2026')).toBeVisible();
     await expect(first.locator('code')).toContainText("import { CardStack } from '@fj-effects';");
-    // The whole card is the click target — clicking body whitespace (not the
+    // The text body is the click target — clicking body whitespace (not the
     // name link itself) lands on the stretched overlay and opens the page.
     await first.click({ position: { x: 400, y: 170 } });
     await expect(page).toHaveURL(/\/animation\/card-stack/);
     await expect(page.getByRole('heading', { name: 'CardStack', exact: true })).toBeVisible();
 
-    // The preview column is a click target too.
+    // The preview is a live demo, not a link: clicking inside it interacts
+    // with the animation and stays on the index (no navigation).
     await page.goBack();
-    await entries.first().click({ position: { x: 20, y: 20 } });
-    await expect(page).toHaveURL(/\/animation\/card-stack/);
+    await expect(page).toHaveURL(/\/animation$/);
+    await entries.first().locator('.index-entry-preview').click({ position: { x: 30, y: 30 } });
+    await expect(page).toHaveURL(/\/animation$/);
   });
 
   test('category chips filter without breaking newest-first order', async ({ page }) => {
