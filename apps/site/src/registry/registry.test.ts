@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   adjacentDocs,
+  animationIndexDocs,
   componentDocs,
   docPath,
   effectDocs,
@@ -8,7 +9,7 @@ import {
   presentCategories,
   REGISTRY,
 } from './index';
-import { CATEGORY_ORDER, type ImplVariantKey } from './types';
+import { CATEGORY_ORDER, isEffectCategory, type ImplVariantKey } from './types';
 
 const VARIANT_KEYS: ImplVariantKey[] = ['js-css', 'ts-css', 'js-tailwind', 'ts-tailwind'];
 
@@ -91,7 +92,7 @@ describe('registry integrity', () => {
 
   it('reports only component categories that exist', () => {
     for (const category of presentCategories()) {
-      expect(category).not.toBe('animation');
+      expect(isEffectCategory(category)).toBe(false);
       expect(REGISTRY.some((doc) => doc.category === category)).toBe(true);
     }
   });
@@ -99,12 +100,33 @@ describe('registry integrity', () => {
   it('splits the registry into the Components and Animation modules', () => {
     expect(componentDocs().length + effectDocs().length).toBe(REGISTRY.length);
     for (const doc of componentDocs()) {
-      expect(doc.category, doc.id).not.toBe('animation');
+      expect(isEffectCategory(doc.category), doc.id).toBe(false);
       expect(docPath(doc)).toBe(`/components/${doc.id}`);
     }
     for (const doc of effectDocs()) {
-      expect(doc.category, doc.id).toBe('animation');
+      expect(isEffectCategory(doc.category), doc.id).toBe(true);
       expect(docPath(doc)).toBe(`/animation/${doc.id}`);
+    }
+  });
+
+  it('gives every animation an explicit, valid addedAt date', () => {
+    for (const doc of effectDocs()) {
+      expect(doc.addedAt, `${doc.id}: addedAt missing`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(Number.isNaN(new Date(`${doc.addedAt}T00:00:00`).getTime()), doc.id).toBe(false);
+    }
+  });
+
+  it('orders the animation index newest first with a stable name tiebreaker', () => {
+    const docs = animationIndexDocs();
+    expect(docs.length).toBe(effectDocs().length);
+    for (let i = 1; i < docs.length; i += 1) {
+      const prev = docs[i - 1];
+      const curr = docs[i];
+      expect(
+        prev.addedAt! > curr.addedAt! ||
+          (prev.addedAt === curr.addedAt && prev.name.localeCompare(curr.name) <= 0),
+        `${prev.id} should sort before ${curr.id}`,
+      ).toBe(true);
     }
   });
 

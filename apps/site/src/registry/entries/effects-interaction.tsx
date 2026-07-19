@@ -6,7 +6,8 @@ import { impl } from '../impl';
 export const magneticDoc: ComponentDoc = {
   id: 'magnetic',
   name: 'Magnetic',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-03',
   blurb: 'Eases its child toward the cursor when the pointer is near — a tactile pull for a CTA.',
   keywords: ['magnetic', 'cursor', 'hover', 'button', 'interaction'],
   importLine: "import { Magnetic } from '@fj-effects';",
@@ -44,7 +45,8 @@ export const magneticDoc: ComponentDoc = {
 export const tiltCardDoc: ComponentDoc = {
   id: 'tilt-card',
   name: 'TiltCard',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-03',
   blurb: 'A card that tilts in 3D toward the cursor, with an optional soft glare.',
   keywords: ['tilt', '3d', 'card', 'perspective', 'glare', 'interaction'],
   importLine: "import { TiltCard } from '@fj-effects';",
@@ -91,7 +93,8 @@ export const tiltCardDoc: ComponentDoc = {
 export const tactileDoc: ComponentDoc = {
   id: 'tactile',
   name: 'Tactile',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-03',
   blurb: 'Adds a satisfying press-down (scale + settle) to any child — buttons, cards, tiles.',
   keywords: ['press', 'tactile', 'active', 'squish', 'interaction'],
   importLine: "import { Tactile } from '@fj-effects';",
@@ -125,7 +128,8 @@ export const tactileDoc: ComponentDoc = {
 export const cursorSpotlightDoc: ComponentDoc = {
   id: 'cursor-spotlight',
   name: 'CursorSpotlight',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-03',
   blurb: 'A soft light that follows the cursor across a container — great behind a grid of cards.',
   keywords: ['cursor', 'spotlight', 'light', 'grid', 'interaction'],
   importLine: "import { CursorSpotlight } from '@fj-effects';",
@@ -171,7 +175,8 @@ export const cursorSpotlightDoc: ComponentDoc = {
 export const rippleDoc: ComponentDoc = {
   id: 'ripple',
   name: 'Ripple',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-10',
   blurb: 'A soft ripple expands from the pointer-down point — tactile press feedback for controls.',
   keywords: ['ripple', 'press', 'click', 'feedback', 'interaction'],
   importLine: "import { Ripple } from '@fj-effects';",
@@ -209,7 +214,9 @@ export const rippleDoc: ComponentDoc = {
 export const clickSparkDoc: ComponentDoc = {
   id: 'click-spark',
   name: 'ClickSpark',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-17',
+  status: 'new',
   blurb: 'Tiny spark lines radiate from the pointer on click — a wink of delight for buttons and likes.',
   keywords: ['click', 'spark', 'burst', 'celebrate', 'press', 'interaction'],
   importLine: "import { ClickSpark } from '@fj-effects';",
@@ -257,7 +264,9 @@ const DOCK_ITEMS = [
 export const dockDoc: ComponentDoc = {
   id: 'dock',
   name: 'Dock',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-17',
+  status: 'new',
   blurb: 'A row of items that swell as the pointer sweeps near — dock magnification for launchers.',
   keywords: ['dock', 'magnify', 'hover', 'toolbar', 'launcher', 'interaction'],
   importLine: "import { Dock } from '@fj-effects';",

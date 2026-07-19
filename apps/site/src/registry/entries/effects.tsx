@@ -22,7 +22,8 @@ const replayKey = (values: ControlValues) => JSON.stringify(values);
 export const textRevealDoc: ComponentDoc = {
   id: 'text-reveal',
   name: 'TextReveal',
-  category: 'animation',
+  category: 'anim-text',
+  addedAt: '2026-07-03',
   blurb: 'Words rise in with a gentle stagger — for heroes and section openers only.',
   keywords: ['animation', 'headline', 'stagger', 'motion'],
   importLine: "import { TextReveal } from '@fj';",
@@ -66,7 +67,8 @@ export const textRevealDoc: ComponentDoc = {
 export const revealDoc: ComponentDoc = {
   id: 'reveal',
   name: 'Reveal',
-  category: 'animation',
+  category: 'anim-entrance',
+  addedAt: '2026-07-03',
   blurb: 'A section fades and rises as it enters the viewport — cascade staggers its children.',
   keywords: ['animation', 'scroll', 'entrance', 'motion'],
   importLine: "import { Reveal } from '@fj';",
@@ -111,7 +113,8 @@ export const revealDoc: ComponentDoc = {
 export const countUpDoc: ComponentDoc = {
   id: 'count-up',
   name: 'CountUp',
-  category: 'animation',
+  category: 'anim-status',
+  addedAt: '2026-07-03',
   blurb: 'A number that eases up to its value when it scrolls into view.',
   keywords: ['animation', 'number', 'stat', 'metric'],
   importLine: "import { CountUp } from '@fj';",
@@ -156,7 +159,8 @@ export const countUpDoc: ComponentDoc = {
 export const spotlightCardDoc: ComponentDoc = {
   id: 'spotlight-card',
   name: 'SpotlightCard',
-  category: 'animation',
+  category: 'anim-interaction',
+  addedAt: '2026-07-03',
   blurb: 'A card whose surface warms under the cursor — for one flagship card per view.',
   keywords: ['hover', 'card', 'highlight', 'motion'],
   importLine: "import { SpotlightCard } from '@fj';",
@@ -193,7 +197,8 @@ export const spotlightCardDoc: ComponentDoc = {
 export const animatedBorderDoc: ComponentDoc = {
   id: 'animated-border',
   name: 'AnimatedBorder',
-  category: 'animation',
+  category: 'anim-ambient',
+  addedAt: '2026-07-03',
   blurb: 'A hairline gradient that sweeps slowly around one flagship panel.',
   keywords: ['border', 'gradient', 'loop', 'motion'],
   importLine: "import { AnimatedBorder } from '@fj';",
@@ -232,7 +237,8 @@ export const animatedBorderDoc: ComponentDoc = {
 export const glowDoc: ComponentDoc = {
   id: 'glow',
   name: 'Glow',
-  category: 'animation',
+  category: 'anim-ambient',
+  addedAt: '2026-07-03',
   blurb: 'A static warm halo that lifts a hero element off the paper. No animation at all.',
   keywords: ['halo', 'gradient', 'hero'],
   importLine: "import { Glow } from '@fj';",
@@ -266,7 +272,8 @@ export const glowDoc: ComponentDoc = {
 export const ambientBackgroundDoc: ComponentDoc = {
   id: 'ambient-background',
   name: 'AmbientBackground',
-  category: 'animation',
+  category: 'anim-ambient',
+  addedAt: '2026-07-03',
   blurb: 'Huge, slow color washes behind hero content — never behind dense product UI.',
   keywords: ['background', 'gradient', 'hero', 'motion'],
   importLine: "import { AmbientBackground } from '@fj';",

@@ -1,5 +1,6 @@
-import type { ComponentDoc, Category } from './types';
+import type { AnimationCategory, ComponentCategory, ComponentDoc } from './types';
 import {
+  ANIMATION_CATEGORIES,
   CATEGORY_LABELS,
   CATEGORY_ORDER,
   COMPONENT_CATEGORIES,
@@ -206,9 +207,47 @@ export function adjacentDocs(id: string): { prev?: ComponentDoc; next?: Componen
 }
 
 /** Component categories that actually have documented docs, in canonical order. */
-export function presentCategories(): Category[] {
+export function presentCategories(): ComponentCategory[] {
   const present = new Set(componentDocs().map((doc) => doc.category));
   return COMPONENT_CATEGORIES.filter((category) => present.has(category));
+}
+
+/** Animation categories that actually have documented docs, in canonical order. */
+export function presentAnimationCategories(): AnimationCategory[] {
+  const present = new Set(effectDocs().map((doc) => doc.category));
+  return ANIMATION_CATEGORIES.filter((category) => present.has(category));
+}
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+function hasValidAddedAt(doc: ComponentDoc): boolean {
+  return Boolean(doc.addedAt && ISO_DATE.test(doc.addedAt));
+}
+
+/**
+ * The animation index order: newest `addedAt` first, name as the stable
+ * tiebreaker. The date is explicit metadata on each doc — never inferred from
+ * file mtimes or git. Docs with a missing/malformed date sort last and warn
+ * in development so the gap is caught before it ships.
+ */
+export function animationIndexDocs(): ComponentDoc[] {
+  const docs = effectDocs();
+  if (import.meta.env.DEV) {
+    for (const doc of docs) {
+      if (!hasValidAddedAt(doc)) {
+        console.warn(`[registry] ${doc.id}: missing or invalid addedAt (${doc.addedAt ?? 'unset'}) — sorted last on the animation index`);
+      }
+    }
+  }
+  return [...docs].sort((a, b) => {
+    const aValid = hasValidAddedAt(a);
+    const bValid = hasValidAddedAt(b);
+    if (aValid !== bValid) return aValid ? -1 : 1;
+    if (aValid && bValid && a.addedAt !== b.addedAt) {
+      return a.addedAt! < b.addedAt! ? 1 : -1;
+    }
+    return a.name.localeCompare(b.name);
+  });
 }
 
 export { CATEGORY_LABELS };

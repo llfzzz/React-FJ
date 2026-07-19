@@ -8,7 +8,12 @@ const CATEGORY_ICONS: Record<string, string> = {
   navigation: 'compass',
   content: 'table',
   feedback: 'bell',
-  animation: 'sparkles',
+  'anim-entrance': 'arrow-up-from-line',
+  'anim-text': 'type',
+  'anim-interaction': 'mouse-pointer-click',
+  'anim-ambient': 'sparkles',
+  'anim-transition': 'arrow-left-right',
+  'anim-status': 'activity',
 };
 
 const PAGES: Array<{ label: string; to: string; icon: string; hint: string }> = [
@@ -17,8 +22,7 @@ const PAGES: Array<{ label: string; to: string; icon: string; hint: string }> = 
   { label: 'Installation', to: '/docs/installation', icon: 'book-open', hint: 'Get started' },
   { label: 'Usage', to: '/docs/usage', icon: 'book-open', hint: 'Get started' },
   { label: 'Component catalog', to: '/components', icon: 'layout-grid', hint: 'Page' },
-  { label: 'Animation gallery', to: '/animation', icon: 'sparkles', hint: 'Page' },
-  { label: 'Animation guide', to: '/docs/effects-guide', icon: 'book-open', hint: 'Page' },
+  { label: 'Animation index', to: '/animation', icon: 'sparkles', hint: 'Page' },
   { label: 'Theme playground', to: '/playground', icon: 'sliders-horizontal', hint: 'Page' },
 ];
 
@@ -54,7 +58,7 @@ export function CommandK({ open, onClose }: { open: boolean; onClose: () => void
         label: doc.name,
         hint: CATEGORY_LABELS[doc.category],
         icon: CATEGORY_ICONS[doc.category],
-        group: `${CATEGORY_LABELS[doc.category]} ${doc.keywords?.join(' ') ?? ''} ${doc.blurb}`,
+        group: `${CATEGORY_LABELS[doc.category]} ${doc.keywords?.join(' ') ?? ''} ${doc.blurb} ${doc.importLine} ${doc.status ?? ''}`,
         onRun: () => navigate(docPath(doc)),
       })),
     ],
