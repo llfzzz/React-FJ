@@ -1574,6 +1574,10 @@ html {
   margin-top: var(--space-5);
 }
 
+/* The whole entry is one click target, via two links to the same page: the
+   preview column is wrapped in its own link (so demos keep their z-indexes and
+   hover life, and clicks bubble into navigation), and the name link's ::after
+   stretches over the text body. */
 .index-entry {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -1581,6 +1585,38 @@ html {
   border-radius: var(--radius-lg);
   background: var(--surface);
   overflow: hidden;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.index-entry:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* The link box dissolves; the preview itself stays the grid's first column. */
+.index-entry-preview-wrap {
+  display: contents;
+}
+
+.index-entry-anchor {
+  color: inherit;
+}
+.index-entry-anchor:hover {
+  text-decoration: none;
+}
+.index-entry-anchor::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+/* Ring the whole card, not just the heading text, on keyboard focus. */
+.index-entry-anchor:focus-visible {
+  box-shadow: none;
+}
+.index-entry:has(.index-entry-anchor:focus-visible) {
+  box-shadow: var(--ring);
 }
 
 .index-entry-preview {
@@ -1599,7 +1635,9 @@ html {
   max-width: 100%;
 }
 
+/* Positioned: the name link's stretched ::after anchors to this box. */
 .index-entry-body {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1635,7 +1673,11 @@ html {
   color: var(--text-muted);
 }
 
+/* Raised above the stretched link so copying (button or text selection)
+   keeps working inside the clickable card. */
 .index-entry-install {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -1651,17 +1693,6 @@ html {
   color: var(--text);
   overflow-x: auto;
   white-space: nowrap;
-}
-
-.index-entry-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: auto;
-  padding-top: var(--space-2);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  color: var(--accent);
 }
 
 @media (max-width: 760px) {

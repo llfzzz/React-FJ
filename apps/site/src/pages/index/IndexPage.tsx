@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 import { Badge, PageHeader } from '@fj';
 import type { Category, ComponentDoc } from '../../registry/types';
 import { CATEGORY_LABELS, docPath, indexDocs, presentIndexCategories } from '../../registry';
@@ -55,14 +54,33 @@ function LazyPreview({ doc }: { doc: ComponentDoc }) {
   );
 }
 
+/**
+ * One entry of the stack. The whole card is the click target, split across
+ * two links to the same page: the preview column is wrapped in its own link
+ * (demos stay hover-live inside it, and their clicks bubble up into
+ * navigation), while the name link's ::after stretches over the text body.
+ * The copy button sits above that overlay and keeps working on its own.
+ */
 function IndexEntry({ doc }: { doc: ComponentDoc }) {
   const added = formatAdded(doc.addedAt);
   return (
     <article className="index-entry" data-doc={doc.id}>
-      <LazyPreview doc={doc} />
+      {/* Duplicate of the name link for pointers only — hidden from AT/tabs. */}
+      <Link
+        to={docPath(doc)}
+        className="index-entry-preview-wrap"
+        tabIndex={-1}
+        aria-hidden="true"
+      >
+        <LazyPreview doc={doc} />
+      </Link>
       <div className="index-entry-body">
         <div className="index-entry-head">
-          <h2 className="index-entry-name">{doc.name}</h2>
+          <h2 className="index-entry-name">
+            <Link to={docPath(doc)} className="index-entry-anchor">
+              {doc.name}
+            </Link>
+          </h2>
           {doc.status && doc.status !== 'stable' && (
             <Badge tone="accent">{STATUS_LABELS[doc.status]}</Badge>
           )}
@@ -74,10 +92,6 @@ function IndexEntry({ doc }: { doc: ComponentDoc }) {
           <code>{doc.importLine}</code>
           <CopyIconButton value={doc.importLine} label={`Copy ${doc.name} import`} />
         </div>
-        <Link to={docPath(doc)} className="index-entry-link">
-          View documentation
-          <ArrowUpRight size={14} aria-hidden />
-        </Link>
       </div>
     </article>
   );

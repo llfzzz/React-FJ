@@ -12,13 +12,20 @@ test.describe('index', () => {
     // Newest first: the top entry comes from the latest batch and carries the
     // "New" badge, its category, its added date, and a copyable import line.
     const first = entries.first();
-    await expect(first.getByRole('heading', { name: 'CardStack' })).toBeVisible();
+    await expect(first.getByRole('link', { name: 'CardStack' })).toBeVisible();
     await expect(first.getByText('New', { exact: true })).toBeVisible();
     await expect(first.getByText('Added Jul 17, 2026')).toBeVisible();
     await expect(first.locator('code')).toContainText("import { CardStack } from '@fj-effects';");
-    await first.getByRole('link', { name: 'View documentation' }).click();
+    // The whole card is the click target — clicking body whitespace (not the
+    // name link itself) lands on the stretched overlay and opens the page.
+    await first.click({ position: { x: 400, y: 170 } });
     await expect(page).toHaveURL(/\/animation\/card-stack/);
     await expect(page.getByRole('heading', { name: 'CardStack', exact: true })).toBeVisible();
+
+    // The preview column is a click target too.
+    await page.goBack();
+    await entries.first().click({ position: { x: 20, y: 20 } });
+    await expect(page).toHaveURL(/\/animation\/card-stack/);
   });
 
   test('category chips filter without breaking newest-first order', async ({ page }) => {
