@@ -180,14 +180,16 @@ pnpm workspace
   (all present categories, for the Index filter chips = All + 4 component + 6 animation). CSS
   `.anim-*` → `.index-*`; entry attr `data-animation` → `data-doc`. Sidebar unchanged (still
   classified Components + Animation sections; the flat Index and classified sidebar coexist).
-  Follow-up (owner request): the "View documentation" link is gone — the WHOLE card is the click
-  target, via two links to the same page: the preview column is wrapped in its own
-  `display: contents` link (demo z-indexes and hover life survive; clicks bubble into
-  navigation — CardStack's `zIndex: n - depth` cards beat any invisible overlay, which is why a
-  single stretched overlay could NOT cover the preview), and the name link's `::after` stretches
-  over `.index-entry-body` (positioned). `.index-entry-install` is `z-index: 1` above the overlay
-  so copy/select still work; card hovers lift border + shadow; keyboard focus rings the whole
-  card via `:has(.index-entry-anchor:focus-visible)`.
+  Follow-up (owner request): the "View documentation" link is gone. Each entry now has TWO
+  distinct zones: (1) the preview column is a plain live demo (NOT wrapped in a link) — clicking
+  it interacts with the animation (e.g. CardStack advances Tip 1 → Tip 2) and does NOT navigate;
+  (2) the text body is the nav target — the name link's `::after` stretches over
+  `.index-entry-body` only (its nearest positioned ancestor), so clicking anywhere in the body
+  opens the item's page. `.index-entry-install` is `z-index: 1` above the overlay so copy/select
+  still work; card hovers lift border + shadow; keyboard focus rings the whole card via
+  `:has(.index-entry-anchor:focus-visible)`. (An earlier iteration wrapped the preview in its own
+  `display: contents` link to make the whole card navigate; that's been replaced — the preview is
+  interactive, so it must not be a link.)
 
 ## Component inventory
 
